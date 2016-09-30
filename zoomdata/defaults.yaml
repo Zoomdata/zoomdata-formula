@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+
+zoomdata:
+  repo_url: 'http://repo.zoomdata.com'
+  release: '2.3'
+  version: 'latest'
+  user: zoomdata
+  group: zoomdata
+  config:
+    zoomdata:
+      path: /etc/zoomdata/zoomdata.properties
+      properties:
+        spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
+        spring.datasource.username: zoomdata
+        spring.datasource.password: 'Z00mda1a'
+    zoomdata-scheduler:
+      path: /etc/zoomdata/scheduler.properties
+      properties:
+        spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
+        spring.datasource.username: zoomdata
+        spring.datasource.password: 'Z00mda1a'
+  services:
+    - zoomdata
+    - zoomdata-edc-elasticsearch-1.7
+    - zoomdata-edc-rts
+    - zoomdata-scheduler
+    - zoomdata-spark-proxy
