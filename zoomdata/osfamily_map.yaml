@@ -2,6 +2,3 @@
 
 Debian:
   repo_file: /etc/apt/sources.list.d/zoomdata.list
-
-RedHat:
-  repo_file: /etc/yum.repos.d/zoomdata.repo

@@ -20,7 +20,7 @@ zoomdata-pkgs:
     - refresh: True
     - skip_verify: True
     - watch:
-      - file: zoomdata-repo
+      - pkgrepo: zoomdata-repo
 
 {%- for service in zoomdata.services %}
 
