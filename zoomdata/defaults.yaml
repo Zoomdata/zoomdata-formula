@@ -6,6 +6,13 @@ zoomdata:
   version: 'latest'
   user: zoomdata
   group: zoomdata
+  packages:
+    - zoomdata
+    - zoomdata-edc-elasticsearch-1.7
+    - zoomdata-edc-rts
+    - zoomdata-scheduler
+    - zoomdata-spark-proxy
+    #- zoomdata-xvfb
   config:
     zoomdata:
       path: /etc/zoomdata/zoomdata.properties
@@ -25,3 +32,4 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-scheduler
     - zoomdata-spark-proxy
+    #- zoomdata-xvfb

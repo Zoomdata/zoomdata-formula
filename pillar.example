@@ -8,7 +8,15 @@ zoomdata:
   release: '2.3'
 
   # Exact version of the packages to install, default is 'latest'
-  version: '2.3.3'
+  version: '2.3.7'
+
+  # Packages to install
+  packages:
+    - zoomdata
+    - zoomdata-edc-elasticsearch-1.7
+    - zoomdata-edc-rts
+    - zoomdata-scheduler
+    - zoomdata-spark-proxy
 
   # Configuration files with properties
   config:
@@ -25,7 +33,7 @@ zoomdata:
         spring.datasource.username: zoomdata
         spring.datasource.password: 'Z00mda1a'
 
-  # Services to install and start
+  # Services to enable and start
   services:
     - zoomdata
     - zoomdata-edc-elasticsearch-1.7
