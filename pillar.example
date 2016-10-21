@@ -47,3 +47,15 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-scheduler
     - zoomdata-spark-proxy
+
+# PostgreSQL Pillar configuration
+
+postgres:
+  users:
+    zoomdata:
+      password: 'Z00mda1a'
+  databases:
+    zoomdata:
+      owner: 'zoomdata'
+    zoomdata-scheduler:
+      owner: 'zoomdata'
