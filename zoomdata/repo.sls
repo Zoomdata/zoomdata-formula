@@ -1,4 +1,4 @@
-{%- from 'zoomdata/map.jinja' import zoomdata with context -%}
+{%- from 'zoomdata/map.jinja' import zoomdata with context %}
 
 {%- if grains['os_family'] == 'Debian' %}
 
@@ -32,4 +32,4 @@ zoomdata-repo:
     - baseurl: {{ repo_url }}
     - gpgcheck: 0
 
-{%- endif -%}
+{%- endif %}

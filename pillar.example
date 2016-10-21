@@ -7,16 +7,23 @@ zoomdata:
   # Repository branch from which the zoomdata package would be installed
   release: '2.3'
 
-  # Exact version of the packages to install, default is 'latest'
-  version: '2.3.7'
+  # Exact version of Zoomdata Server packages to install, default is 'latest'
+  version: '2.3.8'
 
-  # Packages to install
+  # Zoomdata Server packages to install
   packages:
     - zoomdata
-    - zoomdata-edc-elasticsearch-1.7
-    - zoomdata-edc-rts
     - zoomdata-scheduler
     - zoomdata-spark-proxy
+
+  # Zoomdata EDC section
+  edc:
+    # Exact version of Zoomdata EDC packages to install, default is 'latest'
+    version: '2.3.7'
+    # Zoomdata EDC packages to install
+    packages:
+      - zoomdata-edc-elasticsearch-1.7
+      - zoomdata-edc-rts
 
   # Configuration files with properties
   config:

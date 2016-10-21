@@ -1,48 +1,61 @@
-{%- from 'zoomdata/map.jinja' import zoomdata with context -%}
+{%- from 'zoomdata/map.jinja' import zoomdata with context %}
 
-{%- set pkg_function = 'installed' %}
-{%- if zoomdata.version == 'latest' %}
-  {%- set pkg_function = zoomdata.version %}
-{%- elif zoomdata.version  %}
-  {%- set version = zoomdata.version %}
-{%- endif %}
+{%- set packages = [] %}
+{%- set services = zoomdata.services|default([], true) %}
 
-{%- set packages = zoomdata.packages|default([], true) -%}
-{%- set services = zoomdata.services|default([], true) -%}
+{%- for install in (zoomdata, zoomdata.get('edc')) %}
 
+  {%- for package in install.packages|default([], true) %}
+
+    {%- if loop.first and not packages %}
 
 include:
   - zoomdata.repo
 
-zoomdata-pkgs:
-  pkg.{{ pkg_function }}:
-    - pkgs: {{ packages }}
-    {%- if version is defined %}
-    - version: {{ version }}
     {%- endif %}
-    - refresh: True
+
+    {%- do packages.append(package) %}
+
+{{ package }}_package:
+  pkg.installed:
+    - name: {{ package }}
+    {%- if install.get('version') %}
+    - version: {{ install.version }}
+    {%- endif %}
     - skip_verify: True
     - require:
-      - pkgrepo: zoomdata-repo
+      - sls: zoomdata.repo
 
-{%- for service, config in zoomdata.config|dictsort() %}
+  {%- endfor %}
 
-{{ service }}-config:
+{%- endfor %}
+
+{%- for service, config in zoomdata.config|default({}, true)|dictsort() %}
+
+  {%- if config.get('path') and packages %}
+
+{{ service }}_config:
   file.managed:
     - name: {{ config.path }}
     - user: {{ zoomdata.user }}
     - group: {{ zoomdata.group }}
     - mode: 640
     - makedirs: True
+    {%- if config.get('properties') %}
     - contents:
-  {%- for k, v in config.properties|dictsort() %}
+      {%- for k, v in config.properties|default({}, true)|dictsort() %}
       - {{ (k, v)|join('=')|indent(8) }}
-  {%- endfor %}
+      {%- endfor %}
+    {%- endif %}
+    {%- if service in packages %}
     - require:
-      - pkg: zoomdata-pkgs
-  {%- if service in services %}
+      - pkg: {{ service }}_package
+    {%- endif %}
+    {%- if service in services %}
     - watch_in:
-      - service: {{ service }}-service
+      - service: {{ service }}_service
+    {%- endif %}
+
   {%- endif %}
 
 {%- endfor %}
@@ -57,11 +70,11 @@ zoomdata-pkgs:
     {%- set service_requisite = 'require' %}
   {%- endif %}
 
-{{ service }}-service:
+{{ service }}_service:
   service.{{ service_function }}:
     - name: {{ service }}
     - enable: True
     - {{ service_requisite }}:
-      - pkg: zoomdata-pkgs
+      - pkg: {{ service }}_package
 
 {%- endfor %}
