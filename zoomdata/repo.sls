@@ -2,7 +2,7 @@
 
 {%- if grains['os_family'] == 'Debian' %}
 
-  {%- set repo_url = (zoomdata.repo_url,
+  {%- set repo_url = (zoomdata.base_url,
                       zoomdata.release,
                       'apt',
                       grains['os'] | lower())
@@ -10,13 +10,13 @@
 
 zoomdata-repo:
   pkgrepo.managed:
-    - name: deb {{ (repo_url, grains['oscodename'], 'stable') | join(' ') }}
+    - name: {{ ('deb', repo_url, grains['oscodename'], 'stable') | join(' ') }}
     - humanname: Zoomdata {{ zoomdata.release }} stable APT repository
     - file: {{ zoomdata.repo_file }}
 
 {%- elif grains['os_family'] == 'RedHat' %}
 
-  {%- set repo_url = (zoomdata.repo_url,
+  {%- set repo_url = (zoomdata.base_url,
                       zoomdata.release,
                       'yum',
                       grains['os_family'] | lower(),

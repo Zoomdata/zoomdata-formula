@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# vim: ft=sls
+
+{% import_yaml 'zoomdata/defaults.yaml' as defaults %}
 
 Debian:
   repo_file: /etc/apt/sources.list.d/zoomdata.list
+
+default: {{ defaults.zoomdata }}

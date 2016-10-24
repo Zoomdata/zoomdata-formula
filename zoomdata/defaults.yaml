@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 zoomdata:
-  repo_url: 'http://repo.zoomdata.com'
+  base_url: 'http://repo.zoomdata.com'
   release: '2.3'
   version: 'latest'
 

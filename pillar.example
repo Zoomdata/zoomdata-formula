@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# vim: ft=yaml
+# vim: ft=sls
 
 # Zoomdata Pillar SLS example
 
@@ -8,7 +8,11 @@ zoomdata:
   release: '2.3'
 
   # Exact version of Zoomdata Server packages to install, default is 'latest'
+  {%- if grains['os'] == 'Ubuntu' %}
+  version: '2.3.8-0+{{ grains['oscodename'] }}.stable'
+  {%- else %}
   version: '2.3.8'
+  {%- endif %}
 
   # Zoomdata Server packages to install
   packages:
@@ -19,7 +23,11 @@ zoomdata:
   # Zoomdata EDC section
   edc:
     # Exact version of Zoomdata EDC packages to install, default is 'latest'
+    {%- if grains['os'] == 'Ubuntu' %}
+    version: '2.3.7-0+{{ grains['oscodename'] }}.stable'
+    {%- else %}
     version: '2.3.7'
+    {%- endif %}
     # Zoomdata EDC packages to install
     packages:
       - zoomdata-edc-elasticsearch-1.7
@@ -53,11 +61,11 @@ zoomdata:
 
   # Services to enable and start
   services:
-    - zoomdata
-    - zoomdata-edc-elasticsearch-1.7
-    - zoomdata-edc-rts
-    - zoomdata-scheduler
-    - zoomdata-spark-proxy
+    #- zoomdata
+    #- zoomdata-edc-elasticsearch-1.7
+    #- zoomdata-edc-rts
+    #- zoomdata-scheduler
+    #- zoomdata-spark-proxy
 
 # PostgreSQL Pillar configuration
 

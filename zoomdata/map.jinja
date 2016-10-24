@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 # vim: ft=jinja
 
-{% import_yaml 'zoomdata/defaults.yaml' as defaults %}
 {% import_yaml 'zoomdata/osfamily_map.yaml' as osfamily_map %}
 
 {% set zoomdata = salt['grains.filter_by'](
-    defaults,
-    merge=salt['grains.filter_by'](
-        osfamily_map,
-        grain='os_family',
-        merge=salt['pillar.get']('zoomdata', {}),
-    ),
-    base='zoomdata',
+    osfamily_map,
+    grain='os_family',
+    merge=salt['pillar.get']('zoomdata', {}),
+    base='default',
 ) %}
