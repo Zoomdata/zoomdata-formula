@@ -27,6 +27,10 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'Z00mda1a'
+        screenshot.daemon.enabled: False
+        screenshot.daemon.schedule.rate: '168h'
+        screenshots.dashboards.enabled: False
+        screenshots.datasource-charts.enabled: False
     zoomdata-scheduler:
       path: /etc/zoomdata/scheduler.properties
       properties:

@@ -25,17 +25,28 @@ zoomdata:
       - zoomdata-edc-elasticsearch-1.7
       - zoomdata-edc-rts
 
-  # Configuration files with properties
+  # Configuration Property Files and Their Corresponding Variables:
+  # http://docs.zoomdata.com/zoomdata-configuration-property-files-and-their-corresponding-variables
   config:
+    # Zoomdata Server
     zoomdata:
       path: /etc/zoomdata/zoomdata.properties
       properties:
+        # Metadata DB connection details
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'Z00mda1a'
+        # Screenshot Feature: disabled by default
+        # http://docs.zoomdata.com/setting-up-screenshot-for-ubuntu
+        screenshot.daemon.enabled: False
+        screenshot.daemon.schedule.rate: '168h'  # 1 week
+        screenshots.dashboards.enabled: False
+        screenshots.datasource-charts.enabled: False
+    # Zoomdata Scheduler
     zoomdata-scheduler:
       path: /etc/zoomdata/scheduler.properties
       properties:
+        # Metadata DB connection details
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'Z00mda1a'

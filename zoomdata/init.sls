@@ -42,10 +42,12 @@ include:
     - mode: 640
     - makedirs: True
     {%- if config.get('properties') %}
-    - contents:
-      {%- for k, v in config.properties|default({}, true)|dictsort() %}
-      - {{ (k, v)|join('=')|indent(8) }}
-      {%- endfor %}
+    - source: salt://zoomdata/files/service.properties
+    - template: jinja
+    - context:
+        service: {{ service }}
+    {%- else %}
+    - replace: False
     {%- endif %}
     {%- if service in packages %}
     - require:
