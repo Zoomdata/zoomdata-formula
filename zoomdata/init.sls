@@ -30,6 +30,29 @@ include:
 
 {%- endfor %}
 
+{%- if salt['test.provider']('service') != 'systemd' and packages %}
+
+# Provision global system limits for Zoomdata user
+
+zoomdata-user-limits-conf:
+  file.managed:
+    - name: /etc/security/limits.d/30-zoomdata.conf
+    - source: salt://zoomdata/files/limits.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 640
+    - require:
+      - pkg: {{ packages|first() }}_package
+  {%- if services %}
+    - watch_in:
+    {%- for service in services %}
+      - service: {{ service }}_service
+    {%- endfor %}
+  {%- endif %}
+
+{%- endif %}
+
 {%- for service, config in zoomdata.config|default({}, true)|dictsort() %}
 
   {%- if config.get('path') and packages %}
@@ -37,10 +60,6 @@ include:
 {{ service }}_config:
   file.managed:
     - name: {{ config.path }}
-    - user: {{ zoomdata.user }}
-    - group: {{ zoomdata.group }}
-    - mode: 640
-    - makedirs: True
     {%- if config.get('properties') %}
     - source: salt://zoomdata/files/service.properties
     - template: jinja
@@ -49,6 +68,10 @@ include:
     {%- else %}
     - replace: False
     {%- endif %}
+    - user: root
+    - group: {{ zoomdata.group }}
+    - mode: 640
+    - makedirs: True
     {%- if service in packages %}
     - require:
       - pkg: {{ service }}_package
@@ -57,6 +80,8 @@ include:
     - watch_in:
       - service: {{ service }}_service
     {%- endif %}
+    # Prevent `test=True` failures on fresh system
+    - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
 
   {%- endif %}
 
@@ -64,10 +89,10 @@ include:
 
 {%- for service in packages %}
 
-  {%- set service_function = 'running' %}
-  {%- set service_requisite = 'watch' %}
-
-  {%- if service not in services %}
+  {%- if service in services %}
+    {%- set service_function = 'running' %}
+    {%- set service_requisite = 'watch' %}
+  {%- else %}
     {%- set service_function = 'dead' %}
     {%- set service_requisite = 'require' %}
   {%- endif %}
