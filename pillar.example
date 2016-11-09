@@ -4,7 +4,9 @@
 # Zoomdata Pillar SLS example
 
 zoomdata:
-  # Repository branch from which the zoomdata package would be installed
+  # Repository base URL where Zoomdata packages are hosted
+  base_url: 'http://repo.zoomdata.com'
+  # Repository branch from which the packages would be installed
   release: '2.3'
 
   # Exact version of Zoomdata Server packages to install, default is 'latest'
