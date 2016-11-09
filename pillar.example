@@ -9,9 +9,9 @@ zoomdata:
 
   # Exact version of Zoomdata Server packages to install, default is 'latest'
   {%- if grains['os'] == 'Ubuntu' %}
-  version: '2.3.8-0+{{ grains['oscodename'] }}.stable'
+  version: '2.3.9-1+{{ grains['oscodename'] }}.stable'
   {%- else %}
-  version: '2.3.8'
+  version: '2.3.9'
   {%- endif %}
 
   # Zoomdata Server packages to install
@@ -24,9 +24,9 @@ zoomdata:
   edc:
     # Exact version of Zoomdata EDC packages to install, default is 'latest'
     {%- if grains['os'] == 'Ubuntu' %}
-    version: '2.3.7-0+{{ grains['oscodename'] }}.stable'
+    version: '2.3.6-1+{{ grains['oscodename'] }}.stable'
     {%- else %}
-    version: '2.3.7'
+    version: '2.3.6'
     {%- endif %}
     # Zoomdata EDC packages to install
     packages:
@@ -41,10 +41,11 @@ zoomdata:
       path: /etc/zoomdata/zoomdata.properties
       properties:
         # Metadata DB connection details
+        # (REMEMBER TO CHANGE VALUES BELOW IN `postgres` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'Z00mda1a'
-        # Screenshot Feature: disabled by default
+        # Screenshot Feature: disable it by default
         # http://docs.zoomdata.com/setting-up-screenshot-for-ubuntu
         screenshot.daemon.enabled: False
         screenshot.daemon.schedule.rate: '168h'  # 1 week
@@ -55,6 +56,7 @@ zoomdata:
       path: /etc/zoomdata/scheduler.properties
       properties:
         # Metadata DB connection details
+        # (REMEMBER TO CHANGE VALUES BELOW IN `postgres` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'Z00mda1a'
