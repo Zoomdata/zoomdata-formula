@@ -98,6 +98,41 @@ zoomdata-user-limits-conf:
 
 {%- endif %}
 
+# Configure Zoomdata environment
+
+{%- for service, environment in zoomdata.environment|default({}, true)|dictsort() %}
+
+  {%- if environment.get('path') and packages %}
+
+{{ service }}_environment:
+  file.managed:
+    - name: {{ environment.path }}
+    {%- if environment.get('variables') %}
+    - source: salt://zoomdata/files/env.sh
+    - template: jinja
+    - context:
+        service: {{ service }}
+    {%- else %}
+    - replace: False
+    {%- endif %}
+    - user: root
+    - group: root
+    - mode: 0644
+    - makedirs: True
+    {%- if service in packages %}
+    - require:
+      - pkg: {{ service }}_package
+    {%- endif %}
+    {%- if service in services %}
+    - watch_in:
+      - service: {{ service }}_service
+    {%- endif %}
+    # Prevent `test=True` failures on a fresh system
+    - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
+
+  {%- endif %}
+
+{%- endfor %}
 # Configure Zoomdata services
 
 {%- for service, config in zoomdata.config|default({}, true)|dictsort() %}
