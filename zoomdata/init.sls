@@ -9,6 +9,8 @@
 
     {%- if loop.first and not packages %}
 
+# Configure Zoomdata packages repository
+
 include:
   - zoomdata.repo
 
@@ -30,7 +32,48 @@ include:
 
 {%- endfor %}
 
-{%- if salt['test.provider']('service') != 'systemd' and packages %}
+{%- if salt['test.provider']('service') == 'systemd'
+   and zoomdata.limits %}
+
+# Provision systemd limits Zoomdata services
+
+  {%- for service in packages %}
+
+{{ service }}_systemd_limits:
+  file.managed:
+    - name: /etc/systemd/system/{{ service }}.service.d/limits.conf
+    - source: salt://zoomdata/files/systemd_unit_override.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+    - makedirs: True
+    - context:
+        sections:
+          Service:
+    {%- for item, limit in zoomdata.limits|dictsort() %}
+      {%- if 'hard' in limit|default({}, true) %}
+            Limit{{ item|upper() }}: >-
+                {{ (limit.get('soft', none),limit.hard)|reject("none")|join(":") }}
+      {%- endif %}
+    {%- endfor %}
+    - require:
+      - pkg: {{ service }}_package
+    - watch_in:
+      - module: systemctl_reload
+    {%- if service in services %}
+      - service: {{ service }}_service
+    {%- endif %}
+
+  {%- endfor %}
+
+systemctl_reload:
+  module.wait:
+    - name: service.systemctl_reload
+
+{%- else %}
+
+  {%- if packages %}
 
 # Provision global system limits for Zoomdata user
 
@@ -41,17 +84,21 @@ zoomdata-user-limits-conf:
     - template: jinja
     - user: root
     - group: root
-    - mode: 640
+    - mode: 0644
     - require:
       - pkg: {{ packages|first() }}_package
-  {%- if services %}
+    {%- if services %}
     - watch_in:
-    {%- for service in services %}
+      {%- for service in services %}
       - service: {{ service }}_service
-    {%- endfor %}
+      {%- endfor %}
+    {%- endif %}
+
   {%- endif %}
 
 {%- endif %}
+
+# Configure Zoomdata services
 
 {%- for service, config in zoomdata.config|default({}, true)|dictsort() %}
 
@@ -70,7 +117,7 @@ zoomdata-user-limits-conf:
     {%- endif %}
     - user: root
     - group: {{ zoomdata.group }}
-    - mode: 640
+    - mode: 0640
     - makedirs: True
     {%- if service in packages %}
     - require:
@@ -80,12 +127,14 @@ zoomdata-user-limits-conf:
     - watch_in:
       - service: {{ service }}_service
     {%- endif %}
-    # Prevent `test=True` failures on fresh system
+    # Prevent `test=True` failures on a fresh system
     - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
 
   {%- endif %}
 
 {%- endfor %}
+
+# Manage Zoomdata services
 
 {%- for service in packages %}
 
