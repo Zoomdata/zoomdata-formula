@@ -11,6 +11,7 @@ zoomdata:
 
   # Exact version of Zoomdata Server packages to install, default is 'latest'
   {%- if grains['os'] == 'Ubuntu' %}
+  # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
   version: '2.3.9-1+{{ grains['oscodename'] }}.stable'
   {%- else %}
   version: '2.3.9'
@@ -26,6 +27,7 @@ zoomdata:
   edc:
     # Exact version of Zoomdata EDC packages to install, default is 'latest'
     {%- if grains['os'] == 'Ubuntu' %}
+    # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
     version: '2.3.6-1+{{ grains['oscodename'] }}.stable'
     {%- else %}
     version: '2.3.6'
@@ -35,7 +37,7 @@ zoomdata:
       - zoomdata-edc-elasticsearch-1.7
       - zoomdata-edc-rts
 
-  # Global system limits for Zoomdata user:
+  # Global system limits for Zoomdata user (per-service limits for systemd OS):
   # http://docs.zoomdata.com/installation-prerequisites
   limits:
     nproc:
