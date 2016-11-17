@@ -2,11 +2,9 @@
 
 zoomdata:
   base_url: 'http://repo.zoomdata.com'
+  gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   release: '2.3'
   version: 'latest'
-
-  user: zoomdata
-  group: zoomdata
 
   packages:
     - zoomdata
@@ -19,6 +17,9 @@ zoomdata:
     packages:
       - zoomdata-edc-elasticsearch-1.7
       - zoomdata-edc-rts
+
+  user: zoomdata
+  group: zoomdata
 
   limits:
     nproc:

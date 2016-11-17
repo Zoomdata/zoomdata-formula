@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 # vim: ft=sls
 
-# Zoomdata Pillar SLS example
-
+### Zoomdata Pillar SLS example
+#
 zoomdata:
+  ## Package installation settings
+  #
   # Repository base URL where Zoomdata packages are hosted
   base_url: 'http://repo.zoomdata.com'
+  # URL to the GnuPG public key for the repo/pkgs verification.
+  # Put `none` or empty string to skip GnuPG check (for internal repos)
+  gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed
   release: '2.3'
 
@@ -37,6 +42,8 @@ zoomdata:
       - zoomdata-edc-elasticsearch-1.7
       - zoomdata-edc-rts
 
+  ## Configuration settings
+  #
   # Global system limits for Zoomdata user (per-service limits for systemd OS):
   # http://docs.zoomdata.com/installation-prerequisites
   limits:
@@ -47,7 +54,7 @@ zoomdata:
       soft: 1048576
       hard: 1048576
 
-  # Configuration Property Files and Their Corresponding Variables:
+  # Configuration property files and their corresponding variables:
   # http://docs.zoomdata.com/zoomdata-configuration-property-files-and-their-corresponding-variables
   environment:
     # Zoomdata Server
@@ -105,7 +112,7 @@ zoomdata:
     #- zoomdata-scheduler
     #- zoomdata-spark-proxy
 
-# PostgreSQL Pillar configuration
+### PostgreSQL Pillar configuration
 
 postgres:
   users:

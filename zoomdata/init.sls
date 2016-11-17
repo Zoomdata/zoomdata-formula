@@ -24,7 +24,7 @@ include:
     {%- if install.get('version') %}
     - version: {{ install.version }}
     {%- endif %}
-    - skip_verify: True
+    - skip_verify: {{ zoomdata.gpgkey is none or zoomdata.gpgkey == '' }}
     - require:
       - sls: zoomdata.repo
 
