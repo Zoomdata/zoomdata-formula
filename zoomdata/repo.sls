@@ -1,5 +1,9 @@
 {%- from 'zoomdata/map.jinja' import zoomdata with context %}
 
+{%- if not zoomdata.components %}
+  {%- do zoomdata.update({'components': ['stable']}) %}
+{%- endif %}
+
 {%- if grains['os_family'] == 'Debian' %}
 
   {%- set repo_url = (zoomdata.base_url,
@@ -8,14 +12,15 @@
                       grains['os'] | lower())
                       |join('/') %}
 
-zoomdata-repo:
+{{ ('zoomdata', zoomdata.release, 'repo')|join('-') }}:
   pkgrepo.managed:
-    - name: {{ ('deb', repo_url, grains['oscodename'], 'stable')|join(' ') }}
-    - humanname: Zoomdata {{ zoomdata.release }} stable APT repository
+    - name: {{ (['deb', repo_url, grains['oscodename']] +
+               zoomdata.components)|join(' ') }}
     - file: {{ zoomdata.repo_file }}
   {%- if zoomdata.gpgkey %}
     - key_url: {{ zoomdata.gpgkey }}
   {%- endif %}
+    - clean_file: True
 
 {%- elif grains['os_family'] == 'RedHat' %}
 
@@ -24,20 +29,24 @@ zoomdata-repo:
                       'yum',
                       grains['os_family'] | lower(),
                       grains['osmajorrelease'],
-                      grains['osarch'],
-                      'stable')
+                      grains['osarch'])
                       |join('/') %}
 
-zoomdata-repo:
+  {%- for component in zoomdata.components %}
+
+{{ ('zoomdata', zoomdata.release, component)|join('-') }}:
   pkgrepo.managed:
-    - name: zoomdata-{{ zoomdata.release }}
-    - humanname: Zoomdata {{ zoomdata.release }} stable RPMs
-    - baseurl: {{ repo_url }}
-  {%- if zoomdata.gpgkey %}
+    - humanname: {{ ('Zoomdata', zoomdata.release, component, 'for',
+                    grains['os'], grains['osmajorrelease'], '-', grains['osarch'])
+                    |join(' ') }}
+    - baseurl: {{ (repo_url, component)|join('/') }}
+    {%- if zoomdata.gpgkey %}
     - gpgcheck: 1
     - gpgkey: {{ zoomdata.gpgkey }}
-  {%- else %}
+    {%- else %}
     - gpgcheck: 0
-  {%- endif %}
+    {%- endif %}
+
+  {%- endfor %}
 
 {%- endif %}

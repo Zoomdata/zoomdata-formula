@@ -4,8 +4,10 @@ zoomdata:
   base_url: 'http://repo.zoomdata.com'
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   release: '2.3'
-  version: 'latest'
+  components:
+    - stable
 
+  version: 'latest'
   packages:
     - zoomdata
     - zoomdata-scheduler

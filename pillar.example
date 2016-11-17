@@ -13,6 +13,10 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed
   release: '2.3'
+  components:
+    - stable
+    - licensed
+    - unstable
 
   # Exact version of Zoomdata Server packages to install, default is 'latest'
   {%- if grains['os'] == 'Ubuntu' %}
