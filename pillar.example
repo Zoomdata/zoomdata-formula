@@ -21,9 +21,9 @@ zoomdata:
   # Exact version of Zoomdata Server packages to install, default is 'latest'
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-  version: '2.3.9-1+{{ grains['oscodename'] }}.stable'
+  version: '2.3.10-1+{{ grains['oscodename'] }}.stable'
   {%- else %}
-  version: '2.3.9'
+  version: '2.3.10'
   {%- endif %}
 
   # Zoomdata Server packages to install
