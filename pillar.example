@@ -21,7 +21,7 @@ zoomdata:
   # Exact version of Zoomdata Server packages to install, default is 'latest'
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-  version: '2.3.10-1+{{ grains['oscodename'] }}.stable'
+  version: "2.3.10-1+{{ grains['oscodename'] }}.stable"
   {%- else %}
   version: '2.3.10'
   {%- endif %}
@@ -37,7 +37,7 @@ zoomdata:
     # Exact version of Zoomdata EDC packages to install, default is 'latest'
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-    version: '2.3.6-1+{{ grains['oscodename'] }}.stable'
+    version: "2.3.6-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
     version: '2.3.6'
     {%- endif %}
@@ -52,40 +52,40 @@ zoomdata:
   # http://docs.zoomdata.com/installation-prerequisites
   limits:
     nproc:
-      soft: 4096
-      hard: 4096
+      soft: '4096'
+      hard: '4096'
     nofile:
-      soft: 1048576
-      hard: 1048576
+      soft: '1048576'
+      hard: '1048576'
 
   # Configuration property files and their corresponding variables:
   # http://docs.zoomdata.com/zoomdata-configuration-property-files-and-their-corresponding-variables
   environment:
     # Zoomdata Server
     zoomdata:
-      path: /etc/zoomdata/zoomdata.env
+      path: '/etc/zoomdata/zoomdata.env'
       variables:
         JAVA_OPTS: '-Xss256k -Xms2048m -Xmx8192m'
     # Zoomdata Scheduler
     zoomdata-scheduler:
-      path: /etc/zoomdata/scheduler.env
+      path: '/etc/zoomdata/scheduler.env'
       variables:
         SCHEDULER_JAVA_OPTS: '-Xms512m -Xmx1024m'
     # Zoomdata SparkIT
     zoomdata-spark-proxy:
-      path: /etc/zoomdata/spark-proxy.env
+      path: '/etc/zoomdata/spark-proxy.env'
       variables:
         SPARK_PROXY_JAVA_OPTS: '-Xss256k -Xms512m -Xmx2048m'
 
   config:
     # Zoomdata Server
     zoomdata:
-      path: /etc/zoomdata/zoomdata.properties
+      path: '/etc/zoomdata/zoomdata.properties'
       properties:
         # Metadata DB connection details
         # (REMEMBER TO CHANGE VALUES BELOW IN `postgres` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
-        spring.datasource.username: zoomdata
+        spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'Z00mda1a'
         # Screenshot Feature: disable it by default
         # http://docs.zoomdata.com/setting-up-screenshot-for-ubuntu
@@ -95,18 +95,18 @@ zoomdata:
         screenshots.datasource-charts.enabled: False
     # Zoomdata Scheduler
     zoomdata-scheduler:
-      path: /etc/zoomdata/scheduler.properties
+      path: '/etc/zoomdata/scheduler.properties'
       properties:
         # Metadata DB connection details
         # (REMEMBER TO CHANGE VALUES BELOW IN `postgres` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
-        spring.datasource.username: zoomdata
+        spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'Z00mda1a'
     # Zoomdata SparkIT
     zoomdata-spark-proxy:
-      path: /etc/zoomdata/spark-proxy.properties
+      path: '/etc/zoomdata/spark-proxy.properties'
       properties:
-        hadoop.distro: cdh5
+        hadoop.distro: 'cdh5'
 
   # Services to enable and start
   services:
@@ -116,8 +116,9 @@ zoomdata:
     #- zoomdata-scheduler
     #- zoomdata-spark-proxy
 
-### PostgreSQL Pillar configuration
 
+### PostgreSQL Pillar configuration
+#
 postgres:
   users:
     zoomdata:
