@@ -9,3 +9,17 @@
     merge=salt['pillar.get']('zoomdata', {}),
     base='default',
 ) %}
+
+# Read envrionment variables
+
+{% do zoomdata.update({
+    'base_url': salt['environ.get']('ZOOMDATA_REPOSITORY', zoomdata.base_url),
+    'release':  salt['environ.get']('ZOOMDATA_RELEASE', zoomdata.release),
+    'version':  salt['environ.get']('ZOOMDATA_VERSION', zoomdata.get('version')),
+}) %}
+
+{% set edc = {
+    'version': salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version')),
+} %}
+
+{% do zoomdata.edc.update(edc) %}
