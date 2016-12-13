@@ -128,3 +128,60 @@ postgres:
       owner: 'zoomdata'
     zoomdata-scheduler:
       owner: 'zoomdata'
+
+
+### HAproxy Pillar configuration
+#
+# Uncomment to enable forwarding from privileged ports to Zoomdata's binded
+# ports: 80 --> 8080, 443 --> 8443
+#haproxy:
+#  global:
+#    chroot:
+#      enable: True
+#      path: /var/lib/haproxy
+#
+#    maxconn: 4000
+#    user: haproxy
+#    group: haproxy
+#
+#    daemon: True
+#
+#    stats:
+#      enable: True
+#      socketpath: /var/lib/haproxy/stats
+#
+#  defaults:
+#    mode: http
+#    log: global
+#    retries: 3
+#    options:
+#      - httplog
+#      - dontlognull
+#      - http-server-close
+#      - forwardfor
+#
+#  frontends:
+#    zd-http:
+#      bind: "*:80"
+#      reqadds:
+#        - "X-Forwarded-Proto:\\ http"
+#      default_backend: zd-http-backend
+#    zd-https:
+#      bind: "*:443"
+#      mode: tcp
+#      default_backend: zd-https-backend
+#
+#  backends:
+#    zd-http-backend:
+#      servers:
+#        zd-http:
+#          host: 127.0.0.1
+#          port: 8080
+#          check: check
+#    zd-https-backend:
+#      mode: tcp
+#      servers:
+#        zd-https:
+#          host: 127.0.0.1
+#          port: 8443
+#          check: check
