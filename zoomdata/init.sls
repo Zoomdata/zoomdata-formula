@@ -174,19 +174,26 @@ zoomdata-user-limits-conf:
 
 {%- for service in packages %}
 
-  {%- if service in services %}
-    {%- set service_function = 'running' %}
-    {%- set service_requisite = 'watch' %}
-  {%- else %}
-    {%- set service_function = 'dead' %}
-    {%- set service_requisite = 'require' %}
-  {%- endif %}
+  {%- if service not in services %}
 
 {{ service }}_service:
-  service.{{ service_function }}:
+  service.dead:
     - name: {{ service }}
     - enable: True
-    - {{ service_requisite }}:
+    - require:
+      - pkg: {{ service }}_package
+
+  {%- endif %}
+
+{%- endfor %}
+
+{%- for service in services %}
+
+{{ service }}_service:
+  service.running:
+    - name: {{ service }}
+    - enable: True
+    - watch:
       - pkg: {{ service }}_package
 
 {%- endfor %}

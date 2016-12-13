@@ -110,11 +110,11 @@ zoomdata:
 
   # Services to enable and start
   services:
-    #- zoomdata
     #- zoomdata-edc-elasticsearch-1.7
     #- zoomdata-edc-rts
     #- zoomdata-scheduler
     #- zoomdata-spark-proxy
+    #- zoomdata
 
 
 ### PostgreSQL Pillar configuration
