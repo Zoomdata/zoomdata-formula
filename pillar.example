@@ -120,14 +120,26 @@ zoomdata:
 ### PostgreSQL Pillar configuration
 #
 postgres:
+  # Create Zoomdata user
   users:
     zoomdata:
       password: 'Z00mda1a'
+
+  # Create Zoomtata service databases
   databases:
     zoomdata:
       owner: 'zoomdata'
     zoomdata-scheduler:
       owner: 'zoomdata'
+
+  # Append the lines under this item to your postgresql.conf file.
+  # Pay attention to indent exactly with 4 spaces for all lines.
+  #postgresconf: |
+  # listen_addresses = '*'  # listen on all interfaces
+
+  # Backup extension for postgresql.conf file, defaults to `.bak`.
+  # Set to False to stop creation of backup on postgresql.conf changes.
+  #postgresconf_backup: '.bak'
 
 
 ### HAproxy Pillar configuration
