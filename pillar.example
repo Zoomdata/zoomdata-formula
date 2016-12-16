@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml ts=2 sts=2 sw=2 et
 
-### Zoomdata Pillar SLS example
+### Zoomdata provisioning configuration example
 #
 zoomdata:
   ## Package installation settings
@@ -117,7 +117,7 @@ zoomdata:
     #- zoomdata
 
 
-### PostgreSQL Pillar configuration
+### PostgreSQL configuration
 #
 postgres:
   # Create Zoomdata user
@@ -142,7 +142,7 @@ postgres:
   #postgresconf_backup: '.bak'
 
 
-### HAproxy Pillar configuration
+### HAproxy configuration
 #
 # Uncomment to enable forwarding from privileged ports to Zoomdata's binded
 # ports: 80 --> 8080, 443 --> 8443
