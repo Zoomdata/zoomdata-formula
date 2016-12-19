@@ -7,22 +7,28 @@ zoomdata:
   ## Package installation settings
   #
   # Repository base URL where Zoomdata packages are hosted
+  # This would be overriden if ZOOMDATA_REPOSITORY environment varible
   base_url: 'http://repo.zoomdata.com'
   # URL to the GnuPG public key for the repo/pkgs verification.
   # Put `none` or empty string to skip GnuPG check (for internal repos)
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed
+  # This would be overriden if ZOOMDATA_RELEASE environment varible
   release: '2.3'
+
+  # Repository components to enable and install packages from
   components:
     - stable
     - licensed
     - unstable
 
   # Exact version of Zoomdata Server packages to install, default is 'latest'
+  # This would be overriden if ZOOMDATA_VERSION environment varible
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
   #version: "2.3.12-1+{{ grains['oscodename'] }}.stable"
   {%- else %}
+  # Packages version for RHEL systems
   #version: '2.3.12'
   {%- endif %}
 
@@ -35,10 +41,12 @@ zoomdata:
   # Zoomdata EDC section
   edc:
     # Exact version of Zoomdata EDC packages to install, default is 'latest'
+    # This would be overriden if ZOOMDATA_EDC_VERSION environment varible
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
     #version: "2.3.6-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
+  # Packages version for RHEL systems
     #version: '2.3.6'
     {%- endif %}
     # Zoomdata EDC packages to install
