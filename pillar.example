@@ -139,7 +139,7 @@ postgres:
 
   # Backup extension for postgresql.conf file, defaults to `.bak`.
   # Set to False to stop creation of backup on postgresql.conf changes.
-  #postgresconf_backup: '.bak'
+  #postgresconf_backup: ".backup@{{ salt['status.time']('%y-%m-%d_%H:%M:%S') }}"
 
 
 ### HAproxy configuration
