@@ -102,7 +102,7 @@ zoomdata-user-limits-conf:
 
 {%- for service, environment in zoomdata.environment|default({}, true)|dictsort() %}
 
-  {%- if environment.get('path') and packages %}
+  {%- if environment.get('path') and service in packages %}
 
 {{ service }}_environment:
   file.managed:
@@ -138,7 +138,7 @@ zoomdata-user-limits-conf:
 
 {%- for service, config in zoomdata.config|default({}, true)|dictsort() %}
 
-  {%- if config.get('path') and packages %}
+  {%- if config.get('path') and service in packages %}
 
 {{ service }}_config:
   file.managed:
