@@ -94,7 +94,7 @@ zoomdata:
         # (REMEMBER TO CHANGE VALUES BELOW IN `postgres` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: 'zoomdata'
-        spring.datasource.password: 'Z00mda1a'
+        spring.datasource.password: 'PleaseChangeMe'
         # Screenshot Feature: disable it by default
         # http://docs.zoomdata.com/setting-up-screenshot-for-ubuntu
         screenshot.daemon.enabled: False
@@ -109,7 +109,7 @@ zoomdata:
         # (REMEMBER TO CHANGE VALUES BELOW IN `postgres` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: 'zoomdata'
-        spring.datasource.password: 'Z00mda1a'
+        spring.datasource.password: 'PleaseChangeMe'
     # Zoomdata SparkIT
     zoomdata-spark-proxy:
       path: '/etc/zoomdata/spark-proxy.properties'
@@ -131,7 +131,7 @@ postgres:
   # Create Zoomdata user
   users:
     zoomdata:
-      password: 'Z00mda1a'
+      password: 'PleaseChangeMe'
 
   # Create Zoomtata service databases
   databases:

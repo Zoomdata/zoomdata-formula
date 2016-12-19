@@ -51,7 +51,7 @@ zoomdata:
       properties:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: zoomdata
-        spring.datasource.password: 'Z00mda1a'
+        spring.datasource.password: 'PleaseChangeMe'
         screenshot.daemon.enabled: False
         screenshot.daemon.schedule.rate: '168h'
         screenshots.dashboards.enabled: False
@@ -61,7 +61,7 @@ zoomdata:
       properties:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: zoomdata
-        spring.datasource.password: 'Z00mda1a'
+        spring.datasource.password: 'PleaseChangeMe'
     zoomdata-spark-proxy:
       path: /etc/zoomdata/spark-proxy.properties
       properties:
