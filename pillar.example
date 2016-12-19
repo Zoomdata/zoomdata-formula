@@ -19,8 +19,8 @@ zoomdata:
   # Repository components to enable and install packages from
   components:
     - stable
-    - licensed
-    - unstable
+    #- licensed
+    #- unstable
 
   # Exact version of Zoomdata Server packages to install, default is 'latest'
   # This would be overriden if ZOOMDATA_VERSION environment varible
@@ -118,11 +118,11 @@ zoomdata:
 
   # Services to enable and start
   services:
-    #- zoomdata-edc-elasticsearch-1.7
-    #- zoomdata-edc-rts
-    #- zoomdata-scheduler
-    #- zoomdata-spark-proxy
-    #- zoomdata
+    - zoomdata-edc-elasticsearch-1.7
+    - zoomdata-edc-rts
+    - zoomdata-scheduler
+    - zoomdata-spark-proxy
+    - zoomdata
 
 
 ### PostgreSQL configuration
