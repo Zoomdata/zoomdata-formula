@@ -149,6 +149,18 @@ postgres:
   # Set to False to stop creation of backup on postgresql.conf changes.
   #postgresconf_backup: ".backup@{{ salt['status.time']('%y-%m-%d_%H:%M:%S') }}"
 
+  # This section covers ACL management in the `pg_hba.conf` file.
+  # acls list controls: which hosts are allowed to connect, how clients
+  # are authenticated, which PostgreSQL user names they can use, which
+  # databases they can access.
+  #acls:
+  #  # "local" is for Unix domain socket connections only
+  #  - ['local', 'all', 'all', 'peer']
+  #  # IPv4 local connections:
+  #  - ['host', 'all', 'all', '127.0.0.1/32', 'md5']
+  #  # IPv6 local connections:
+  #  - ['host', 'all', 'all', '::1/128', 'md5']
+
 
 ### HAproxy configuration
 #
