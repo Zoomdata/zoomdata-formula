@@ -46,7 +46,7 @@ zoomdata:
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
     #version: "2.3.6-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
-  # Packages version for RHEL systems
+    # Packages version for RHEL systems
     #version: '2.3.6'
     {%- endif %}
     # Zoomdata EDC packages to install
