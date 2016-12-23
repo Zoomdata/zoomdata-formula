@@ -35,6 +35,8 @@ zoomdata:
   # Zoomdata Server packages to install
   packages:
     - zoomdata
+    # Uncomment the Consul package for Zoomdata 2.4 release
+    #- zoomdata-consul
     - zoomdata-scheduler
     - zoomdata-spark-proxy
 
@@ -118,6 +120,8 @@ zoomdata:
 
   # Services to enable and start
   services:
+    # Uncomment the Consul agent service for Zoomdata 2.4 release
+    #- zoomdata-consul
     - zoomdata-edc-elasticsearch-1.7
     - zoomdata-edc-rts
     - zoomdata-scheduler
