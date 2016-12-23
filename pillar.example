@@ -131,6 +131,8 @@ zoomdata:
 
 ### PostgreSQL configuration
 #
+# Comment out the whole section to disable
+# PostgreSQL installation and configuration
 postgres:
   # Create Zoomdata user
   users:
