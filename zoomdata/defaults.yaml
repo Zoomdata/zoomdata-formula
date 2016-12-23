@@ -62,10 +62,6 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'PleaseChangeMe'
-    zoomdata-spark-proxy:
-      path: /etc/zoomdata/spark-proxy.properties
-      properties:
-        hadoop.distro: cdh5
 
   services:
     - zoomdata-edc-elasticsearch-1.7
