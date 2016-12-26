@@ -97,7 +97,9 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
-        # Screenshot Feature: disable it by default
+        # Screenshot Feature: we disable it by default. Look at these pages for
+        # instructions how to set it up on your platform:
+        # http://docs.zoomdata.com/screenshot-for-rpm
         # http://docs.zoomdata.com/setting-up-screenshot-for-ubuntu
         screenshot.daemon.enabled: False
         screenshot.daemon.schedule.rate: '168h'  # 1 week
