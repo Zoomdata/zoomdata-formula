@@ -114,7 +114,8 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
-    # Zoomdata Spark Proxy
+    # Zoomdata Spark Proxy. See the following article for additional info:
+    # http://docs.zoomdata.com/changing-the-default-configuration-for-an-embedded-spark-server
     #zoomdata-spark-proxy:
     #  path: '/etc/zoomdata/spark-proxy.properties'
     #  properties:
