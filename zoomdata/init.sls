@@ -170,7 +170,8 @@ zoomdata-user-limits-conf:
 
 {%- endfor %}
 
-# Manage Zoomdata services
+# Manage Zoomdata services: first stop those were not explicitly declared and
+# finally start all defined in defaults or Pillar
 
 {%- for service in packages %}
 
@@ -195,5 +196,27 @@ zoomdata-user-limits-conf:
     - enable: True
     - watch:
       - pkg: {{ service }}_package
+
+{%- endfor %}
+
+# Try to enable Zoomdata services in "manual" way if Salt `service` state module
+# is currently not available (e.g. during Docker or Packer build)
+
+{%- for service in packages %}
+
+{{ service }}_enable:
+  cmd.run:
+  {%- if salt['file.file_exists']('/bin/systemctl') %}
+    - name: systemctl enable {{ service }}
+  {%- elif salt['cmd.which']('chkconfig') %}
+    - name: chkconfig {{ service }} on
+  {%- elif salt['file.file_exists']('/usr/sbin/update-rc.d') %}
+    - name: update-rc.d {{ service }} defaults
+  {%- else %}
+    # Nothing to do
+    - name: 'true'
+  {%- endif %}
+    - onfail:
+      - service: {{ service }}_service
 
 {%- endfor %}
