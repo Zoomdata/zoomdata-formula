@@ -1,5 +1,7 @@
 {%- from 'zoomdata/map.jinja' import zoomdata with context %}
 
+{%- set init_available = grains['init'] != 'unknown' %}
+
 {%- set packages = [] %}
 {%- set services = zoomdata.services|default([], true) %}
 
@@ -32,12 +34,13 @@ include:
 
 {%- endfor %}
 
-{%- if salt['test.provider']('service') == 'systemd'
-   and zoomdata.limits %}
+{%- if zoomdata.get('limits') and packages %}
+
+  {%- if salt['test.provider']('service') == 'systemd' %}
 
 # Provision systemd limits Zoomdata services
 
-  {%- for service in packages %}
+    {%- for service in packages %}
 
 {{ service }}_systemd_limits:
   file.managed:
@@ -48,32 +51,36 @@ include:
     - group: root
     - mode: 0644
     - makedirs: True
-    - context:
+    - defaults:
         sections:
           Service:
-    {%- for item, limit in zoomdata.limits|dictsort() %}
-      {%- if 'hard' in limit|default({}, true) %}
+      {%- for item, limit in zoomdata.limits|default({}, true)|dictsort() %}
+        {%- if 'hard' in limit|default({}, true) %}
             Limit{{ item|upper() }}: >-
                 {{ (limit.get('soft', none),limit.hard)|reject("none")|join(":") }}
-      {%- endif %}
-    {%- endfor %}
+        {%- endif %}
+      {%- endfor %}
     - require:
       - pkg: {{ service }}_package
+      {%- if init_available %}
     - watch_in:
       - module: systemctl_reload
-    {%- if service in services %}
+        {%- if service in services %}
       - service: {{ service }}_service
-    {%- endif %}
+        {%- endif %}
+      {%- endif %}
 
-  {%- endfor %}
+    {%- endfor %}
+
+    {%- if init_available %}
 
 systemctl_reload:
   module.wait:
     - name: service.systemctl_reload
 
-{%- else %}
+    {%- endif %}
 
-  {%- if packages %}
+  {%- else %}
 
 # Provision global system limits for Zoomdata user
 
@@ -85,9 +92,11 @@ zoomdata-user-limits-conf:
     - user: root
     - group: root
     - mode: 0644
+    - defaults:
+        limits: {{ zoomdata['limits'] }}
     - require:
       - pkg: {{ packages|first() }}_package
-    {%- if services %}
+    {%- if services and init_available %}
     - watch_in:
       {%- for service in services %}
       - service: {{ service }}_service
@@ -110,8 +119,8 @@ zoomdata-user-limits-conf:
     {%- if environment.get('variables') %}
     - source: salt://zoomdata/files/env.sh
     - template: jinja
-    - context:
-        service: {{ service }}
+    - defaults:
+        environment: {{ environment['variables'] }}
     {%- else %}
     - replace: False
     {%- endif %}
@@ -123,7 +132,7 @@ zoomdata-user-limits-conf:
     - require:
       - pkg: {{ service }}_package
     {%- endif %}
-    {%- if service in services %}
+    {%- if service in services and init_available %}
     - watch_in:
       - service: {{ service }}_service
     {%- endif %}
@@ -146,8 +155,8 @@ zoomdata-user-limits-conf:
     {%- if config.get('properties') %}
     - source: salt://zoomdata/files/service.properties
     - template: jinja
-    - context:
-        service: {{ service }}
+    - defaults:
+        properties: {{ config['properties'] }}
     {%- else %}
     - replace: False
     {%- endif %}
@@ -159,7 +168,7 @@ zoomdata-user-limits-conf:
     - require:
       - pkg: {{ service }}_package
     {%- endif %}
-    {%- if service in services %}
+    {%- if service in services and init_available %}
     - watch_in:
       - service: {{ service }}_service
     {%- endif %}
@@ -173,9 +182,11 @@ zoomdata-user-limits-conf:
 # Manage Zoomdata services: first stop those were not explicitly declared and
 # finally start all defined in defaults or Pillar
 
-{%- for service in packages %}
+{%- if grains['init'] != 'unknown' %}
 
-  {%- if service not in services %}
+  {%- for service in packages %}
+
+    {%- if service not in services %}
 
 {{ service }}_service:
   service.dead:
@@ -184,11 +195,11 @@ zoomdata-user-limits-conf:
     - require:
       - pkg: {{ service }}_package
 
-  {%- endif %}
+    {%- endif %}
 
-{%- endfor %}
+  {%- endfor %}
 
-{%- for service in services %}
+  {%- for service in services %}
 
 {{ service }}_service:
   service.running:
@@ -197,26 +208,28 @@ zoomdata-user-limits-conf:
     - watch:
       - pkg: {{ service }}_package
 
-{%- endfor %}
+  {%- endfor %}
+
+{%- else %}
 
 # Try to enable Zoomdata services in "manual" way if Salt `service` state module
 # is currently not available (e.g. during Docker or Packer build)
 
-{%- for service in packages %}
+  {%- for service in packages %}
 
 {{ service }}_enable:
   cmd.run:
-  {%- if salt['file.file_exists']('/bin/systemctl') %}
+    {%- if salt['file.file_exists']('/bin/systemctl') %}
     - name: systemctl enable {{ service }}
-  {%- elif salt['cmd.which']('chkconfig') %}
+    {%- elif salt['cmd.which']('chkconfig') %}
     - name: chkconfig {{ service }} on
-  {%- elif salt['file.file_exists']('/usr/sbin/update-rc.d') %}
+    {%- elif salt['file.file_exists']('/usr/sbin/update-rc.d') %}
     - name: update-rc.d {{ service }} defaults
-  {%- else %}
+    {%- else %}
     # Nothing to do
     - name: 'true'
-  {%- endif %}
-    - onfail:
-      - service: {{ service }}_service
+    {%- endif %}
 
-{%- endfor %}
+  {%- endfor %}
+
+{%- endif %}
