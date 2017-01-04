@@ -3,11 +3,11 @@
 {%- set init_available = grains['init'] != 'unknown' %}
 
 {%- set packages = [] %}
-{%- set services = zoomdata.services|default([], true) %}
+{%- set services = zoomdata['services']|default([], true) %}
 
-{%- for install in (zoomdata, zoomdata.get('edc')) %}
+{%- for install in (zoomdata, zoomdata['edc']|default({})) %}
 
-  {%- for package in install.packages|default([], true) %}
+  {%- for package in install['packages']|default([], true) %}
 
     {%- if loop.first and not packages %}
 
@@ -34,7 +34,7 @@ include:
 
 {%- endfor %}
 
-{%- if zoomdata.get('limits') and packages %}
+{%- if zoomdata['limits']|default({}) and packages %}
 
   {%- if salt['test.provider']('service') == 'systemd' %}
 
@@ -54,7 +54,7 @@ include:
     - defaults:
         sections:
           Service:
-      {%- for item, limit in zoomdata.limits|default({}, true)|dictsort() %}
+      {%- for item, limit in zoomdata['limits']|default({}, true)|dictsort() %}
         {%- if 'hard' in limit|default({}, true) %}
             Limit{{ item|upper() }}: >-
                 {{ (limit.get('soft', none),limit.hard)|reject("none")|join(":") }}
@@ -111,7 +111,7 @@ zoomdata-user-limits-conf:
 
 {%- for service, environment in zoomdata.environment|default({}, true)|dictsort() %}
 
-  {%- if environment.get('path') and service in packages %}
+  {%- if environment['path']|default('') and service in packages %}
 
 {{ service }}_environment:
   file.managed:
@@ -147,7 +147,7 @@ zoomdata-user-limits-conf:
 
 {%- for service, config in zoomdata.config|default({}, true)|dictsort() %}
 
-  {%- if config.get('path') and service in packages %}
+  {%- if config['path']|default('') and service in packages %}
 
 {{ service }}_config:
   file.managed:
