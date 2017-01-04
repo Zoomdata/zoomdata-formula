@@ -22,7 +22,8 @@ zoomdata:
     #- licensed
     #- unstable
 
-  # Exact version of Zoomdata Server packages to install, default is 'latest'
+  # Exact version of Zoomdata Server packages to install, use 'latest' keyword
+  # to always upgrade to the latest minor version in the release
   # This would be overriden if ZOOMDATA_VERSION environment varible
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
@@ -42,7 +43,8 @@ zoomdata:
 
   # Zoomdata EDC section
   edc:
-    # Exact version of Zoomdata EDC packages to install, default is 'latest'
+    # Exact version of Zoomdata Server packages to install, use 'latest' keyword
+    # to always upgrade to the latest minor version in the release.
     # This would be overriden if ZOOMDATA_EDC_VERSION environment varible
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
