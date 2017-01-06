@@ -213,7 +213,8 @@ zoomdata-user-limits-conf:
 {%- else %}
 
 # Try to enable Zoomdata services in "manual" way if Salt `service` state module
-# is currently not available (e.g. during Docker or Packer build)
+# is currently not available (e.g. during Docker or Packer build when is no init
+# system running)
 
   {%- for service in packages %}
 
