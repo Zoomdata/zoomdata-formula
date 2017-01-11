@@ -151,6 +151,14 @@ postgres:
     zoomdata-scheduler:
       owner: 'zoomdata'
 
+  {%- if grains['init'] == 'unknown' %}
+
+  # If Salt is unable to detect init system running in the scope of state run,
+  # probably we are trying to bake a container/VM image with PostgreSQL.
+  bake_image: True
+
+  {%- endif %}
+
   # Append the lines under this item to your postgresql.conf file.
   # Pay attention to indent exactly with 4 spaces for all lines.
   #postgresconf: |
