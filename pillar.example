@@ -172,6 +172,9 @@ postgres:
   # acls list controls: which hosts are allowed to connect, how clients
   # are authenticated, which PostgreSQL user names they can use, which
   # databases they can access.
+  #
+  # If ``acls`` item value is empty ('', [], null), then the contents of
+  # ``pg_hba.conf`` file will not be touched at all.
   #acls:
   #  # "local" is for Unix domain socket connections only
   #  - ['local', 'all', 'all', 'peer']
