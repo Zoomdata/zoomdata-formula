@@ -14,7 +14,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed
   # This would be overriden if ZOOMDATA_RELEASE environment varible
-  release: '2.3'
+  release: '2.4'
 
   # Repository components to enable and install packages from
   components:
@@ -27,17 +27,17 @@ zoomdata:
   # This would be overriden if ZOOMDATA_VERSION environment varible
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-  #version: "2.3.12-1+{{ grains['oscodename'] }}.stable"
+  #version: "2.4.3-1MR4+{{ grains['oscodename'] }}.stable"
   {%- else %}
   # Packages version for RHEL systems
-  #version: '2.3.12'
+  #version: '2.4.3'
   {%- endif %}
 
   # Zoomdata Server packages to install
   packages:
     - zoomdata
-    # Uncomment the Consul package for Zoomdata 2.4 release
-    #- zoomdata-consul
+    # The Consul package is mandatory since Zoomdata 2.4 release, comment out for 2.3
+    - zoomdata-consul
     - zoomdata-scheduler
     - zoomdata-spark-proxy
 
@@ -48,10 +48,10 @@ zoomdata:
     # This would be overriden if ZOOMDATA_EDC_VERSION environment varible
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-    #version: "2.3.6-1+{{ grains['oscodename'] }}.stable"
+    #version: "2.4.3-1MR4+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL systems
-    #version: '2.3.6'
+    #version: '2.4.3'
     {%- endif %}
     # Zoomdata EDC packages to install
     packages:
@@ -125,8 +125,8 @@ zoomdata:
 
   # Services to enable and start
   services:
-    # Uncomment the Consul agent service for Zoomdata 2.4 release
-    #- zoomdata-consul
+    # The Consul service is mandatory since Zoomdata 2.4 release, comment out for 2.3
+    - zoomdata-consul
     - zoomdata-edc-elasticsearch-1.7
     - zoomdata-edc-rts
     - zoomdata-scheduler

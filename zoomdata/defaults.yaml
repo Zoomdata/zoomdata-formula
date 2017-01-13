@@ -3,13 +3,14 @@
 zoomdata:
   base_url: 'http://repo.zoomdata.com'
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
-  release: '2.3'
+  release: '2.4'
   components:
     - stable
 
   #version: 'latest'
   packages:
     - zoomdata
+    - zoomdata-consul
     - zoomdata-scheduler
     - zoomdata-spark-proxy
     #- zoomdata-xvfb
@@ -64,6 +65,7 @@ zoomdata:
         spring.datasource.password: 'PleaseChangeMe'
 
   services:
+    - zoomdata-consul
     - zoomdata-edc-elasticsearch-1.7
     - zoomdata-edc-rts
     - zoomdata-scheduler
