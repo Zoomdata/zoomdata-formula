@@ -159,14 +159,18 @@ postgres:
 
   {%- endif %}
 
+  {%- if 'status.time' in salt.keys() %}
+
+  # Backup extension for configuration files, defaults to ``.bak``.
+  # Set ``False`` to stop creation of backups when config files change.
+  config_backup: ".backup@{{ salt['status.time']('%y-%m-%d_%H:%M:%S') }}"
+
+  {%- endif %}
+
   # Append the lines under this item to your postgresql.conf file.
   # Pay attention to indent exactly with 4 spaces for all lines.
   #postgresconf: |
   #  listen_addresses = '*'  # listen on all interfaces
-
-  # Backup extension for postgresql.conf file, defaults to `.bak`.
-  # Set to False to stop creation of backup on postgresql.conf changes.
-  #postgresconf_backup: ".backup@{{ salt['status.time']('%y-%m-%d_%H:%M:%S') }}"
 
   # This section covers ACL management in the `pg_hba.conf` file.
   # acls list controls: which hosts are allowed to connect, how clients
