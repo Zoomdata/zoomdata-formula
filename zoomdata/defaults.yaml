@@ -64,6 +64,9 @@ zoomdata:
         spring.datasource.username: zoomdata
         spring.datasource.password: 'PleaseChangeMe'
 
+  tls:
+    name: zoomdata
+
   services:
     - zoomdata-consul
     - zoomdata-edc-elasticsearch-1.7
@@ -72,6 +75,3 @@ zoomdata:
     - zoomdata-spark-proxy
     - zoomdata
     #- zoomdata-xvfb
-
-  tls:
-    name: zoomdata

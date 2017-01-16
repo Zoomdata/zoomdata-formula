@@ -107,6 +107,12 @@ zoomdata:
         screenshot.daemon.schedule.rate: '168h'  # 1 week
         screenshots.dashboards.enabled: False
         screenshots.datasource-charts.enabled: False
+        # Configure HTTPS for Zoomdata (see ``tls`` item below)
+        # http://docs.zoomdata.com/adding-ssl-certificate-to-the-zoomdata-server
+        #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
+        #server.ssl.key-store-password: 'your_keystore_password'
+        # Optional redired to https scheme, this requires HAProxy (see below)
+        #http.redirect.port: '443'
     # Zoomdata Scheduler
     zoomdata-scheduler:
       path: '/etc/zoomdata/scheduler.properties'
@@ -122,6 +128,20 @@ zoomdata:
     #  path: '/etc/zoomdata/spark-proxy.properties'
     #  properties:
     #    hadoop.distro: 'cdh5'
+
+  # Zoomdata TLS: paste certificates chain and private key for your domain here.
+  # Pay attention to indent exactly with 4 spaces for all lines under
+  # ``certificate`` and ``key`` items.
+  #tls:
+  #  name: 'www.example.com'
+  #  certificate: |
+  #      -----BEGIN CERTIFICATE-----
+  #      MIIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  #      -----END CERTIFICATE-----
+  #  key: |
+  #      -----BEGIN PRIVATE KEY-----
+  #      MIIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  #      -----END PRIVATE KEY-----
 
   # Services to enable and start
   services:
