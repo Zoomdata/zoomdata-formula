@@ -4,33 +4,43 @@
 
 {%- set packages = [] %}
 {%- set services = zoomdata.services|default([], true) %}
+{%- set versions = {} %}
 
 {%- for install in (zoomdata, zoomdata['edc']|default({})) %}
-
   {%- for package in install.packages|default([], true) %}
+    {%- do packages.append(package) %}
+    {%- do versions.update({package: install.get('version')}) %}
+  {%- endfor %}
+{%- endfor %}
 
-    {%- if loop.first and not packages %}
+{%- set includes = [] %}
+{%- if packages and zoomdata.base_url %}
+  {%- do includes.append('zoomdata.repo') %}
+{%- endif %}
+{%- if 'zoomdata' in packages %}
+  {%- do includes.append('zoomdata.tls') %}
+{%- endif %}
+
+{%- if includes -%}
 
 # Configure Zoomdata packages repository
 
 include:
-  - zoomdata.repo
+  {{ includes|yaml(false)|indent(2) }}
 
-    {%- endif %}
+{%- endif %}
 
-    {%- do packages.append(package) %}
+{%- for package in packages %}
 
 {{ package }}_package:
   pkg.installed:
     - name: {{ package }}
-    {%- if install.get('version') %}
-    - version: {{ install.version }}
-    {%- endif %}
+  {%- if versions.get(package) %}
+    - version: {{ versions[package] }}
+  {%- endif %}
     - skip_verify: {{ zoomdata.gpgkey is none or zoomdata.gpgkey == '' }}
     - require:
       - sls: zoomdata.repo
-
-  {%- endfor %}
 
 {%- endfor %}
 
