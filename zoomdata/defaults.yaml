@@ -72,3 +72,6 @@ zoomdata:
     - zoomdata-spark-proxy
     - zoomdata
     #- zoomdata-xvfb
+
+  tls:
+    name: zoomdata

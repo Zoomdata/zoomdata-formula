@@ -3,11 +3,11 @@
 {%- set init_available = grains['init'] != 'unknown' %}
 
 {%- set packages = [] %}
-{%- set services = zoomdata['services']|default([], true) %}
+{%- set services = zoomdata.services|default([], true) %}
 
 {%- for install in (zoomdata, zoomdata['edc']|default({})) %}
 
-  {%- for package in install['packages']|default([], true) %}
+  {%- for package in install.packages|default([], true) %}
 
     {%- if loop.first and not packages %}
 
@@ -182,7 +182,7 @@ zoomdata-user-limits-conf:
 # Manage Zoomdata services: first stop those were not explicitly declared and
 # finally start all defined in defaults or Pillar
 
-{%- if grains['init'] != 'unknown' %}
+{%- if init_available %}
 
   {%- for service in packages %}
 
