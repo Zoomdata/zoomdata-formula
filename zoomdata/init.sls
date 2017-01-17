@@ -6,7 +6,7 @@
 {%- set services = zoomdata.services|default([], true) %}
 {%- set versions = {} %}
 
-{%- for install in (zoomdata, zoomdata['edc']|default({})) %}
+{%- for install in (zoomdata, zoomdata.edc|default({}, true)) %}
   {%- for package in install.packages|default([], true) %}
     {%- do packages.append(package) %}
     {%- do versions.update({package: install.get('version')}) %}

@@ -16,10 +16,9 @@
     'base_url': salt['environ.get']('ZOOMDATA_REPOSITORY', zoomdata.base_url),
     'release':  salt['environ.get']('ZOOMDATA_RELEASE', zoomdata.release),
     'version':  salt['environ.get']('ZOOMDATA_VERSION', zoomdata.get('version')),
+    'edc':      zoomdata.edc|default({}, true),
 }) %}
 
-{% set edc = {
-    'version': salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version')),
-} %}
-
-{% do zoomdata.edc.update(edc) %}
+{% do zoomdata.edc.update(
+    {'version': salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version'))},
+) %}
