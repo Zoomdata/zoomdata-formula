@@ -8,8 +8,10 @@
 
 {%- for install in (zoomdata, zoomdata.edc|default({}, true)) %}
   {%- for package in install.packages|default([], true) %}
-    {%- do packages.append(package) %}
-    {%- do versions.update({package: install.get('version')}) %}
+    {%- if package not in packages %}
+      {%- do packages.append(package) %}
+      {%- do versions.update({package: install.get('version')}) %}
+    {%- endif %}
   {%- endfor %}
 {%- endfor %}
 
