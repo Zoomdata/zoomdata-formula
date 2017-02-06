@@ -27,10 +27,10 @@ zoomdata:
   # This would be overriden if ZOOMDATA_VERSION environment varible
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-  #version: "2.4.3-1MR4+{{ grains['oscodename'] }}.stable"
+  #version: "2.4.4-1MR4+{{ grains['oscodename'] }}.stable"
   {%- else %}
   # Packages version for RHEL systems
-  #version: '2.4.3'
+  #version: '2.4.4'
   {%- endif %}
 
   # Zoomdata Server packages to install
@@ -48,10 +48,10 @@ zoomdata:
     # This would be overriden if ZOOMDATA_EDC_VERSION environment varible
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-    #version: "2.4.3-1MR4+{{ grains['oscodename'] }}.stable"
+    #version: "2.4.4-1MR4+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL systems
-    #version: '2.4.3'
+    #version: '2.4.4'
     {%- endif %}
     # Zoomdata EDC packages to install
     packages:
