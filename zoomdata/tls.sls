@@ -1,8 +1,10 @@
 {%- from 'zoomdata/map.jinja' import zoomdata with context %}
 
 {%- set init_available = grains['init'] != 'unknown' %}
-{%- set keystore = zoomdata.config.zoomdata.properties['server.ssl.key-store']|default(none, true) %}
-{%- set password = zoomdata.config.zoomdata.properties['server.ssl.key-store-password']|default(none, true) %}
+{%- set config = zoomdata['config']|default({}, true) %}
+{%- set properties = config.get('zoomdata', {})['properties']|default({}, true) %}
+{%- set keystore = properties['server.ssl.key-store']|default(none, true) %}
+{%- set password = properties['server.ssl.key-store-password']|default(none, true) %}
 
 include:
   - zoomdata
