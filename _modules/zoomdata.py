@@ -313,11 +313,11 @@ def inspect(versions=False):
 
     for params in list_repos().itervalues():
         url = urlparse.urlparse(params['baseurl'])
-        if not baseurl:
+        if baseurl is None:
             baseurl = urlparse.urlunparse((url.scheme, url.netloc, '', '', '', ''))
-        if not gpgkey:
+        if gpgkey is None:
             gpgkey = params['gpgkey']
-        if not release:
+        if release is None:
             release = url.path.split('/')[1]
         components.append(url.path.rsplit('/')[-1])
 
@@ -333,15 +333,23 @@ def inspect(versions=False):
             }
 
     for service, config_file in PROPERTIES.iteritems():
-        parsed_props = properties(config_file)
-        if parsed_props is None:
+        configuration = {}
+
+        legacy_config = properties(config_file.rsplit('.', 1)[0] + '.conf')
+        if legacy_config:
+            configuration.update(legacy_config)
+
+        new_config = properties(config_file)
+        if new_config:
+            configuration.update(new_config)
+        elif not configuration:
             config[service] = None
-        else:
-            # file with properties is present
-            config[service] = {
-                'path': config_file,
-                'properties': parsed_props,
-            }
+            continue
+
+        config[service] = {
+            'path': config_file,
+            'properties': configuration,
+        }
 
     ret = {
         ZOOMDATA: {
