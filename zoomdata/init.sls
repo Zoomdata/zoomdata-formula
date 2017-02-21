@@ -161,6 +161,18 @@ zoomdata-user-limits-conf:
 
   {%- if config['path']|default('') and service in packages %}
 
+    {%- if config['old_path']|default('') %}
+
+{{ service }}_legacy_config:
+  file.absent:
+    - name: {{ config.old_path }}
+      {%- if service in services and init_available %}
+    - watch_in:
+      - service: {{ service }}_service
+      {%- endif %}
+
+    {%- endif %}
+
 {{ service }}_config:
   file.managed:
     - name: {{ config.path }}
@@ -176,10 +188,8 @@ zoomdata-user-limits-conf:
     - group: {{ zoomdata.group }}
     - mode: 0640
     - makedirs: True
-    {%- if service in packages %}
     - require:
       - pkg: {{ service }}_package
-    {%- endif %}
     {%- if service in services and init_available %}
     - watch_in:
       - service: {{ service }}_service

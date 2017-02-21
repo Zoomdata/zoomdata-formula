@@ -92,6 +92,8 @@ zoomdata:
   config:
     # Zoomdata Server
     zoomdata:
+      # Old path (legacy configuration file) will be removed if specified.
+      #old_path: '/etc/zoomdata/zoomdata.conf'
       path: '/etc/zoomdata/zoomdata.properties'
       properties:
         # Metadata DB connection details
