@@ -353,7 +353,7 @@ def inspect(versions=False):
 
     ret = {
         ZOOMDATA: {
-            'baseurl': baseurl,
+            'base_url': baseurl,
             'gpgkey': gpgkey,
             'release': release,
             'components': components,
