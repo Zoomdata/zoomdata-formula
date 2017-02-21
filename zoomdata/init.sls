@@ -16,7 +16,7 @@
 {%- endfor %}
 
 {%- set includes = [] %}
-{%- if packages and zoomdata.base_url %}
+{%- if packages %}
   {%- do includes.append('zoomdata.repo') %}
 {%- endif %}
 {%- if 'zoomdata' in packages %}

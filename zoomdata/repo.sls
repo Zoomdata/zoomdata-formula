@@ -1,38 +1,40 @@
 {%- from 'zoomdata/map.jinja' import zoomdata with context %}
 
-{%- if not zoomdata.components %}
-  {%- do zoomdata.update({'components': ['stable']}) %}
-{%- endif %}
+{%- if zoomdata.base_url and zoomdata.release %}
 
-{%- if grains['os_family'] == 'Debian' %}
+  {%- if not zoomdata.components %}
+    {%- do zoomdata.update({'components': ['stable']}) %}
+  {%- endif %}
 
-  {%- set repo_url = (zoomdata.base_url,
-                      zoomdata.release,
-                      'apt',
-                      grains['os'] | lower())
-                      |join('/') %}
+  {%- if grains['os_family'] == 'Debian' %}
+
+    {%- set repo_url = (zoomdata.base_url,
+                        zoomdata.release,
+                        'apt',
+                        grains['os'] | lower())
+                        |join('/') %}
 
 {{ ('zoomdata', zoomdata.release, 'repo')|join('-') }}:
   pkgrepo.managed:
     - name: {{ (['deb', repo_url, grains['oscodename']] +
                zoomdata.components)|join(' ') }}
     - file: {{ zoomdata.repo_file }}
-  {%- if zoomdata.gpgkey %}
+    {%- if zoomdata.gpgkey %}
     - key_url: {{ zoomdata.gpgkey }}
-  {%- endif %}
+    {%- endif %}
     - clean_file: True
 
-{%- elif grains['os_family'] == 'RedHat' %}
+  {%- elif grains['os_family'] == 'RedHat' %}
 
-  {%- set repo_url = (zoomdata.base_url,
-                      zoomdata.release,
-                      'yum',
-                      grains['os_family'] | lower(),
-                      grains['osmajorrelease'],
-                      grains['osarch'])
-                      |join('/') %}
+    {%- set repo_url = (zoomdata.base_url,
+                        zoomdata.release,
+                        'yum',
+                        grains['os_family'] | lower(),
+                        grains['osmajorrelease'],
+                        grains['osarch'])
+                        |join('/') %}
 
-  {%- for component in zoomdata.components %}
+    {%- for component in zoomdata.components %}
 
 {{ ('zoomdata', zoomdata.release, component)|join('-') }}:
   pkgrepo.managed:
@@ -40,13 +42,23 @@
                     grains['os'], grains['osmajorrelease'], '-', grains['osarch'])
                     |join(' ') }}
     - baseurl: {{ (repo_url, component)|join('/') }}
-    {%- if zoomdata.gpgkey %}
+      {%- if zoomdata.gpgkey %}
     - gpgcheck: 1
     - gpgkey: {{ zoomdata.gpgkey }}
-    {%- else %}
+      {%- else %}
     - gpgcheck: 0
-    {%- endif %}
+      {%- endif %}
 
-  {%- endfor %}
+    {%- endfor %}
+
+  {%- endif %}
+
+{%- else %}
+
+zoomdata-repo-is-mission:
+  test.show_notification:
+    - text: |
+        There is no Zoomdata repository URL and/or release (major) version provided.
+        The repo configuration skipped.
 
 {%- endif %}
