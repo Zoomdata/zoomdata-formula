@@ -291,7 +291,8 @@ def services(running=False):
     return zd_services
 
 
-def inspect(versions=False):
+def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
+            versions=False):
     '''
     Inspect Zoomdata installation and return info as dictionary structure
 
@@ -367,12 +368,19 @@ def inspect(versions=False):
         },
     }
 
+    if limits:
+        # TO DO: implement reading limits.
+        # Just skip limits configuration for now to omit defaults.
+        ret[ZOOMDATA].update({
+            'limits': None,
+        })
+
     if versions:
         ret[ZOOMDATA].update({
-            'version': version()
+            'version': version(),
         })
         ret[ZOOMDATA]['edc'].update({
-            'version': version_edc()
+            'version': version_edc(),
         })
 
     return ret
