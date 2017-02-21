@@ -330,7 +330,7 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
             # file with environment is present
             env[service] = {
                 'path': env_file,
-                'properties': parsed_env,
+                'variables': parsed_env,
             }
 
     for service, config_file in PROPERTIES.iteritems():
