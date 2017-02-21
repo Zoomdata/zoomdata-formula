@@ -334,10 +334,15 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
             }
 
     for service, config_file in PROPERTIES.iteritems():
+        config[service] = {}
         configuration = {}
 
-        legacy_config = properties(config_file.rsplit('.', 1)[0] + '.conf')
+        legacy_file = config_file.rsplit('.', 1)[0] + '.conf'
+        legacy_config = properties(legacy_file)
         if legacy_config:
+            config[service].update({
+                'old_path': legacy_file,
+            })
             configuration.update(legacy_config)
 
         new_config = properties(config_file)
@@ -347,10 +352,10 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
             config[service] = None
             continue
 
-        config[service] = {
+        config[service].update({
             'path': config_file,
             'properties': configuration,
-        }
+        })
 
     ret = {
         ZOOMDATA: {
