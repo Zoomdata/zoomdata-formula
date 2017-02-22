@@ -316,7 +316,7 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
         url = urlparse.urlparse(params['baseurl'])
         if baseurl is None:
             baseurl = urlparse.urlunparse((url.scheme, url.netloc, '', '', '', ''))
-        if gpgkey is None:
+        if gpgkey is None and 'gpgkey' in params:
             gpgkey = params['gpgkey']
         if release is None:
             release = url.path.split('/')[1]
