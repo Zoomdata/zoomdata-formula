@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-# vim: ft=jinja
-
 {% import_yaml 'zoomdata/osfamily_map.yaml' as osfamily_map %}
 
 {% set zoomdata = salt['grains.filter_by'](
@@ -10,7 +7,7 @@
     base='default',
 ) %}
 
-# Read envrionment variables
+{# Read envrionment variables #}
 
 {% do zoomdata.update({
     'base_url': salt['environ.get']('ZOOMDATA_REPOSITORY', zoomdata.base_url),
@@ -22,3 +19,11 @@
 {% do zoomdata.edc.update(
     {'version': salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version'))},
 ) %}
+
+{% for service, config in zoomdata.config|default({}, true)|dictsort() %}
+    {% if config.properties|default(none, true) and not config.merge|default(true) %}
+        {# Drop default properties if we don't want to merge them #}
+        {% set properties = salt['pillar.get']('zoomdata:config:' ~ service ~ ':properties', none) %}
+        {% do zoomdata.config[service].update({'properties': properties}) %}
+    {% endif %}
+{% endfor %}
