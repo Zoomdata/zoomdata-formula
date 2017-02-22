@@ -353,6 +353,8 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
             continue
 
         config[service].update({
+            # Disable merging with defaults is mandatory here
+            'merge': False,
             'path': config_file,
             'properties': configuration,
         })
