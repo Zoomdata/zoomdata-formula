@@ -221,9 +221,9 @@ zoomdata-user-limits-conf:
 
   {%- endfor %}
 
-  {%- for service in packages %}
+  {%- for service in services %}
 
-    {%- if service in services %}
+    {%- if service in packages %}
 
 {{ service }}_service:
   service.running:
