@@ -288,6 +288,12 @@ def services(running=False):
             else:
                 zd_services.append(srv)
 
+    if ZOOMDATA in zd_services:
+        # Put zoomdata service to the end of the list,
+        # because it is better to be started last
+        zd_services.remove(ZOOMDATA)
+        zd_services.append(ZOOMDATA)
+
     return zd_services
 
 
