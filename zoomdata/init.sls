@@ -64,6 +64,7 @@ include:
     - mode: 0644
     - makedirs: True
     - defaults:
+        header: "{{ zoomdata.header|default('', true) }}"
         sections:
           Service:
       {%- for item, limit in zoomdata.limits|default({}, true)|dictsort() %}
@@ -105,6 +106,7 @@ zoomdata-user-limits-conf:
     - group: root
     - mode: 0644
     - defaults:
+        header: "{{ zoomdata.header|default('', true) }}"
         limits: {{ zoomdata['limits'] }}
     - require:
       - pkg: {{ packages|first() }}_package
@@ -132,6 +134,7 @@ zoomdata-user-limits-conf:
     - source: salt://zoomdata/files/env.sh
     - template: jinja
     - defaults:
+        header: "{{ zoomdata.header|default('', true) }}"
         environment: {{ environment['variables'] }}
     {%- else %}
     - replace: False
@@ -180,6 +183,7 @@ zoomdata-user-limits-conf:
     - source: salt://zoomdata/files/service.properties
     - template: jinja
     - defaults:
+        header: "{{ zoomdata.header|default('', true) }}"
         properties: {{ config['properties'] }}
     {%- else %}
     - replace: False
