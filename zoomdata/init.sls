@@ -46,7 +46,7 @@ include:
 
 {%- endfor %}
 
-{%- if zoomdata['limits']|default({}) and packages %}
+{%- if zoomdata.limits|default({}) and packages %}
 
   {%- if salt['test.provider']('service') == 'systemd' %}
 
@@ -66,7 +66,7 @@ include:
     - defaults:
         sections:
           Service:
-      {%- for item, limit in zoomdata['limits']|default({}, true)|dictsort() %}
+      {%- for item, limit in zoomdata.limits|default({}, true)|dictsort() %}
         {%- if 'hard' in limit|default({}, true) %}
             Limit{{ item|upper() }}: >-
                 {{ (limit.get('soft', none),limit.hard)|reject("none")|join(":") }}
@@ -159,9 +159,9 @@ zoomdata-user-limits-conf:
 
 {%- for service, config in zoomdata.config|default({}, true)|dictsort() %}
 
-  {%- if config['path']|default('') and service in packages %}
+  {%- if config.path|default('') and service in packages %}
 
-    {%- if config['old_path']|default('') %}
+    {%- if config.old_path|default('') %}
 
 {{ service }}_legacy_config:
   file.absent:
@@ -176,7 +176,7 @@ zoomdata-user-limits-conf:
 {{ service }}_config:
   file.managed:
     - name: {{ config.path }}
-    {%- if config.get('properties') %}
+    {%- if config.properties|default({}, true) %}
     - source: salt://zoomdata/files/service.properties
     - template: jinja
     - defaults:

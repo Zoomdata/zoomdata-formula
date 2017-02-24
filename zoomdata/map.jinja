@@ -1,5 +1,6 @@
 {% import_yaml 'zoomdata/osfamily_map.yaml' as osfamily_map %}
 
+{# Merge Pillar items with defaults #}
 {% set zoomdata = salt['grains.filter_by'](
     osfamily_map,
     grain='os_family',
@@ -7,8 +8,12 @@
     base='default',
 ) %}
 
-{# Read envrionment variables #}
+{# Import modules bundled with the formula #}
+{% if salt['zoomdata.inspect']|default(none) is not callable %}
+    {% do salt['saltutil.sync_modules']() %}
+{% endif %}
 
+{# Read envrionment variables #}
 {% do zoomdata.update({
     'base_url': salt['environ.get']('ZOOMDATA_REPOSITORY', zoomdata.base_url),
     'release':  salt['environ.get']('ZOOMDATA_RELEASE', zoomdata.release),
@@ -20,10 +25,19 @@
     {'version': salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version'))},
 ) %}
 
+{# Process properties #}
 {% for service, config in zoomdata.config|default({}, true)|dictsort() %}
-    {% if config.properties|default(none, true) and not config.merge|default(true) %}
+    {% if config.properties|default({}, true) and not config.merge|default(true) %}
         {# Drop default properties if we don't want to merge them #}
         {% set properties = salt['pillar.get']('zoomdata:config:' ~ service ~ ':properties', none) %}
+        {% do zoomdata.config[service].update({'properties': properties}) %}
+    {% endif %}
+
+    {% if config['update']|default(false) %}
+        {# Read local properties and update them with provided values #}
+        {% set local_config = salt['zoomdata.inspect']().zoomdata.config[service]|default({}, true) %}
+        {% set properties = local_config.properties|default({}. true) %}
+        {% do properties.update(zoomdata.config[service].properties|default({}, true)) %}
         {% do zoomdata.config[service].update({'properties': properties}) %}
     {% endif %}
 {% endfor %}
