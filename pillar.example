@@ -121,9 +121,12 @@ zoomdata:
         #server.ssl.key-store-password: 'your_keystore_password'
         # Optional redired to https scheme, this requires HAProxy (see below)
         #http.redirect.port: '443'
+      # Update the properties with ones given above. Do not remove locally
+      # modified properties. This is ``False`` by default (always replace).
+      update: False
     # Zoomdata Scheduler
     zoomdata-scheduler:
-      merge: True
+      #merge: True
       path: '/etc/zoomdata/scheduler.properties'
       properties:
         # Metadata DB connection details
@@ -131,12 +134,15 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
+      #update: False
     # Zoomdata Spark Proxy. See the following article for additional info:
     # http://docs.zoomdata.com/changing-the-default-configuration-for-an-embedded-spark-server
     zoomdata-spark-proxy:
-    #  path: '/etc/zoomdata/spark-proxy.properties'
-    #  properties:
-    #    hadoop.distro: 'cdh5'
+      #merge: True
+      #path: '/etc/zoomdata/spark-proxy.properties'
+      #properties:
+        #hadoop.distro: 'cdh5'
+      #update: False
 
   # Zoomdata TLS: paste certificates chain and private key for your domain here.
   # Pay attention to indent exactly with 4 spaces for all lines under

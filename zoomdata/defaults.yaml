@@ -48,6 +48,7 @@ zoomdata:
 
   config:
     zoomdata:
+      merge: True
       path: /etc/zoomdata/zoomdata.properties
       properties:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
@@ -57,12 +58,20 @@ zoomdata:
         screenshot.daemon.schedule.rate: '168h'
         screenshots.dashboards.enabled: False
         screenshots.datasource-charts.enabled: False
+      update: False
     zoomdata-scheduler:
+      merge: True
       path: /etc/zoomdata/scheduler.properties
       properties:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'PleaseChangeMe'
+      update: False
+    zoomdata-spark-proxy:
+      merge: True
+      path: '/etc/zoomdata/spark-proxy.properties'
+      properties: {}
+      update: False
 
   tls:
     name: zoomdata
