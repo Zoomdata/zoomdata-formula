@@ -326,7 +326,9 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
             gpgkey = params['gpgkey']
         if release is None:
             release = url.path.split('/')[1]
-        components.append(url.path.rsplit('/')[-1])
+        component = url.path.rsplit('/')[-1]
+        if component not in components:
+            components.append(url.path.rsplit('/')[-1])
 
     for service, env_file in ENVIRONMENT.iteritems():
         parsed_env = environment(env_file)
