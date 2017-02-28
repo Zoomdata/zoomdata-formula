@@ -161,7 +161,7 @@ zoomdata:
   # Services to enable and start
   services:
     # The Consul service is mandatory since Zoomdata 2.4 release, comment out for 2.3
-    - zoomdata-consul
+    - zoomdata-consul  # always start it first
     - zoomdata-edc-elasticsearch-1.7
     - zoomdata-edc-rts
     - zoomdata-scheduler
