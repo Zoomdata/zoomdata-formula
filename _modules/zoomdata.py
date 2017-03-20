@@ -302,8 +302,12 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
     '''
     Inspect Zoomdata installation and return info as dictionary structure
 
+    limits : False
+        Detect system limits. Currently not implemented, so this parameter
+        just returns ``None`` for ``limits`` key.
+
     versions : False
-        Include exact versions of Zoomdata and EDC
+        Include exact versions of Zoomdata and EDC installed
 
     CLI Example:
 
