@@ -323,11 +323,11 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
     config = {}
 
     for params in list_repos().itervalues():
-        url = urlparse.urlparse(params['baseurl'])
+        url = urlparse.urlparse(params['baseurl'].strip())
         if baseurl is None:
             baseurl = urlparse.urlunparse((url.scheme, url.netloc, '', '', '', ''))
         if gpgkey is None and 'gpgkey' in params:
-            gpgkey = params['gpgkey']
+            gpgkey = params['gpgkey'].strip()
         if release is None:
             release = url.path.split('/')[1]
         component = url.path.rsplit('/')[-1]
