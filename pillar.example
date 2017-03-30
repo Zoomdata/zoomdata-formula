@@ -252,6 +252,11 @@ postgres:
 #      - dontlognull
 #      - http-server-close
 #      - forwardfor
+#    timeouts:
+#      - client  1m
+#      - connect 10s
+#      - server  1m
+#      - tunnel  1h  # timeout to use with WebSocket and CONNECT
 #
 #  frontends:
 #    zd-http:
