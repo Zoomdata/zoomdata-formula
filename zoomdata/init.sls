@@ -1,12 +1,11 @@
-{%- from 'zoomdata/map.jinja' import zoomdata with context %}
-
-{%- set init_available = grains['init'] != 'unknown' %}
+{%- from 'zoomdata/map.jinja' import init_available,
+                                     zoomdata with context %}
 
 {%- set packages = [] %}
 {%- set services = zoomdata.services|default([], true) %}
 {%- set versions = {} %}
 
-{%- for install in (zoomdata, zoomdata.edc|default({}, true)) %}
+{%- for install in (zoomdata, zoomdata.edc) %}
   {%- for package in install.packages|default([], true) %}
     {%- if package not in packages %}
       {%- do packages.append(package) %}
@@ -45,6 +44,56 @@ include:
       - sls: zoomdata.repo
 
 {%- endfor %}
+
+{%- set jdbc = zoomdata.edc.jdbc|default({}, true) %}
+
+{%- if jdbc.install|default(false) %}
+
+# Download provided JDBC drivers for EDC connectors
+
+  {%- for driver, jars in jdbc.drivers|default({}, true)|dictsort() %}
+    {%- set package = ('zoomdata-edc', driver)|join('-') %}
+    {%- if package in packages %}
+      {%- for jar in jars %}
+
+        {%- set jar_name = salt['file.basename'](jar) %}
+        {%- set jar_hash = jar|replace('http', 'https', 1) ~ '.sha1' %}
+
+        {#- Ugly workaround for bug in Salt 2016.11.3:
+            ``skip_verify`` leads to stack trace with KeyError on ``source_sum['hsum']``.
+            It is already fixed in upcoming 2016.11.4. #}
+
+        {%- if 'error' in salt['http.query'](jar_hash, method='HEAD') %}
+          {#- Check local cache or probe jar file URL #}
+          {%- if salt['cp.is_cached'](jar) or
+                 'body' in salt['http.query'](jar, method='HEAD') %}
+            {#- Cache jar file and get its hash #}
+            {%- set jar_hash = salt['hashutil.sha256_digest'](
+                               salt['cp.get_file_str'](jar)) %}
+          {%- endif %}
+        {%- endif %}
+
+{{ package }}_jdbc_{{ jar_name }}:
+  file.managed:
+    - name: {{ salt['file.join']('/opt/zoomdata/lib/edc-' ~ driver, jar_name) }}
+    - source: {{ jar }}
+    - source_hash: {{ jar_hash }}
+    - user: root
+    - group: {{ zoomdata.group }}
+    - mode: 0640
+    - makedirs: True
+    - show_change: False
+    - require:
+      - pkg: {{ package }}_package
+        {%- if package in services and init_available %}
+    - watch_in:
+      - service: {{ package }}_service
+        {%- endif %}
+
+      {%- endfor %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
 
 {%- if zoomdata.limits|default({}) and packages %}
 

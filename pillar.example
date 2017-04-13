@@ -7,13 +7,13 @@ zoomdata:
   ## Package installation settings
   #
   # Repository base URL where Zoomdata packages are hosted
-  # This would be overriden if ZOOMDATA_REPOSITORY environment varible
+  # This would be overriden if ZOOMDATA_REPOSITORY environment variable
   base_url: 'http://repo.zoomdata.com'
   # URL to the GnuPG public key for the repo/pkgs verification.
   # Put `none` or empty string to skip GnuPG check (for internal repos)
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed
-  # This would be overriden if ZOOMDATA_RELEASE environment varible
+  # This would be overriden if ZOOMDATA_RELEASE environment variable
   release: '2.5'
 
   # Repository components to enable and install packages from
@@ -24,12 +24,12 @@ zoomdata:
 
   # Exact version of Zoomdata Server packages to install, use 'latest' keyword
   # to always upgrade to the latest minor version in the release
-  # This would be overriden if ZOOMDATA_VERSION environment varible
+  # This would be overriden if ZOOMDATA_VERSION environment variable
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
   #version: "2.5.2-1+{{ grains['oscodename'] }}.stable"
   {%- else %}
-  # Packages version for RHEL systems
+  # Packages version for RHEL/CentOS systems
   #version: '2.5.2'
   {%- endif %}
 
@@ -45,18 +45,28 @@ zoomdata:
   edc:
     # Exact version of Zoomdata Server packages to install, use 'latest' keyword
     # to always upgrade to the latest minor version in the release.
-    # This would be overriden if ZOOMDATA_EDC_VERSION environment varible
+    # This would be overriden if ZOOMDATA_EDC_VERSION environment variable
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
     #version: "2.5.2-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
-    # Packages version for RHEL systems
+    # Packages version for RHEL/CentOS systems
     #version: '2.5.2'
     {%- endif %}
     # Zoomdata EDC packages to install
     packages:
       - zoomdata-edc-elasticsearch-1.7
       - zoomdata-edc-rts
+    # Install JDBC jar drivers which are not packaged with EDC connectors.
+    # This is an example for MySQL connector (``zoomdata-edc-mysql``):
+    #jdbc:
+    #  drivers:
+    #    mysql:
+    #      - 'http://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/1.3.2/mariadb-java-client-1.3.2.jar'
+    #
+    # Do the similar for other connectors which require external drivers.
+    # To actually make it work, set ``install`` to ``True``:
+    #  install: True
 
   ## Configuration settings
   #

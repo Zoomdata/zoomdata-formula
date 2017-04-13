@@ -20,6 +20,9 @@ zoomdata:
     packages:
       - zoomdata-edc-elasticsearch-1.7
       - zoomdata-edc-rts
+    jdbc:
+      drivers: {}
+      install: False
 
   user: zoomdata
   group: zoomdata

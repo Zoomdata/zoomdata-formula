@@ -41,3 +41,6 @@
         {% do zoomdata.config[service].update({'properties': properties}) %}
     {% endif %}
 {% endfor %}
+
+{# Detect if we are using real init or building some image #}
+{% set init_available = grains['init'] != 'unknown' %}
