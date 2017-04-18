@@ -156,7 +156,8 @@ zoomdata-user-limits-conf:
     - mode: 0644
     - defaults:
         header: "{{ zoomdata.header|default('', true) }}"
-        limits: {{ zoomdata['limits'] }}
+        limits: {{ zoomdata.limits }}
+        user: {{ zoomdata.user|default('root', true) }}
     - require:
       - pkg: {{ packages|first() }}_package
     {%- if services and init_available %}
