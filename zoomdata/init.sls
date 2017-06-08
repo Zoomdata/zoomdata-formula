@@ -57,7 +57,7 @@ include:
       {%- for jar in jars %}
 
         {%- set jar_name = salt['file.basename'](jar) %}
-        {%- set jar_hash = jar|replace('http', 'https', 1) ~ '.sha1' %}
+        {%- set jar_hash = jar|replace('http:', 'https:', 1) ~ '.sha1' %}
 
         {#- Ugly workaround for bug in Salt 2016.11.3:
             ``skip_verify`` leads to stack trace with KeyError on ``source_sum['hsum']``.
