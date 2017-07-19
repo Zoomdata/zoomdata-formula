@@ -13,7 +13,7 @@ zoomdata:
     - zoomdata-consul
     - zoomdata-scheduler
     - zoomdata-spark-proxy
-    #- zoomdata-xvfb
+    - zoomdata-xvfb
 
   edc:
     #version: 'latest'

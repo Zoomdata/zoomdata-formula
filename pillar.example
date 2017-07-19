@@ -40,6 +40,7 @@ zoomdata:
     - zoomdata-consul
     - zoomdata-scheduler
     - zoomdata-spark-proxy
+    - zoomdata-xvfb
 
   # Zoomdata EDC section
   edc:
@@ -176,6 +177,8 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-scheduler
     - zoomdata-spark-proxy
+    # Usually you don't need screenshotting service running
+    #- zoomdata-xvfb
     - zoomdata
 
 
