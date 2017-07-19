@@ -7,7 +7,7 @@ zoomdata:
   components:
     - stable
 
-  #version: 'latest'
+  version: 'latest'
   packages:
     - zoomdata
     - zoomdata-consul
@@ -16,7 +16,7 @@ zoomdata:
     - zoomdata-xvfb
 
   edc:
-    #version: 'latest'
+    version: 'latest'
     packages:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-aurora

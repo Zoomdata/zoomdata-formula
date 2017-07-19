@@ -54,6 +54,7 @@ zoomdata:
     # Packages version for RHEL/CentOS systems
     #version: '2.5.2'
     {%- endif %}
+
     # Zoomdata EDC packages to install
     packages:
       - zoomdata-edc-apache-solr
