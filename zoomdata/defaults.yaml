@@ -18,8 +18,23 @@ zoomdata:
   edc:
     #version: 'latest'
     packages:
+      - zoomdata-edc-apache-solr
+      - zoomdata-edc-aurora
+      - zoomdata-edc-cloudera-search
       - zoomdata-edc-elasticsearch-1.7
+      - zoomdata-edc-elasticsearch-2.0
+      - zoomdata-edc-impala
+      - zoomdata-edc-memsql
+      - zoomdata-edc-mssql
+      - zoomdata-edc-mysql
+      - zoomdata-edc-oracle
+      - zoomdata-edc-phoenix-4.5
+      - zoomdata-edc-postgresql
+      - zoomdata-edc-redshift
       - zoomdata-edc-rts
+      - zoomdata-edc-sparksql
+      - zoomdata-edc-tez
+
     jdbc:
       drivers: {}
       install: False
@@ -88,8 +103,22 @@ zoomdata:
 
   services:
     - zoomdata-consul
+    - zoomdata-edc-apache-solr
+    - zoomdata-edc-aurora
+    - zoomdata-edc-cloudera-search
     - zoomdata-edc-elasticsearch-1.7
+    - zoomdata-edc-elasticsearch-2.0
+    - zoomdata-edc-impala
+    - zoomdata-edc-memsql
+    - zoomdata-edc-mssql
+    - zoomdata-edc-mysql
+    - zoomdata-edc-oracle
+    - zoomdata-edc-phoenix-4.5
+    - zoomdata-edc-postgresql
+    - zoomdata-edc-redshift
     - zoomdata-edc-rts
+    - zoomdata-edc-sparksql
+    - zoomdata-edc-tez
     - zoomdata-scheduler
     - zoomdata-spark-proxy
     - zoomdata
