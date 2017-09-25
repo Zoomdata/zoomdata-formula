@@ -1,4 +1,4 @@
-{{- header -}}
+{{- header.strip() -}}
 {%- if header %}
 
 {# blank line inserted here #}
