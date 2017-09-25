@@ -1,5 +1,6 @@
 {{- header -}}
 {%- if header %}
+
 {# blank line inserted here #}
 {%- endif -%}
 # See http://docs.zoomdata.com/zoomdata-configuration-property-files-and-their-corresponding-variables
