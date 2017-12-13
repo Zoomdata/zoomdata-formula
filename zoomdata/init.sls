@@ -75,7 +75,7 @@ include:
 
 {{ package }}_jdbc_{{ jar_name }}:
   file.managed:
-    - name: {{ salt['file.join']('/opt/zoomdata/lib/edc-' ~ driver, jar_name) }}
+    - name: {{ salt['file.join'](zoomdata.prefix, 'lib/edc-' ~ driver, jar_name) }}
     - source: {{ jar }}
     - source_hash: {{ jar_hash }}
     - user: root
@@ -248,7 +248,7 @@ zoomdata-user-limits-conf:
     - watch_in:
       - service: {{ service }}_service
     {%- endif %}
-    # Prevent `test=True` failures on a fresh system
+    # Prevent ``test=True`` failures on a fresh system
     - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
 
   {%- endif %}
@@ -279,12 +279,17 @@ zoomdata-user-limits-conf:
 
     {%- if service in packages %}
 
+      {%- set command = salt['file.join'](zoomdata.prefix, 'bin', service) %}
+
 {{ service }}_service:
   service.running:
     - name: {{ service }}
     - enable: True
     - watch:
       - pkg: {{ service }}_package
+    # Skip dealing with daemons if there are no binaries at all.
+    # Fixes applying the state with ``test=True``.
+    - onlyif: test -f '{{ command }}' && test -x '{{ command }}'
 
     {%- endif %}
 

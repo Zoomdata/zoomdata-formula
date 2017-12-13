@@ -102,6 +102,8 @@ zoomdata:
   tls:
     name: zoomdata
 
+  prefix: '/opt/zoomdata'
+
   services:
     - zoomdata-consul
     - zoomdata-edc-apache-solr
