@@ -162,7 +162,7 @@ zoomdata-user-limits-conf:
       - pkg: {{ packages|first() }}_package
     {%- if services and init_available %}
     - watch_in:
-      {%- for service in services %}
+      {%- for service in packages %}
       - service: {{ service }}_service
       {%- endfor %}
     {%- endif %}
