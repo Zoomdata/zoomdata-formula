@@ -6,6 +6,8 @@ zoomdata:
   release: '2.5'
   components:
     - stable
+    #- licensed
+    #- unstable
 
   version: 'latest'
   packages:

@@ -11,14 +11,13 @@
     {%- set repo_url = (zoomdata.base_url,
                         zoomdata.release,
                         'apt',
-                        grains['os'] | lower())
-                        |join('/') %}
-    {%- set tools_repo_url = (
-                    zoomdata.base_url,
-                    'tools',
-                    'apt',
-                    grains['os']|lower())
-                    |join('/') %}
+                        grains['os'] | lower()
+                       )|join('/') %}
+    {%- set tools_repo_url = (zoomdata.base_url,
+                              'tools',
+                              'apt',
+                              grains['os']|lower()
+                             )|join('/') %}
 
     {%- if zoomdata.gpgkey %}
 
@@ -43,7 +42,7 @@ zoomdata-gpg-key:
 {{ ('zoomdata', zoomdata.release, 'repo')|join('-') }}:
   pkgrepo.managed:
     - name: {{ (['deb', repo_url, grains['oscodename']] +
-               zoomdata.components
+                zoomdata.components
                )|join(' ') }}
     - file: {{ zoomdata.repo_file }}
     - clean_file: True
@@ -56,9 +55,9 @@ zoomdata-gpg-key:
 zoomdata-tools:
   pkgrepo.managed:
     - name: {{ ('deb',
-                 tools_repo_url,
-                 grains['oscodename'],
-                 'stable',
+                tools_repo_url,
+                grains['oscodename'],
+                'stable',
                )|join(' ') }}
     - file: {{ zoomdata.tools_repo_file }}
     - clean_file: True
@@ -77,16 +76,17 @@ zoomdata-tools:
                         'yum',
                         grains['os_family'] | lower(),
                         grains['osmajorrelease'],
-                        grains['osarch'])
-                        |join('/') %}
+                        grains['osarch'],
+                       )
+                       |join('/') %}
 
     {%- for component in zoomdata.components %}
 
 {{ ('zoomdata', zoomdata.release, component)|join('-') }}:
   pkgrepo.managed:
     - humanname: {{ ('Zoomdata', zoomdata.release, component, 'for',
-                    grains['os'], grains['osmajorrelease'], '-', grains['osarch'])
-                    |join(' ') }}
+                     grains['os'], grains['osmajorrelease'], '-', grains['osarch'],
+                    )|join(' ') }}
     - baseurl: {{ (repo_url, component)|join('/') }}
       {%- if zoomdata.gpgkey %}
     - gpgcheck: 1
@@ -99,8 +99,12 @@ zoomdata-tools:
 
 zoomdata-tools:
   pkgrepo.managed:
-    - humanname: {{ ('Zoomdata tools for', grains['os'], grains['osmajorrelease'], '-', grains['osarch'])|join(' ') }}
-    - baseurl: {{ (zoomdata.base_url, 'tools', 'yum', grains['os_family'] | lower(), grains['osmajorrelease'], grains['osarch'], 'stable') |join('/') }}
+    - humanname: {{ ('Zoomdata tools for', grains['os'],
+                     grains['osmajorrelease'], '-', grains['osarch']
+                    )|join(' ') }}
+    - baseurl: {{ (zoomdata.base_url, 'tools', 'yum', grains['os_family']|lower(),
+                   grains['osmajorrelease'], grains['osarch'], 'stable'
+                  )|join('/') }}
     {%- if zoomdata.gpgkey %}
     - gpgcheck: 1
     - gpgkey: {{ zoomdata.gpgkey }}
