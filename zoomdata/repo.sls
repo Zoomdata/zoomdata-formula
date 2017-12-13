@@ -20,31 +20,57 @@
                     grains['os']|lower())
                     |join('/') %}
 
+    {%- if zoomdata.gpgkey %}
+
+      {%- set keyfile = salt['file.join'](
+                        '/etc/zoomdata',
+                        salt['file.basename'](zoomdata.gpgkey)) %}
+
+zoomdata-gpg-key:
+  file.managed:
+    - name: {{ keyfile }}
+    - makedirs: True
+    - user: root
+    - group: root
+    - mode: 0444
+    # FIXME: due to a bug in Salt 2017.7.2,
+    # some file downloads and remote hash verifications are broken
+    - contents: |
+        {{ salt['http.query'](zoomdata.gpgkey)['body']|indent(8) }}
+
+    {%- endif %}
+
 {{ ('zoomdata', zoomdata.release, 'repo')|join('-') }}:
   pkgrepo.managed:
     - name: {{ (['deb', repo_url, grains['oscodename']] +
-               zoomdata.components)|join(' ') }}
+               zoomdata.components
+               )|join(' ') }}
     - file: {{ zoomdata.repo_file }}
-    {%- if zoomdata.gpgkey %}
-    - key_url: {{ zoomdata.gpgkey }}
-    {%- endif %}
     - clean_file: True
+    {%- if keyfile is defined %}
+    - key_url: file://{{ keyfile }}
+    - require:
+      - file: zoomdata-gpg-key
+    {%- endif %}
 
 zoomdata-tools:
   pkgrepo.managed:
-    - name: {{ (
-                  'deb',
-                  tools_repo_url,
-                  grains['oscodename'],
-                  'stable',
+    - name: {{ ('deb',
+                 tools_repo_url,
+                 grains['oscodename'],
+                 'stable',
                )|join(' ') }}
     - file: {{ zoomdata.tools_repo_file }}
-    {%- if zoomdata.gpgkey %}
-    - key_url: {{ zoomdata.gpgkey }}
-    {%- endif %}
     - clean_file: True
+    {%- if keyfile is defined %}
+    - key_url: file://{{ keyfile }}
+    - require:
+      - file: zoomdata-gpg-key
+    {%- endif %}
 
   {%- elif grains['os_family'] == 'RedHat' %}
+
+# FIXME: provision and check sum for repo GnuPG pub key
 
     {%- set repo_url = (zoomdata.base_url,
                         zoomdata.release,
