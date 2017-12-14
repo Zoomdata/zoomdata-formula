@@ -9,7 +9,7 @@ zoomdata:
     #- licensed
     #- unstable
 
-  version: 'latest'
+  #version: 'latest'
   packages:
     - zoomdata
     - zoomdata-consul
@@ -19,7 +19,7 @@ zoomdata:
     - zoomdata-zdmanage
 
   edc:
-    version: 'latest'
+    #version: 'latest'
     packages:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-aurora
