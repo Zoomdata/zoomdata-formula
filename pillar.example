@@ -13,7 +13,7 @@ zoomdata:
   # Put `none` or empty string to skip GnuPG check (for internal repos)
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed
-  # This would be overriden if ZOOMDATA_RELEASE environment variable
+  # This would be overridden if ZOOMDATA_RELEASE environment variable
   release: '2.5'
 
   # Repository components to enable and install packages from
@@ -47,7 +47,7 @@ zoomdata:
   edc:
     # Exact version of Zoomdata Server packages to install, use 'latest' keyword
     # to always upgrade to the latest minor version in the release.
-    # This would be overriden if ZOOMDATA_EDC_VERSION environment variable
+    # This would be overridden if ZOOMDATA_EDC_VERSION environment variable
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
     #version: "2.5.2-1+{{ grains['oscodename'] }}.stable"
@@ -147,7 +147,7 @@ zoomdata:
         # http://docs.zoomdata.com/adding-ssl-certificate-to-the-zoomdata-server
         #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
         #server.ssl.key-store-password: 'your_keystore_password'
-        # Optional redired to https scheme, this requires HAProxy (see below)
+        # Optional redirect to https scheme, this requires HAProxy (see below)
         #http.redirect.port: '443'
       # Update the properties with ones given above. Do not remove locally
       # modified properties. This is ``False`` by default (always replace).
