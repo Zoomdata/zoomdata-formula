@@ -106,14 +106,14 @@ include:
 {{ service }}_systemd_limits:
   file.managed:
     - name: /etc/systemd/system/{{ service }}.service.d/limits.conf
-    - source: salt://zoomdata/files/systemd_unit_override.conf
+    - source: salt://zoomdata/templates/systemd_unit_override.conf
     - template: jinja
     - user: root
     - group: root
     - mode: 0644
     - makedirs: True
     - defaults:
-        header: {{ zoomdata.header|default('', true)|yaml_encode}}
+        header: "{{ zoomdata.header|default('', true) }}"
         sections:
           Service:
       {%- for item, limit in zoomdata.limits|default({}, true)|dictsort() %}
@@ -149,13 +149,13 @@ systemctl_reload:
 zoomdata-user-limits-conf:
   file.managed:
     - name: /etc/security/limits.d/30-zoomdata.conf
-    - source: salt://zoomdata/files/limits.conf
+    - source: salt://zoomdata/templates/limits.conf
     - template: jinja
     - user: root
     - group: root
     - mode: 0644
     - defaults:
-        header: {{ zoomdata.header|default('', true)|yaml_encode}}
+        header: "{{ zoomdata.header|default('', true) }}"
         limits: {{ zoomdata.limits }}
         user: {{ zoomdata.user|default('root', true) }}
     - require:
@@ -181,10 +181,10 @@ zoomdata-user-limits-conf:
   file.managed:
     - name: {{ environment.path }}
     {%- if environment.get('variables') %}
-    - source: salt://zoomdata/files/env.sh
+    - source: salt://zoomdata/templates/env.sh
     - template: jinja
     - defaults:
-        header: {{ zoomdata.header|default('', true)|yaml_encode}}
+        header: "{{ zoomdata.header|default('', true) }}"
         environment: {{ environment['variables'] }}
     {%- else %}
     - replace: False
@@ -230,10 +230,10 @@ zoomdata-user-limits-conf:
   file.managed:
     - name: {{ config.path }}
     {%- if config.properties|default({}, true) %}
-    - source: salt://zoomdata/files/service.properties
+    - source: salt://zoomdata/templates/service.properties
     - template: jinja
     - defaults:
-        header: {{ zoomdata.header|default('', true)|yaml_encode}}
+        header: "{{ zoomdata.header|default('', true) }}"
         properties: {{ config['properties'] }}
     {%- else %}
     - replace: False

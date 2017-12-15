@@ -1,9 +1,8 @@
-{{- header.strip() -}}
+{{- header -}}
 {%- if header %}
-
 {# blank line inserted here #}
 {%- endif -%}
-# See http://docs.zoomdata.com/zoomdata-configuration-property-files-and-their-corresponding-variables
+# See https://www.zoomdata.com/docs/2.5/zoomdata-configuration-property-files-and-their-corresponding-variables.html
 {# blank line inserted here #}
 {%- for key, value in environment|dictsort() %}
     {%- if value is none %}
