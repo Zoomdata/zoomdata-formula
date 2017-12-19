@@ -279,8 +279,6 @@ zoomdata-user-limits-conf:
 
     {%- if service in packages %}
 
-      {%- set command = salt['file.join'](zoomdata.prefix, 'bin', service) %}
-
 {{ service }}_service:
   service.running:
     - name: {{ service }}
@@ -289,7 +287,7 @@ zoomdata-user-limits-conf:
       - pkg: {{ service }}_package
     # Skip dealing with daemons if there are no binaries at all.
     # Fixes applying the state with ``test=True``.
-    - onlyif: test -f '{{ command }}' && test -x '{{ command }}'
+    - onlyif: test -d "{{ salt['file.join'](zoomdata.prefix, 'bin') }}"
 
     {%- endif %}
 
