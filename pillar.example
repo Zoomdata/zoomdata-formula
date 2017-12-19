@@ -120,9 +120,6 @@ zoomdata:
   config:
     # Zoomdata Server
     zoomdata:
-      # Merge properties with hard-coded defaults. This is useful to skip
-      # common configuration values. Set ``False`` to disable such behavior.
-      merge: True
       # Old path (legacy configuration file) will be removed if specified.
       # This usually required when upgrading from 2.2 and older releases.
       # Make sure you have set all necessary configuration to the
@@ -149,9 +146,17 @@ zoomdata:
         #server.ssl.key-store-password: 'your_keystore_password'
         # Optional redirect to https scheme, this requires HAProxy (see below)
         #http.redirect.port: '443'
+      # Merge properties with hard-coded defaults. This is useful to skip
+      # common configuration values. Set ``False`` to disable such behavior.
+      merge: True
       # Update the properties with ones given above. Do not remove locally
       # modified properties. This is ``False`` by default (always replace).
       update: False
+      # When updating the properties (set ``update: True``), discard locally
+      # modified properties with the same names (keys), literally update them
+      # all. Set ``False`` if you would like to keep local modifications, but
+      # add some options from above.
+      discard: True
     # Zoomdata Scheduler
     zoomdata-scheduler:
       #merge: True

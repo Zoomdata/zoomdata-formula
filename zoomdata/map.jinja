@@ -34,11 +34,18 @@
     {% endif %}
 
     {% if config['update']|default(false) %}
-        {# Read local properties and update them with provided values #}
         {% set local_config = salt['zoomdata.inspect']().zoomdata.config[service]|default({}, true) %}
-        {% set properties = local_config.properties|default({}. true) %}
-        {% do properties.update(zoomdata.config[service].properties|default({}, true)) %}
-        {% do zoomdata.config[service].update({'properties': properties}) %}
+        {% set local_properties = local_config['properties']|default({}, true) %}
+        {% set properties = zoomdata.config[service].properties|default({}, true) %}
+        {% if config['discard']|default(true) %}
+            {# Read local properties and update them with provided values #}
+            {% do local_properties.update(properties) %}
+            {% do zoomdata.config[service].update({'properties': local_properties}) %}
+        {% else %}
+            {# Filter out default or Pillar provided properties and only add new ones #}
+            {% do properties.update(local_properties) %}
+            {% do zoomdata.config[service].update({'properties': properties}) %}
+        {% endif %}
     {% endif %}
 {% endfor %}
 

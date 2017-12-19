@@ -76,7 +76,6 @@ zoomdata:
 
   config:
     zoomdata:
-      merge: True
       path: /etc/zoomdata/zoomdata.properties
       properties:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
@@ -86,7 +85,9 @@ zoomdata:
         screenshot.daemon.schedule.rate: '168h'
         screenshots.dashboards.enabled: False
         screenshots.datasource-charts.enabled: False
+      merge: True
       update: False
+      discard: True
     zoomdata-scheduler:
       merge: True
       path: /etc/zoomdata/scheduler.properties
