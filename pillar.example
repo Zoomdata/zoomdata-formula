@@ -14,7 +14,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed
   # This would be overridden if ZOOMDATA_RELEASE environment variable
-  release: '2.5'
+  release: '2.6'
 
   # Repository components to enable and install packages from
   components:
@@ -27,10 +27,10 @@ zoomdata:
   # This would be overriden if ZOOMDATA_VERSION environment variable
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-  #version: "2.5.2-1+{{ grains['oscodename'] }}.stable"
+  #version: "2.6.2-1+{{ grains['oscodename'] }}.stable"
   {%- else %}
   # Packages version for RHEL/CentOS systems
-  #version: '2.5.2'
+  #version: '2.6.2'
   {%- endif %}
 
   # Zoomdata Server packages to install
@@ -38,8 +38,10 @@ zoomdata:
     - zoomdata
     # The Consul package is mandatory since Zoomdata 2.4 release, comment out for 2.3
     - zoomdata-consul
+    - zoomdata-query-engine
     - zoomdata-scheduler
-    - zoomdata-spark-proxy
+    # The Spark Proxy has gone in Zoomdata 2.6 release
+    #- zoomdata-spark-proxy
     - zoomdata-xvfb
     - zoomdata-zdmanage
 
@@ -50,10 +52,10 @@ zoomdata:
     # This would be overridden if ZOOMDATA_EDC_VERSION environment variable
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-    #version: "2.5.2-1+{{ grains['oscodename'] }}.stable"
+    #version: "2.6.2-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL/CentOS systems
-    #version: '2.5.2'
+    #version: '2.6.2'
     {%- endif %}
 
     # Zoomdata EDC packages to install
@@ -61,14 +63,19 @@ zoomdata:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-aurora
       - zoomdata-edc-cloudera-search
-      - zoomdata-edc-elasticsearch-1.7
+      # The ElasticSearch 1.7 was deprecated in Zoomdata 2.6 release
+      #- zoomdata-edc-elasticsearch-1.7
       - zoomdata-edc-elasticsearch-2.0
+      - zoomdata-edc-elasticsearch-5.0
       - zoomdata-edc-impala
       - zoomdata-edc-memsql
+      - zoomdata-edc-mongo
       - zoomdata-edc-mssql
       - zoomdata-edc-mysql
       - zoomdata-edc-oracle
-      - zoomdata-edc-phoenix-4.5
+      # The Phoenix 4.5 was deprecated in Zoomdata 2.6 release
+      #- zoomdata-edc-phoenix-4.5
+      - zoomdata-edc-phoenix-4.7-queryserver
       - zoomdata-edc-postgresql
       - zoomdata-edc-redshift
       - zoomdata-edc-rts
@@ -111,11 +118,11 @@ zoomdata:
       path: '/etc/zoomdata/scheduler.env'
       variables:
         SCHEDULER_JAVA_OPTS: '-Xms512m -Xmx1024m'
-    # Zoomdata SparkIT
-    zoomdata-spark-proxy:
-      path: '/etc/zoomdata/spark-proxy.env'
-      variables:
-        SPARK_PROXY_JAVA_OPTS: '-Xss256k -Xms512m -Xmx2048m'
+    # Zoomdata SparkIT has gone in release 2.6
+    #zoomdata-spark-proxy:
+    #  path: '/etc/zoomdata/spark-proxy.env'
+    #  variables:
+    #    SPARK_PROXY_JAVA_OPTS: '-Xss256k -Xms512m -Xmx2048m'
 
   config:
     # Zoomdata Server
@@ -168,14 +175,18 @@ zoomdata:
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
       #update: False
+      #discard: True
     # Zoomdata Spark Proxy. See the following article for additional info:
     # http://docs.zoomdata.com/changing-the-default-configuration-for-an-embedded-spark-server
-    zoomdata-spark-proxy:
+    #
+    # It has gone in release 2.6.
+    #zoomdata-spark-proxy:
       #merge: True
       #path: '/etc/zoomdata/spark-proxy.properties'
       #properties:
         #hadoop.distro: 'cdh5'
       #update: False
+      #discard: True
 
   # Zoomdata TLS: paste certificates chain and private key for your domain here.
   # Pay attention to indent exactly with 4 spaces for all lines under
@@ -195,26 +206,41 @@ zoomdata:
   services:
     # The Consul service is mandatory since Zoomdata 2.4 release, comment out for 2.3
     - zoomdata-consul  # always start it first
+
+    # EDC connectors
     - zoomdata-edc-apache-solr
     - zoomdata-edc-aurora
     - zoomdata-edc-cloudera-search
-    - zoomdata-edc-elasticsearch-1.7
+    # The ElasticSearch 1.7 was deprecated in Zoomdata 2.6 release
+    #- zoomdata-edc-elasticsearch-1.7
     - zoomdata-edc-elasticsearch-2.0
+    - zoomdata-edc-elasticsearch-5.0
     - zoomdata-edc-impala
     - zoomdata-edc-memsql
+    - zoomdata-edc-mongo
     - zoomdata-edc-mssql
     - zoomdata-edc-mysql
     - zoomdata-edc-oracle
-    - zoomdata-edc-phoenix-4.5
+    # The Phoenix 4.5 was deprecated in Zoomdata 2.6 release
+    #- zoomdata-edc-phoenix-4.5
+    - zoomdata-edc-phoenix-4.7-queryserver
     - zoomdata-edc-postgresql
     - zoomdata-edc-redshift
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
     - zoomdata-edc-tez
+
+    # Zoomdata core
+    - zoomdata-query-engine
     - zoomdata-scheduler
-    - zoomdata-spark-proxy
+
+    # The Spark Proxy has gone in Zoomdata 2.6 release
+    #- zoomdata-spark-proxy
+
     # Usually you don't need screenshotting service running
     #- zoomdata-xvfb
+
+    # Zoomdata Server starts last
     - zoomdata
 
 
