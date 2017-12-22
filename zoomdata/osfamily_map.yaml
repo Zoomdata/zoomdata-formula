@@ -7,4 +7,4 @@ Debian:
   repo_file: /etc/apt/sources.list.d/zoomdata.list
   tools_repo_file: /etc/apt/sources.list.d/zoomdata-tools.list
 
-default: {{ defaults.zoomdata }}
+default: {{ defaults.zoomdata|yaml }}
