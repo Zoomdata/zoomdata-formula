@@ -156,6 +156,7 @@ zoomdata-user-limits-conf:
     - mode: 0644
     - defaults:
         header: {{ zoomdata.header|default('', true)|yaml }}
+        release: {{ zoomdata.release }}
         limits: {{ zoomdata.limits }}
         user: {{ zoomdata.user|default('root', true) }}
     - require:
@@ -185,6 +186,7 @@ zoomdata-user-limits-conf:
     - template: jinja
     - defaults:
         header: {{ zoomdata.header|default('', true)|yaml }}
+        release: {{ zoomdata.release }}
         environment: {{ environment['variables'] }}
     {%- else %}
     - replace: False
@@ -234,6 +236,7 @@ zoomdata-user-limits-conf:
     - template: jinja
     - defaults:
         header: {{ zoomdata.header|default('', true)|yaml }}
+        release: {{ zoomdata.release }}
         properties: {{ config['properties'] }}
     {%- else %}
     - replace: False
