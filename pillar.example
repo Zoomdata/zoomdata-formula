@@ -16,11 +16,17 @@ zoomdata:
   # This would be overridden if ZOOMDATA_RELEASE environment variable
   release: '2.6'
 
+  # Additional repositories under the ``base_url`` to get packages from
+  repositories:
+    - microservices
+    - tools
+
   # Repository components to enable and install packages from
   components:
     - stable
-    #- licensed
     #- unstable
+    # Lisensed repo became obsoleted
+    #- licensed
 
   # Exact version of Zoomdata Server packages to install, use 'latest' keyword
   # to always upgrade to the latest minor version in the release
@@ -40,6 +46,8 @@ zoomdata:
     - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
+    - zoomdata-stream-writer
+    - zoomdata-upload-service
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
     - zoomdata-xvfb
@@ -229,6 +237,10 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
     - zoomdata-edc-tez
+
+    # Microservices
+    - zoomdata-stream-writer
+    - zoomdata-upload-service
 
     # Zoomdata core
     - zoomdata-query-engine

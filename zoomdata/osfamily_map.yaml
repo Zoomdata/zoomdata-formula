@@ -3,8 +3,26 @@
 
 {% import_yaml 'zoomdata/defaults.yaml' as defaults %}
 
-Debian:
-  repo_file: /etc/apt/sources.list.d/zoomdata.list
-  tools_repo_file: /etc/apt/sources.list.d/zoomdata-tools.list
+{% set zoomdata = defaults.zoomdata %}
 
 default: {{ defaults.zoomdata|yaml }}
+
+Debian:
+  os: {{ grains['oscodename'] }}
+  os_type: {{ grains['os']|lower }}
+  repo_type: 'apt'
+  repo_name: 'zoomdata-%(repo)s-repo'
+  repo_file: '/etc/apt/sources.list.d/zoomdata-%(repo)s.list'
+  repo_entry: 'deb %(base_url)s/%(repo)s/%(repo_type)s/%(os_type)s %(os)s
+               %(components)s'
+  repo_keyfile: {{ salt['file.join'](zoomdata.config_dir,
+                                     salt['file.basename'](zoomdata.gpgkey)) }}
+
+RedHat:
+  os_type: {{ grains['os_family']|lower }}
+  os_release: {{ grains['osmajorrelease'] }}
+  os_arch: {{  grains['osarch'] }}
+  repo_type: 'yum'
+  repo_name: 'zoomdata-%(repo)s-%(component)s'
+  repo_desc: 'Zoomdata %(repo)s %(component)s RPMs'
+  repo_url: '%(base_url)s/%(repo)s/%(repo_type)s/%(os_type)s/%(os_release)s/%(os_arch)s/%(component)s'
