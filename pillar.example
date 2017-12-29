@@ -6,14 +6,16 @@
 zoomdata:
   ## Package installation settings
   #
-  # Repository base URL where Zoomdata packages are hosted
-  # This would be overriden if ZOOMDATA_REPOSITORY environment variable
+  # Repository base URL where Zoomdata packages are hosted.
+  # This would be overridden if ``ZOOMDATA_REPOSITORY`` environment variable
+  # has been set for ``salt-minion`` process or ``salt-call`` command (in
+  # masterless mode).
   base_url: 'http://repo.zoomdata.com'
   # URL to the GnuPG public key for the repo/pkgs verification.
-  # Put `none` or empty string to skip GnuPG check (for internal repos)
+  # Put `none` or empty string to skip GnuPG check (for internal repos).
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
-  # Repository branch from which the packages would be installed
-  # This would be overridden if ZOOMDATA_RELEASE environment variable
+  # Repository branch from which the packages would be installed.
+  # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
   release: '2.6'
 
   # Additional repositories under the ``base_url`` to get packages from
@@ -28,9 +30,9 @@ zoomdata:
     # Lisensed repo became obsoleted
     #- licensed
 
-  # Exact version of Zoomdata Server packages to install, use 'latest' keyword
-  # to always upgrade to the latest minor version in the release
-  # This would be overriden if ZOOMDATA_VERSION environment variable
+  # Exact version of Zoomdata Server packages to install, use ``latest``
+  # keyword to always upgrade to the latest minor version in the release.
+  # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
   #version: "2.6.2-1+{{ grains['oscodename'] }}.stable"
@@ -55,9 +57,9 @@ zoomdata:
 
   # Zoomdata EDC section
   edc:
-    # Exact version of Zoomdata Server packages to install, use 'latest' keyword
-    # to always upgrade to the latest minor version in the release.
-    # This would be overridden if ZOOMDATA_EDC_VERSION environment variable
+    # Exact version of Zoomdata Server packages to install, use ``latest``
+    # keyword to always upgrade to the latest minor version in the release.
+    # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
     #version: "2.6.2-1+{{ grains['oscodename'] }}.stable"
@@ -103,7 +105,8 @@ zoomdata:
 
   ## Configuration settings
   #
-  # Global system limits for Zoomdata user (per-service limits for systemd OS):
+  # Global system limits for Zoomdata user
+  # (per-service limits for systemd OS):
   # http://docs.zoomdata.com/installation-prerequisites
   limits:
     nproc:
@@ -143,7 +146,7 @@ zoomdata:
       path: '/etc/zoomdata/zoomdata.properties'
       properties:
         # Metadata DB connection details
-        # (REMEMBER TO CHANGE VALUES BELOW IN `postgres` SECTION ACCORDINGLY!)
+        # (REMEMBER TO CHANGE VALUES BELOW IN ``postgres`` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
@@ -212,7 +215,8 @@ zoomdata:
 
   # Services to enable and start
   services:
-    # The Consul service is mandatory since Zoomdata 2.4 release, comment out for 2.3
+    # The Consul service is mandatory since Zoomdata 2.4 release,
+    # comment out for 2.3
     - zoomdata-consul  # always start it first
 
     # EDC connectors
@@ -249,7 +253,7 @@ zoomdata:
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
 
-    # Usually you don't need screenshotting service running
+    # Usually you don't need to keep screenshotting service always running
     #- zoomdata-xvfb
 
     # Zoomdata Server starts last
@@ -258,8 +262,8 @@ zoomdata:
 
 ### PostgreSQL configuration
 #
-# Comment out the whole section to disable
-# PostgreSQL installation and configuration
+# Comment out the whole section to disable PostgreSQL installation and
+# configuration.
 postgres:
   # Create Zoomdata user
   users:
