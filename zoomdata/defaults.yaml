@@ -4,6 +4,7 @@ zoomdata:
   base_url: 'http://repo.zoomdata.com'
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   release: '2.5'
+  repositories: []
   components:
     - stable
     #- licensed
