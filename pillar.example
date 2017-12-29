@@ -106,8 +106,8 @@ zoomdata:
   ## Configuration settings
   #
   # Global system limits for Zoomdata user
-  # (per-service limits for systemd OS):
-  # http://docs.zoomdata.com/installation-prerequisites
+  # (per-service limits for systemd based OS):
+  # https://www.zoomdata.com/docs/2.6/installation-prerequisites.html
   limits:
     nproc:
       soft: '4096'
@@ -117,7 +117,7 @@ zoomdata:
       hard: '1048576'
 
   # Configuration property files and their corresponding variables:
-  # http://docs.zoomdata.com/zoomdata-configuration-property-files-and-their-corresponding-variables
+  # https://www.zoomdata.com/docs/2.6/zoomdata-configuration-property-files-and-their-corresponding-variables.html
   environment:
     # Zoomdata Server
     zoomdata:
@@ -152,14 +152,14 @@ zoomdata:
         spring.datasource.password: 'PleaseChangeMe'
         # Screenshot Feature: we disable it by default. Look at these pages for
         # instructions how to set it up on your platform:
-        # http://docs.zoomdata.com/screenshot-for-rpm
-        # http://docs.zoomdata.com/setting-up-screenshot-for-ubuntu
+        # https://www.zoomdata.com/docs/2.6/screenshot-for-rpm.html
+        # https://www.zoomdata.com/docs/2.6/setting-up-the-screenshot-feature-for-ubuntu.html
         screenshot.daemon.enabled: False
         screenshot.daemon.schedule.rate: '168h'  # 1 week
         screenshots.dashboards.enabled: False
         screenshots.datasource-charts.enabled: False
-        # Configure HTTPS for Zoomdata (see ``tls`` item below)
-        # http://docs.zoomdata.com/adding-ssl-certificate-to-the-zoomdata-server
+        # Configure HTTPS for Zoomdata (see ``tls`` item below):
+        # https://www.zoomdata.com/docs/2.6/adding-ssl-certificate-to-the-zoomdata-server.html
         #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
         #server.ssl.key-store-password: 'your_keystore_password'
         # Optional redirect to https scheme, this requires HAProxy (see below)
@@ -188,9 +188,9 @@ zoomdata:
       #update: False
       #discard: True
     # Zoomdata Spark Proxy. See the following article for additional info:
-    # http://docs.zoomdata.com/changing-the-default-configuration-for-an-embedded-spark-server
+    # https://www.zoomdata.com/docs/2.4/changing-the-default-configuration-for-an-embedded-spark-server.html
     #
-    # It has gone in release 2.6.
+    # It has been gone entirely in release 2.6.
     #zoomdata-spark-proxy:
       #merge: True
       #path: '/etc/zoomdata/spark-proxy.properties'
