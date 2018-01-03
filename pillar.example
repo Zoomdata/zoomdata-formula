@@ -150,6 +150,12 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
+        # Upload Service and API credentials
+        upload.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-upload'
+        upload.destination.params.user_name: 'zoomdata'
+        upload.destination.params.password: 'PleaseChangeMe'
+        upload.destination.schema: public
+        upload.batch-size: 1000
         # Screenshot Feature: we disable it by default. Look at these pages for
         # instructions how to set it up on your platform:
         # https://www.zoomdata.com/docs/2.6/screenshot-for-rpm.html
@@ -282,6 +288,8 @@ postgres:
     zoomdata:
       owner: 'zoomdata'
     zoomdata-scheduler:
+      owner: 'zoomdata'
+    zoomdata-upload:
       owner: 'zoomdata'
 
   {%- if grains['init'] == 'unknown' %}
