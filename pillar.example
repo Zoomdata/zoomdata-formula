@@ -177,7 +177,6 @@ zoomdata:
       discard: True
     # Zoomdata Scheduler
     zoomdata-scheduler:
-      #merge: True
       path: '/etc/zoomdata/scheduler.properties'
       properties:
         # Metadata DB connection details
@@ -185,6 +184,7 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
+      #merge: True
       #update: False
       #discard: True
     # Zoomdata Spark Proxy. See the following article for additional info:
@@ -192,12 +192,12 @@ zoomdata:
     #
     # It has been gone entirely in release 2.6.
     #zoomdata-spark-proxy:
-      #merge: True
-      #path: '/etc/zoomdata/spark-proxy.properties'
-      #properties:
-        #hadoop.distro: 'cdh5'
-      #update: False
-      #discard: True
+    #  path: '/etc/zoomdata/spark-proxy.properties'
+    #  properties:
+    #    hadoop.distro: 'cdh5'
+    #  merge: True
+    #  update: False
+    #  discard: True
 
   # Zoomdata TLS: paste certificates chain and private key for your domain here.
   # Pay attention to indent exactly with 4 spaces for all lines under
@@ -265,10 +265,17 @@ zoomdata:
 # Comment out the whole section to disable PostgreSQL installation and
 # configuration.
 postgres:
-  # Create Zoomdata user
+  # Create Zoomdata user for the first time.
+  # Remove Jinja templating (``if .. endif``) lines when you want to ensure
+  # that it would always have Pillar-defined password to be set.
   users:
     zoomdata:
+      ensure: present
+      {%- if (salt['postgres.user_exists']|default(none) is callable and
+              not salt['postgres.user_exists']('zoomdata'))
+          or salt['postgres.user_exists']|default(none) is not callable %}
       password: 'PleaseChangeMe'
+      {%- endif %}
 
   # Create Zoomtata service databases
   databases:

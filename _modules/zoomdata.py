@@ -31,8 +31,8 @@ EDC = 'zoomdata-edc'
 
 def _parse_ini(path, chars=(' \'"')):
     '''
-    Parse ini-like files to a dictionary, which also could be Spring
-    application properties or shell environment files
+    Parse ini-like files to a dictionary, which also could be
+    Java Spring application properties or shell environment files
     '''
     ret = {}
 
