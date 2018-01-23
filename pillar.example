@@ -23,12 +23,21 @@ zoomdata:
     - microservices
     - tools
 
-  # Repository components to enable and install packages from
+  # Release repository components to enable and install packages from
   components:
     - stable
     #- unstable
     # Lisensed repo became obsoleted
     #- licensed
+
+  # Enforce the state defined by configured Pillar values or provided defaults.
+  # Setting it to ``False`` changes the formula behaviour to "relaxed
+  # configuration management mode": detect installed packages and
+  # running services with only upgrading or restarting them if needed.
+  #
+  # Please note that it would not take effect during the first time
+  # provisioning until all configured services would be started.
+  enforce: True
 
   # Exact version of Zoomdata Server packages to install, use ``latest``
   # keyword to always upgrade to the latest minor version in the release.

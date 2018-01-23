@@ -4,14 +4,9 @@
 {% set zoomdata = salt['grains.filter_by'](
     osfamily_map,
     grain='os_family',
-    merge=salt['pillar.get']('zoomdata', {}),
+    merge=salt['pillar.get']('zoomdata')|default({}, true),
     base='default',
 ) %}
-
-{# Import modules bundled with the formula #}
-{% if salt['zoomdata.inspect']|default(none) is not callable %}
-    {% do salt['saltutil.sync_modules']() %}
-{% endif %}
 
 {# Read envrionment variables #}
 {% do zoomdata.update({
@@ -20,22 +15,54 @@
     'version':  salt['environ.get']('ZOOMDATA_VERSION', zoomdata.get('version')),
     'edc':      zoomdata.edc|default({}, true),
 }) %}
-
 {% do zoomdata.edc.update(
     {'version': salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version'))},
 ) %}
 
+{# Try to inspect local installation #}
+{% set local = {
+    'zoomdata': {}
+} %}
+{% if salt['zoomdata.inspect']|default(none) is callable %}
+    {% set local = salt['zoomdata.inspect']() %}
+{% endif %}
+
+{% if not zoomdata['enforce'] %}
+    {# Bypass state enforcement: detect locally installed and running services #}
+    {% set packages = local.zoomdata['packages']|default([]) +
+                      local.zoomdata.edc['packages']|default([]) %}
+
+    {% if packages %}
+        {# Make sure we have finished bootstrapping when some packages were
+           already installed. #}
+        {% set bootstrap = salt['grains.get']('zoomdata:bootstrap', False) %}
+    {% else %}
+        {% set bootstrap = True %}
+    {% endif %}
+
+    {% do zoomdata.update({'bootstrap': bootstrap}) %}
+    {% if not zoomdata['bootstrap'] %}
+        {% do zoomdata.edc.update({'packages': []}) %}
+        {# If something is already installed, create global packages list:
+           for both Zoomdata core services and EDC in the single place. #}
+        {% do zoomdata.update({
+            'packages': packages,
+            'services': local.zoomdata['services'],
+        }) %}
+    {% endif %}
+{% endif %}
+
 {# Process properties #}
 {% for service, config in zoomdata.config|default({}, true)|dictsort() %}
-    {% if config.properties|default({}, true) and not config.merge|default(true) %}
+    {% if config.properties|default({}, true) and not config['merge']|default(true) %}
         {# Drop default properties if we don't want to merge them #}
-        {% set properties = salt['pillar.get']('zoomdata:config:' ~ service ~ ':properties', none) %}
+        {% set properties = salt['pillar.get']('zoomdata:config:' ~ service ~ ':properties', {}) %}
         {% do zoomdata.config[service].update({'properties': properties}) %}
     {% endif %}
 
     {% if config['update']|default(false) %}
-        {% set local_config = salt['zoomdata.inspect']().zoomdata.config[service]|default({}, true) %}
-        {% set local_properties = local_config['properties']|default({}, true) %}
+        {% set local_config = local.zoomdata.config[service]|default({}, true) %}
+        {% set local_properties = local_config.properties|default({}, true) %}
         {% set properties = zoomdata.config[service].properties|default({}, true) %}
         {% if config['discard']|default(true) %}
             {# Read local properties and update them with provided values #}
