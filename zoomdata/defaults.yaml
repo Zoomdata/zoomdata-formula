@@ -12,6 +12,9 @@ zoomdata:
 
   prefix: '/opt/zoomdata'
 
+  bootstrap: False
+  enforce: True
+
   #version: 'latest'
   packages:
     - zoomdata
