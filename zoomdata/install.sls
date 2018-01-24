@@ -14,17 +14,23 @@
   {%- endfor %}
 {%- endfor %}
 
-{%- set includes = [] %}
+{%- set includes = ['zoomdata'] %}
+
+{%- set backup = false %}
+{%- if zoomdata.backup and not zoomdata['bootstrap'] %}
+  {%- set backup = true %}
+  {%- do includes.append('zoomdata.backup') %}
+{%- endif %}
+
 {%- if packages %}
   {%- do includes.append('zoomdata.repo') %}
 {%- endif %}
+
 {%- if 'zoomdata' in packages %}
   {%- do includes.append('zoomdata.tls') %}
 {%- endif %}
 
 {%- if includes -%}
-
-# Configure Zoomdata packages repository
 
 include:
   {{ includes|yaml(false)|indent(2) }}
@@ -36,12 +42,17 @@ include:
 {{ package }}_package:
   pkg.installed:
     - name: {{ package }}
-  {%- if versions.get(package) %}
+    {%- if versions.get(package) %}
     - version: {{ versions[package] }}
-  {%- endif %}
+    {%- endif %}
     - skip_verify: {{ zoomdata.gpgkey is none or zoomdata.gpgkey == '' }}
     - require:
       - sls: zoomdata.repo
+    {%- if backup and package in zoomdata.backup['services']|default([], true) %}
+    - prereq_in:
+      - file: zoomdata_backup_dir
+      - test: {{ package }}_backup
+    {%- endif %}
 
 {%- endfor %}
 

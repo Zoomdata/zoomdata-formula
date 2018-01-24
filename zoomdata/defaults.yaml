@@ -135,3 +135,11 @@ zoomdata:
     - zoomdata-spark-proxy
     - zoomdata
     #- zoomdata-xvfb
+
+  backup:
+    services: []
+    databases: []
+    state: Null
+    destination: /opt/zoomdata/data/backups
+    strptime: '%y-%m-%d_%H:%M:%S'
+    retention: 10
