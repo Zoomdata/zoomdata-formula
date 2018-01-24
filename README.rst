@@ -4,10 +4,15 @@ zoomdata-formula
 
 Install, configure and run the Zoomdata services.
 
-.. note::
+**IMPORTANT!**
 
-    See the full `Salt Formulas installation and usage instructions
-    <https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
+This code is experimental and still in development. It is not officially
+supported by Zoomdata, Inc. and provided for evaluation purposes only.
+
+**NOTE**
+
+See the full `Salt Formulas installation and usage instructions
+<https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html>`_.
 
 Available states
 ================
