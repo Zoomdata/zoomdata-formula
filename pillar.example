@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml ts=2 sts=2 sw=2 et
 
-### Zoomdata provisioning configuration example
-#
+### Zoomdata provisioning configuration example.
+###
+### This is Salt Pillar file that written in SaltStack (SLS) format:
+### YAML rendered with Jinja2.
+
+
 zoomdata:
   ## Package installation settings
   #
@@ -275,6 +279,36 @@ zoomdata:
 
     # Zoomdata Server starts last
     - zoomdata
+
+  # Backup PostgreSQL databases which used by following services as
+  # metadata and persistent cache storage before upgrades.
+  # The dumps will be stored locally on machine running Zoomdata.
+  backup:
+    services:
+      # Specifying the services is mandatory for backups to be made.
+      # These services would be stopped, the order is important.
+      - zoomdata-stream-writer
+      - zoomdata-scheduler
+      - zoomdata
+    # Use to define which databases need to be backed up from the services
+    # above. It requires you to have those services defined.
+    # Defaults to all.
+    # Set to ``Null`` if you do not want to make any database backups.
+    #databases:
+      #- zoomdata
+      #- zoomdata-scheduler
+      #- zoomdata-upload
+    # Dump installation metadata in YAML (SLS) file that could be used as
+    # a source for Salt Pillar configuration, just like this file.
+    state: '99-backup'
+    # Where to put backup files. If not set or empty, there would be
+    # no backups.
+    destination: /opt/zoomdata/data/backups
+    # Create subdirectories under ``destination`` named as timestamps in
+    # specified format (Python's ``datetime.strptime``).
+    strptime: '%y-%m-%d_%H:%M:%S'
+    # How many recent backups to keep. Setting ``all`` means ALL!
+    retention: 10
 
 
 ### PostgreSQL configuration
