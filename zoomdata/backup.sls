@@ -78,9 +78,6 @@ Nothing would happen if nothing to upgrade.
 If called directly as ``state.apply zoomdata.backup``, always do the backup.
 #}
 
-{{ service }}_backup:
-  test.succeed_with_changes
-
 {#- The service supposed to be started back by applying ``zoomdata`` or
     ``zoomdata.install`` SLS. #}
 
@@ -88,7 +85,7 @@ If called directly as ``state.apply zoomdata.backup``, always do the backup.
   service.dead:
     - name: {{ service }}
     - onchanges:
-      - test: {{ service }}_backup
+      - file: zoomdata_backup_dir
 
   {%- endif %}
 
@@ -103,7 +100,7 @@ If called directly as ``state.apply zoomdata.backup``, always do the backup.
 
     {%- if has_properties|last %}
       {%- set connection_uri = config[properties[0]]|replace('jdbc:', '', 1) %}
-      {%- set database = config[properties[0]].split('/')|last %}
+      {%- set database = connection_uri.split('/')|last %}
       {%- set user = config[properties[1]] %}
       {%- set password = config[properties[2]] %}
 
@@ -117,14 +114,16 @@ If called directly as ``state.apply zoomdata.backup``, always do the backup.
     - name: >-
         pg_dump
         --no-password --clean --if-exists --create
-        {{ connection_uri }}
-        | pxz --compress --to-stdout --threads {{ salt['status.nproc']() }} >
+        {{ connection_uri }} |
+        pxz
+        --compress
+        --to-stdout --threads {{ salt['status.nproc']() }} >
         {{ salt['file.join'](backup_dir, database) }}_postgre.sql.xz
     - env:
       - PGUSER: {{ user }}
       - PGPASSWORD: {{ password }}
     - onchanges:
-      - test: {{ service }}_backup
+      - file: zoomdata_backup_dir
     - onchanges_in:
       - file: zoomdata_backup_retension
     - require:
