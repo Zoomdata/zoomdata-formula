@@ -143,3 +143,12 @@ zoomdata:
     destination: /opt/zoomdata/data/backups
     strptime: '%y-%m-%d_%H:%M:%S'
     retention: Null
+    bin: pg_dump --no-password --clean --if-exists --create
+    compressor: gzip
+    comp_opts: ''
+    comp_ext: '_postgre.sql.gz'
+
+  restore:
+    bin: psql
+    user: postgres
+    dir: Null

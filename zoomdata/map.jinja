@@ -1,3 +1,4 @@
+{% import_yaml 'zoomdata/defaults.yaml' as defaults %}
 {% import_yaml 'zoomdata/osfamily_map.yaml' as osfamily_map %}
 
 {# Merge Pillar items with defaults #}
@@ -49,6 +50,13 @@
         'services': zoomdata.local['services'],
     }) %}
 {% endif %}
+
+{% for params in ('backup', 'restore') %}
+    {% if zoomdata[params] is not mapping %}
+        {# Reload defaults if nested dictionary with parameters is messy #}
+        {% do zoomdata.update({params: defaults.zoomdata[params]}) %}
+    {% endif %}
+{% endfor %}
 
 {# Process properties #}
 {% for service, config in zoomdata.config|default({}, true)|dictsort() %}

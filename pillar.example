@@ -309,6 +309,30 @@ zoomdata:
     strptime: '%y-%m-%d_%H:%M:%S'
     # How many recent backups to keep. Setting ``all`` means ALL!
     retention: 10
+    # The PostgreSQL dump command with options to run on Zoomdata databases
+    bin: pg_dump --no-password --clean --if-exists --create
+    # Compress the dump file with following tool. Default is ``gzip``.
+    # Also supported compressors are: ``pigz``, ``[p]bzip2`` and ``[p]xz``.
+    compressor: pxz
+    # Additional command line options to use on compress/decompress
+    comp_opts: --threads {{ salt['status.nproc']() }}
+    # Extension or suffix to append to compressed dump file names.
+    # Better to align it with compression format defined above.
+    comp_ext: '_postgre.sql.xz'
+
+  # Use this setting to restore from previously made backup with
+  # ``zoomdata.restore`` state.
+  restore:
+    # The PostgreSQL client binary with options if needed.
+    bin: psql
+    # The client will connect to the PostgreSQL cluster with
+    # default authentication for this user. Usually it is host authentication
+    # type on localhost, so if you would like to use remote instance, make sure
+    # you have put necessary ``psql`` options above and created ~/.pgpass file.
+    # Also you must create the Zoomdata service users ahead.
+    user: postgres
+    # The directory where Zoomdata service databases dumps are located
+    #dir: /opt/zoomdata/data/backups/18-01-26_11:35:25
 
 
 ### PostgreSQL configuration

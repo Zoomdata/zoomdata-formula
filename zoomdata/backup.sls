@@ -13,12 +13,6 @@
   ),
 ) %}
 
-{%- if zoomdata.backup is not mapping %}
-  {#- Reload defaults if the ``backup`` dictionary is messy #}
-  {%- import_yaml 'zoomdata/defaults.yaml' as defaults %}
-  {%- do zoomdata.update({'backup': defaults.zoomdata.backup}) %}
-{%- endif %}
-
 {%- set backup_dir = salt['file.join'](
   zoomdata.backup['destination'],
   salt['status.time'](zoomdata.backup['strptime'])
@@ -32,7 +26,7 @@
 
 zoomdata_backup_compressor:
   pkg.installed:
-    - name: pxz
+    - name: {{ zoomdata.backup['compressor'] }}
 
   {%- endif %}
 
@@ -46,10 +40,14 @@ zoomdata_backup_dir:
 
   {%- if zoomdata.backup['state'] %}
 
+    {%- do zoomdata.local.update({'backup': zoomdata.backup}) %}
+    {%- do zoomdata.restore.update({'dir': backup_dir}) %}
+    {%- do zoomdata.local.update({'restore': zoomdata.restore}) %}
+
 zoomdata_dump_state:
   file.serialize:
-    - name: {{ salt['file.join'](backup_dir, zoomdata.backup['state']) ~ '.yaml' }}
-    - dataset: {{ zoomdata.local|yaml }}
+    - name: {{ salt['file.join'](backup_dir, zoomdata.backup['state']) ~ '.sls' }}
+    - dataset: {{ {'zoomdata': zoomdata.local}|yaml }}
     - formatter: yaml
     - user: root
     - group: root
@@ -112,13 +110,11 @@ If called directly as ``state.apply zoomdata.backup``, always do the backup.
 {{ database }}_db_backup:
   cmd.run:
     - name: >-
-        pg_dump
-        --no-password --clean --if-exists --create
+        {{ zoomdata.backup['bin'] }}
         {{ connection_uri }} |
-        pxz
-        --compress
-        --to-stdout --threads {{ salt['status.nproc']() }} >
-        {{ salt['file.join'](backup_dir, database) }}_postgre.sql.xz
+        {{ zoomdata.backup['compressor'] }}
+        --stdout {{ zoomdata.backup['comp_opts'] }} >
+        {{ salt['file.join'](backup_dir, database ~ zoomdata.backup['comp_ext']) }}
     - env:
       - PGUSER: {{ user }}
       - PGPASSWORD: {{ password }}
