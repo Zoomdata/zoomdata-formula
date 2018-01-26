@@ -51,7 +51,6 @@ include:
     {%- if backup and package in zoomdata.backup['services']|default([], true) %}
     - prereq_in:
       - file: zoomdata_backup_dir
-      - test: {{ package }}_backup
     {%- endif %}
 
 {%- endfor %}
