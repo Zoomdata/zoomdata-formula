@@ -23,15 +23,29 @@ Available states
 ``zoomdata``
 ------------
 
-Install the Zoomdata packages. Configure, enable and start Zoomdata services.
+Bootstrap the Zoomdata services from scratch or upgrade existing installation.
+
+``zoomdata.backup``
+-------------------
+
+Make backup of the Zoomdata (PostgreSQL) databases and installation state.
+
+``zoomdata.install``
+--------------------
+
+Install the Zoomdata packages. Configure, enable and start the services.
 
 ``zoomdata.repo``
 -----------------
 
-Configure package repositories for installing Zoomdata.
+Configure package repositories for installing the Zoomdata packages.
+
+``zoomdata.restore``
+--------------------
+
+Restore the Zoomdata databases in a PostgreSQL cluster.
 
 ``zoomdata.tls``
 ----------------
 
-Install TLS (SSL) certificate with a private key into Java keystore and
-configure https endpoint in the Zoomdata server.
+Install a TLS (SSL) certificate with a private key into a Java keystore file.
