@@ -1,17 +1,4 @@
-{%- from 'zoomdata/map.jinja' import zoomdata %}
-
-{%- set postgre_conn_properties = (
-  (
-    'spring.datasource.url',
-    'spring.datasource.username',
-    'spring.datasource.password'
-  ),
-  (
-    'upload.destination.params.jdbc_url',
-    'upload.destination.params.user_name',
-    'upload.destination.params.password'
-  ),
-) %}
+{%- from 'zoomdata/map.jinja' import zoomdata, postgres %}
 
 {%- set backup_dir = salt['file.join'](
   zoomdata.backup['destination'],
@@ -107,7 +94,7 @@ If called directly as ``state.apply zoomdata.backup``, always do the backup.
 
   {%- endif %}
 
-  {%- for properties in postgre_conn_properties %}
+  {%- for properties in postgres.properties %}
     {#- The full set of properties: url, user and pw need to be configured #}
     {%- set has_properties = [true] %}
     {%- for property in properties %}

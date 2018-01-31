@@ -82,5 +82,21 @@
     {% endif %}
 {% endfor %}
 
+{# Hard-code of some PostgreSQL authentication property names #}
+{% set postgres = {
+    'properties': (
+        (
+            'spring.datasource.url',
+            'spring.datasource.username',
+            'spring.datasource.password'
+        ),
+        (
+            'upload.destination.params.jdbc_url',
+            'upload.destination.params.user_name',
+            'upload.destination.params.password'
+        ),
+    )
+} %}
+
 {# Detect if we are using real init or building some image #}
 {% set init_available = grains['init'] != 'unknown' %}
