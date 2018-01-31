@@ -1,8 +1,39 @@
-{%- from 'zoomdata/map.jinja' import zoomdata %}
+{%- from 'zoomdata/map.jinja' import zoomdata, postgres %}
 
 {%- if zoomdata.restore['dir'] %}
 
   {%- for service in zoomdata.backup['services'] %}
+    {%- set config = zoomdata.config.get(service, {}).properties|
+                     default({}, true) %}
+
+    {%- for properties in postgres.properties %}
+      {#- The full set of properties: url, user and pw need to be configured #}
+      {%- set has_properties = [true] %}
+      {%- for property in properties %}
+        {%- if property not in config %}
+          {%- do has_properties.append(false) %}
+        {%- endif %}
+      {%- endfor %}
+
+      {%- if has_properties|last %}
+        {%- set conn = config[properties[0]]|replace('jdbc:postgresql://', '', 1) %}
+        {%- set host = conn.split(':')|first %}
+        {%- set user = config[properties[1]] %}
+        {%- set password = config[properties[2]] %}
+
+        {%- if host == 'localhost' %}
+
+{{ service }}_{{ properties[1] }}:
+  postgres_user.present:
+    - name: {{ user }}
+    - password: {{ password }}
+    - user: {{ zoomdata.restore['user'] }}
+    - require_in:
+      - test: zoomdata_services_stopped
+
+        {%- endif %}
+      {%- endif %}
+    {%- endfor %}
 
 {{ service }}_stop:
   service.dead:
@@ -31,7 +62,7 @@ zoomdata_restore_{{ salt['file.basename'](zoomdata.restore['dir']) }}_{{ dump }}
         --decompress --stdout {{ zoomdata.backup['comp_opts'] }}
         {{ dump }} |
         {{ zoomdata.restore['bin'] }}
-    - cwd: "{{ zoomdata.restore['dir'] }}"    
+    - cwd: "{{ zoomdata.restore['dir'] }}"
     - runas: {{ zoomdata.restore['user'] }}
     - require:
       - test: zoomdata_services_stopped

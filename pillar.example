@@ -325,14 +325,14 @@ zoomdata:
   restore:
     # The PostgreSQL client binary with options if needed.
     bin: psql
-    # The client will connect to the PostgreSQL cluster with
-    # default authentication for this user. Usually it is host authentication
-    # type on localhost, so if you would like to use remote instance, make sure
+    # The client will connect to a PostgreSQL cluster with default
+    # authentication for this user. Usually it is ``peer`` auth type on
+    # localhost. So if you would like to use remote instance, make sure
     # you have put necessary ``psql`` options above and created ~/.pgpass file.
     # Also you must create the Zoomdata service users ahead.
     user: postgres
     # The directory where Zoomdata service databases dumps are located
-    #dir: /opt/zoomdata/data/backups/18-01-26_11:35:25
+    #dir: /opt/zoomdata/data/backups/18-01-31_12:01:08
 
 
 ### PostgreSQL configuration
