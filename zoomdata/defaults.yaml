@@ -150,5 +150,5 @@ zoomdata:
 
   restore:
     bin: psql
-    user: postgres
+    user: Null
     dir: Null

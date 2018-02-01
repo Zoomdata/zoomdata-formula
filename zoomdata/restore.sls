@@ -16,12 +16,8 @@
       {%- endfor %}
 
       {%- if has_properties|last %}
-        {%- set conn = config[properties[0]]|replace('jdbc:postgresql://', '', 1) %}
-        {%- set host = conn.split(':')|first %}
         {%- set user = config[properties[1]] %}
         {%- set password = config[properties[2]] %}
-
-        {%- if host == 'localhost' %}
 
 {{ service }}_{{ properties[1] }}:
   postgres_user.present:
@@ -31,7 +27,6 @@
     - require_in:
       - test: zoomdata_services_stopped
 
-        {%- endif %}
       {%- endif %}
     {%- endfor %}
 
