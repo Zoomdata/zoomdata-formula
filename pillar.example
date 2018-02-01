@@ -283,6 +283,7 @@ zoomdata:
   # Backup PostgreSQL databases which used by following services as
   # metadata and persistent cache storage before upgrades.
   # The dumps will be stored locally on machine running Zoomdata.
+  # These settings are applicable for ``zoomdata.backup`` states.
   backup:
     services:
       # Specifying the services is mandatory for backups to be made.
@@ -320,16 +321,20 @@ zoomdata:
     # Better to align it with compression format defined above.
     comp_ext: '_postgre.sql.xz'
 
-  # Use this setting to restore from previously made backup with
-  # ``zoomdata.restore`` state.
+  # Use these settings to restore from previously made backup. They work only
+  # when the ``backup`` section above has defined and valid values.
+  # Apply the ``zoomdata.restore`` states to make restoration to local or
+  # remote PostgreSQL cluster.
   restore:
-    # The PostgreSQL client binary with options if needed.
+    # The PostgreSQL client binary with options if needed. The full path may
+    # be required for custom installations, i.e. ``/usr/pgsql-9.5/bin/psql``.
+    # Connection command line options for remote servers could be specified
+    # here as well.
     bin: psql
     # The client will connect to a PostgreSQL cluster with default
-    # authentication for this user. Usually it is ``peer`` auth type on
-    # localhost. So if you would like to use remote instance, make sure
-    # you have put necessary ``psql`` options above and created ~/.pgpass file.
-    # Also you must create the Zoomdata service users ahead.
+    # authentication for this user. Usually it is ``peer`` authentication type
+    # on localhost. For other authentication options against remote servers,
+    # set ``root`` or ``Null`` here and look for relevant settings below.
     user: postgres
     # The directory where Zoomdata service databases dumps are located
     #dir: /opt/zoomdata/data/backups/18-01-31_12:01:08
@@ -337,8 +342,22 @@ zoomdata:
 
 ### PostgreSQL configuration
 #
+# Salt Minion settings. PROVIDE ONLY FOR REMOTE POSTGRESQL CLUSTER.
+# These options are intended to be configured only when connecting to the
+# cluster being provisioned elsewhere, not the same machine that runs
+# Zoomdata. The ``peer`` authentication for ``postgres`` system user will be
+# used to access PostgreSQL server via local socket by default.
+# The user specified here should have administrative permissions to create
+# ROLES and DATABASES on given host.
+#postgres.host: 'localhost'
+#postgres.port: '5432'
+#postgres.user: 'postgres'
+#postgres.pass: ''
+#postgres.maintenance_db: 'postgres'
+
 # Comment out the whole section to disable PostgreSQL installation and
-# configuration.
+# configuration (depends on targeting set in the states ``top.sls`` file).
+# In that case, consider to configure the options above.
 postgres:
   # Create Zoomdata user for the first time.
   # Remove Jinja templating (``if .. endif``) lines when you want to ensure
