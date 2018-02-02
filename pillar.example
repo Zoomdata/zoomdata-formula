@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml ts=2 sts=2 sw=2 et
 
-### Zoomdata provisioning configuration example.
+### Zoomdata 2.6 provisioning configuration example.
 ###
 ### This is Salt Pillar file that written in SaltStack (SLS) format:
 ### YAML rendered with Jinja2.
@@ -158,26 +158,32 @@ zoomdata:
       #old_path: '/etc/zoomdata/zoomdata.conf'
       path: '/etc/zoomdata/zoomdata.properties'
       properties:
-        # Metadata DB connection details
+        ## Metadata DB connection details.
         # (REMEMBER TO CHANGE VALUES BELOW IN ``postgres`` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
-        # Upload Service and API credentials
+        # Keyset database credentials. Required for Zoomdata versions starting
+        # from 2.6.4-1.
+        keyset.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-keyset'
+        keyset.destination.params.user_name: 'zoomdata'
+        keyset.destination.params.password: 'PleaseChangeMe'
+        keyset.destination.schema: 'public'
+        # Stream Writer credentials for saving Upload Service data
         upload.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-upload'
         upload.destination.params.user_name: 'zoomdata'
         upload.destination.params.password: 'PleaseChangeMe'
-        upload.destination.schema: public
+        upload.destination.schema: 'public'
         upload.batch-size: 1000
-        # Screenshot Feature: we disable it by default. Look at these pages for
-        # instructions how to set it up on your platform:
+        ## Screenshot Feature: we disable it by default.
+        # Look at these pages for instructions how to set it up on your platform:
         # https://www.zoomdata.com/docs/2.6/screenshot-for-rpm.html
         # https://www.zoomdata.com/docs/2.6/setting-up-the-screenshot-feature-for-ubuntu.html
         screenshot.daemon.enabled: False
         screenshot.daemon.schedule.rate: '168h'  # 1 week
         screenshots.dashboards.enabled: False
         screenshots.datasource-charts.enabled: False
-        # Configure HTTPS for Zoomdata (see ``tls`` item below):
+        ## Configure HTTPS for Zoomdata (see ``tls`` item below):
         # https://www.zoomdata.com/docs/2.6/adding-ssl-certificate-to-the-zoomdata-server.html
         #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
         #server.ssl.key-store-password: 'your_keystore_password'
@@ -198,8 +204,8 @@ zoomdata:
     zoomdata-scheduler:
       path: '/etc/zoomdata/scheduler.properties'
       properties:
-        # Metadata DB connection details
-        # (REMEMBER TO CHANGE VALUES BELOW IN `postgres` SECTION ACCORDINGLY!)
+        ## Metadata DB connection details.
+        # (REMEMBER TO CHANGE VALUES BELOW IN ``postgres`` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
