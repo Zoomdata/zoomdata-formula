@@ -377,9 +377,11 @@ postgres:
       password: 'PleaseChangeMe'
       {%- endif %}
 
-  # Create Zoomtata service databases
+  # Create databases for Zoomdata services
   databases:
     zoomdata:
+      owner: 'zoomdata'
+    zoomdata-keyset:
       owner: 'zoomdata'
     zoomdata-scheduler:
       owner: 'zoomdata'
