@@ -56,9 +56,14 @@ zoomdata_restore_{{ salt['file.basename'](zoomdata.restore['dir']) }}_{{ dump }}
         {{ zoomdata.backup['compressor'] }}
         --decompress --stdout {{ zoomdata.backup['comp_opts'] }}
         {{ dump }} |
-        {{ zoomdata.restore['bin'] }}
+        {{ zoomdata.restore['bin'] }} {{ postgres.connection_uri }}
     - cwd: "{{ zoomdata.restore['dir'] }}"
     - runas: {{ zoomdata.restore['user'] }}
+      {%- if postgres.password %}
+    - env:
+      - PGUSER: {{ postgres.user }}
+      - PGPASSWORD: {{ postgres.password }}
+      {%- endif %}
     - require:
       - test: zoomdata_services_stopped
       - pkg: zoomdata_backup_decompressor
