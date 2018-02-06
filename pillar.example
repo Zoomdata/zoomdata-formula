@@ -303,6 +303,7 @@ zoomdata:
     # Set to ``Null`` if you do not want to make any database backups.
     #databases:
       #- zoomdata
+      #- zoomdata-keyset
       #- zoomdata-scheduler
       #- zoomdata-upload
     # Dump installation metadata in YAML (SLS) file that could be used as
@@ -354,7 +355,8 @@ zoomdata:
 # Zoomdata. The ``peer`` authentication for ``postgres`` system user will be
 # used to access PostgreSQL server via local socket by default.
 # The user specified here should have administrative permissions to create
-# ROLES and DATABASES on given host.
+# ROLES and DATABASES on given host. It is mandatory to specify at least
+# ``postgres.host`` and ``postgres.pass`` for backup restoration to work.
 #postgres.host: 'localhost'
 #postgres.port: '5432'
 #postgres.user: 'postgres'

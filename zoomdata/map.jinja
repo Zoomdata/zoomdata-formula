@@ -82,7 +82,8 @@
     {% endif %}
 {% endfor %}
 
-{# Hard-code of some PostgreSQL authentication property names #}
+{# Hard-code of some PostgreSQL authentication property names
+   and expose administrative credentials for running raw ``psql`` command. #}
 {% set postgres = {
     'properties': (
         (
@@ -100,8 +101,21 @@
             'upload.destination.params.user_name',
             'upload.destination.params.password'
         ),
-    )
+    ),
+    'connection_uri': none,
+    'user': salt['config.option']('postgres.user', 'postgres'),
+    'password': salt['config.option']('postgres.pass'),
 } %}
+
+{% set pg_host = salt['config.option']('postgres.host') %}
+{% set pg_port = salt['config.option']('postgres.port', 5432) %}
+{% set pg_db = salt['config.option']('postgres.maintenance_db', 'postgres') %}
+
+{% if pg_host %}
+    {% do postgres.update({
+        'connection_uri': 'postgresql://' ~ pg_host ~ ':' ~ pg_port ~ '/' ~ pg_db,
+    }) %}
+{% endif %}
 
 {# Detect if we are using real init or building some image #}
 {% set init_available = grains['init'] != 'unknown' %}
