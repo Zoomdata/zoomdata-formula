@@ -86,17 +86,19 @@ zoomdata:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-aurora
       - zoomdata-edc-cloudera-search
-      # The ElasticSearch 1.7 was deprecated in Zoomdata 2.6 release
+      # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1 release
       #- zoomdata-edc-elasticsearch-1.7
       - zoomdata-edc-elasticsearch-2.0
       - zoomdata-edc-elasticsearch-5.0
+      # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3 release
+      - zoomdata-edc-elasticsearch-6.0
       - zoomdata-edc-impala
       - zoomdata-edc-memsql
       - zoomdata-edc-mongo
       - zoomdata-edc-mssql
       - zoomdata-edc-mysql
       - zoomdata-edc-oracle
-      # The Phoenix 4.5 was deprecated in Zoomdata 2.6 release
+      # The Phoenix 4.5 was deprecated in Zoomdata 2.6.0 release
       #- zoomdata-edc-phoenix-4.5
       - zoomdata-edc-phoenix-4.7-queryserver
       - zoomdata-edc-postgresql
@@ -250,17 +252,19 @@ zoomdata:
     - zoomdata-edc-apache-solr
     #- zoomdata-edc-aurora
     - zoomdata-edc-cloudera-search
-    # The ElasticSearch 1.7 was deprecated in Zoomdata 2.6 release
+    # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1 release
     #- zoomdata-edc-elasticsearch-1.7
     - zoomdata-edc-elasticsearch-2.0
     - zoomdata-edc-elasticsearch-5.0
+    # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3 release
+    - zoomdata-edc-elasticsearch-6.0
     - zoomdata-edc-impala
     #- zoomdata-edc-memsql
     - zoomdata-edc-mongo
     #- zoomdata-edc-mssql
     #- zoomdata-edc-mysql
     #- zoomdata-edc-oracle
-    # The Phoenix 4.5 was deprecated in Zoomdata 2.6 release
+    # The Phoenix 4.5 was deprecated in Zoomdata 2.6.0 release
     #- zoomdata-edc-phoenix-4.5
     - zoomdata-edc-phoenix-4.7-queryserver
     - zoomdata-edc-postgresql
