@@ -88,7 +88,8 @@ zoomdata:
       - zoomdata-edc-cloudera-search
       # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1 release
       #- zoomdata-edc-elasticsearch-1.7
-      - zoomdata-edc-elasticsearch-2.0
+      # The ElasticSearch 2.0 connector will be deprecated in release 2.6.5
+      #- zoomdata-edc-elasticsearch-2.0
       - zoomdata-edc-elasticsearch-5.0
       # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3 release
       - zoomdata-edc-elasticsearch-6.0
@@ -240,7 +241,7 @@ zoomdata:
   #      MIIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   #      -----END PRIVATE KEY-----
 
-  # Services to enable and start
+  # Services to enable and start in order
   services:
     # The Consul service is mandatory since Zoomdata 2.4 release,
     # comment out for 2.3
@@ -254,7 +255,8 @@ zoomdata:
     - zoomdata-edc-cloudera-search
     # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1 release
     #- zoomdata-edc-elasticsearch-1.7
-    - zoomdata-edc-elasticsearch-2.0
+    # The ElasticSearch 2.0 connector will be deprecated in release 2.6.5
+    # - zoomdata-edc-elasticsearch-2.0
     - zoomdata-edc-elasticsearch-5.0
     # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3 release
     - zoomdata-edc-elasticsearch-6.0
