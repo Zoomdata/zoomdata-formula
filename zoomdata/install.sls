@@ -7,7 +7,7 @@
 
 {%- for install in (zoomdata, zoomdata.edc) %}
   {%- for package in install.packages|default([], true) %}
-    {%- if package not in packages %}
+    {%- if package and package not in packages %}
       {%- do packages.append(package) %}
       {%- do versions.update({package: install.get('version')}) %}
     {%- endif %}
@@ -271,7 +271,7 @@ zoomdata-user-limits-conf:
 {%- endfor %}
 
 # Manage Zoomdata services: first stop those were not explicitly declared and
-# finally start all defined in defaults or Pillar
+# finally start all defined in defaults or Pillar.
 
 {%- if init_available %}
 
@@ -309,9 +309,9 @@ zoomdata-user-limits-conf:
 
 {%- else %}
 
-# Try to enable Zoomdata services in "manual" way if Salt `service` state module
-# is currently not available (e.g. during Docker or Packer build when is no init
-# system running)
+# Try to enable Zoomdata services in "manual" way if Salt `service` state
+# module is currently not available (e.g. during Docker or Packer build when
+# there is no init system running).
 
   {%- for service in packages %}
 

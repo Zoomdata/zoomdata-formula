@@ -14,11 +14,41 @@
     'base_url': salt['environ.get']('ZOOMDATA_REPOSITORY', zoomdata.base_url),
     'release':  salt['environ.get']('ZOOMDATA_RELEASE', zoomdata.release),
     'version':  salt['environ.get']('ZOOMDATA_VERSION', zoomdata.get('version')),
+    'packages': salt['environ.get']('ZOOMDATA_PACKAGES', zoomdata.get('packages')),
     'edc':      zoomdata.edc|default({}, true),
+    'services': salt['environ.get']('ZOOMDATA_SERVICES', zoomdata.get('services')),
 }) %}
-{% do zoomdata.edc.update(
-    {'version': salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version'))},
-) %}
+
+{% do zoomdata.edc.update({
+    'packages': salt['environ.get']('ZOOMDATA_EDC_PACKAGES', zoomdata.edc.get('packages')),
+    'version':  salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version')),
+}) %}
+
+{# Fix short names for Zoomdata sevices and connectors by appending
+   approptiate prefix to each package and service defined via environment
+   variable. #}
+{% for group, prefix in ((none, 'zoomdata'), ('edc', 'zoomdata-edc')) %}
+    {% for item in ('packages', 'services') %}
+        {% set map = zoomdata.get(group, zoomdata) %}
+        {% if map.get(item) is string %}
+            {% set items = map[item].split(',') %}
+            {% set srvs = [] %}
+            {% for srv in items %}
+                {% if srv and not srv.startswith(prefix) %}
+                    {% do srvs.append(prefix ~ '-' ~ srv) %}
+                {% elif srv %}
+                    {% do srvs.append(srv) %}
+                {% endif %}
+            {% endfor %}
+            {% set param = {item: srvs} %}
+            {% if group %}
+                {% do zoomdata[group].update(param) %}
+            {% else %}
+                {% do zoomdata.update(param) %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
 
 {# Install our module to gather data #}
 {% if salt['zoomdata.inspect']|default(none) is not callable %}
