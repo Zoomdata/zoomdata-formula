@@ -66,7 +66,10 @@ zoomdata:
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
     - zoomdata-xvfb
-    - zoomdata-zdmanage
+    # The ``zdmanage`` tool has independent versioning, uncomment if exact version from
+    # above is not set. Or install manually afterwards.
+    # TODO: add separate tools section
+    #- zoomdata-zdmanage
 
   # Zoomdata EDC section
   edc:
