@@ -23,11 +23,11 @@
 {% do zoomdata.update({
     'local': salt['zoomdata.inspect'](versions=true)['zoomdata'],
 }) %}
-{% set packages = zoomdata.local['packages']|default([], true) +
-                  zoomdata.local.edc['packages']|default([], true) %}
 
 {# Make sure we have finished bootstrapping when some packages were
    already installed. #}
+{% set packages = zoomdata.local['packages'] +
+                  zoomdata.local.edc['packages'] %}
 {% do zoomdata.update({
     'bootstrap': packages == [] or
                  salt['grains.get']('zoomdata:bootstrap', False),
@@ -35,13 +35,13 @@
 
 {% if not zoomdata['bootstrap'] and not zoomdata['enforce'] %}
     {# Bypass state enforcement: work only with locally installed and
-       running services #}
-    {% do zoomdata.edc.update({'packages': []}) %}
-    {# If something is already installed, create global packages list:
-       for both Zoomdata core services and EDC in the single place. #}
+       running services. #}
     {% do zoomdata.update({
-        'packages': packages,
+        'packages': zoomdata.local['packages'],
         'services': zoomdata.local['services'],
+    }) %}
+    {% do zoomdata.edc.update({
+        'packages': zoomdata.local.edc['packages']
     }) %}
 {% endif %}
 
