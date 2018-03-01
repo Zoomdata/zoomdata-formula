@@ -2,16 +2,15 @@
 {% import_yaml 'zoomdata/osfamily_map.yaml' as osfamily_map %}
 
 {# Merge Pillar items with defaults #}
-{% set zoomdata = salt['grains.filter_by'](
-    osfamily_map,
-    grain='os_family',
-    merge=salt['pillar.get']('zoomdata')|default({}, true),
-    base='default',
+{% set zoomdata = salt['pillar.get'](
+    'zoomdata',
+    default=defaults.zoomdata,
+    merge=true,
 ) %}
 
 {# Make sure EDC dict always exists #}
 {% do zoomdata.update({
-    'edc':      zoomdata.edc|default({}, true),
+    'edc': zoomdata.edc|default({}, true),
 }) %}
 
 {# Install our module to gather data #}
@@ -53,6 +52,13 @@
     'packages': salt['environ.get']('ZOOMDATA_PACKAGES', zoomdata.get('packages')),
     'services': salt['environ.get']('ZOOMDATA_SERVICES', zoomdata.get('services')),
 }) %}
+
+{# Merge in OS specific defaults #}
+{% set zoomdata = salt['grains.filter_by'](
+    osfamily_map,
+    grain='os_family',
+    merge=zoomdata,
+) %}
 
 {% do zoomdata.edc.update({
     'packages': salt['environ.get']('ZOOMDATA_EDC_PACKAGES', zoomdata.edc.get('packages')),

@@ -5,7 +5,7 @@
 
 {% set zoomdata = defaults.zoomdata %}
 
-default: {{ defaults.zoomdata|yaml }}
+default: {{ zoomdata|yaml }}
 
 Debian:
   os: {{ grains['oscodename'] }}
