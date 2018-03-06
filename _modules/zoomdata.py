@@ -328,8 +328,13 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
             baseurl = urlparse.urlunparse((url.scheme, url.netloc, '', '', '', ''))
         if gpgkey is None and 'gpgkey' in params:
             gpgkey = params['gpgkey'].strip()
-        if release is None:
-            release = url.path.split('/')[1]
+
+        repo_root = url.path.split('/')[1]
+        try:
+            release = float(repo_root) if not release or float(repo_root) > release else release
+        except ValueError:
+            pass
+
         component = url.path.rstrip('/').rsplit('/')[-1]
         if component not in components:
             components.append(component)
