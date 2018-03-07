@@ -35,10 +35,15 @@
 {% if not zoomdata['bootstrap'] and not zoomdata['enforce'] %}
     {# Bypass state enforcement: work only with locally installed and
        running services. #}
-    {% do zoomdata.update({
-        'packages': zoomdata.local['packages'],
-        'services': zoomdata.local['services'],
-    }) %}
+    {% if zoomdata.release == zoomdata.local.release %}
+        {# Keep core packages and services only within minor (by SemVer)
+           version number, i.e. release cycle. #}
+        {% do zoomdata.update({
+            'packages': zoomdata.local['packages'],
+            'services': zoomdata.local['services'],
+        }) %}
+    {% endif %}
+    {# EDC (connectors) are preserved between releases #}
     {% do zoomdata.edc.update({
         'packages': zoomdata.local.edc['packages']
     }) %}
