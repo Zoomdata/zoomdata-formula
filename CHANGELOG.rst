@@ -1,6 +1,17 @@
 zoomdata-formula
 ================
 
+2.6.5 (2018-03-14)
+
+- Removed ElasticSearch 2.0 connector from the example
+- Recognize new environment variables: ``ZOOMDATA_PACKAGES``,
+  ``ZOOMDATA_EDC_PACKAGES``, ``ZOOMDATA_SERVICES``
+- Temporarily disabled ``zoomdata-zdmanage`` package in the example,
+  it would break versions pinning. This should be fixed.
+- Fixed parsing release number if multiple repos configured in an OS
+- Bypass core packages detection when doing release upgrade (from 2.5)
+- Fixed few regressions
+
 2.6.4 (2018-02-13)
 
 - Added ability to preserve local changes in property files (like passwords)
