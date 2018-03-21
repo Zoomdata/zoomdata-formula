@@ -2,6 +2,7 @@
 
 include:
   - zoomdata.install
+  - zoomdata.tools
 
 {%- if zoomdata['bootstrap'] %}
 

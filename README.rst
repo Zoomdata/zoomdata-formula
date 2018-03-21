@@ -49,3 +49,8 @@ Restore the Zoomdata databases in a PostgreSQL cluster.
 ----------------
 
 Install a TLS (SSL) certificate with a private key into a Java keystore file.
+
+``zoomdata.tools``
+------------------
+
+Install additional explicitly defined packages from ``tools`` repository.

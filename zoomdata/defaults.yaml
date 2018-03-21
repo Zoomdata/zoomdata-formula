@@ -48,6 +48,9 @@ zoomdata:
       drivers: {}
       install: False
 
+  tools:
+    packages: []
+
   user: zoomdata
   group: zoomdata
 
