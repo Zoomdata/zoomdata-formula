@@ -66,14 +66,10 @@ zoomdata:
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
     - zoomdata-xvfb
-    # The ``zdmanage`` tool has independent versioning, uncomment if exact version from
-    # above is not set. Or install manually afterwards.
-    # TODO: add separate tools section
-    #- zoomdata-zdmanage
 
   # Zoomdata EDC section
   edc:
-    # Exact version of Zoomdata Server packages to install, use ``latest``
+    # Exact version of Zoomdata EDC packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
@@ -121,6 +117,19 @@ zoomdata:
     # Do the similar for other connectors which require external drivers.
     # To actually make it work, set ``install`` to ``True``:
     #  install: True
+
+  tools:
+    # Exact version of Zoomdata Tools packages to install, use ``latest``
+    # keyword to always upgrade to the latest version.
+    {%- if grains['os'] == 'Ubuntu' %}
+    # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
+    #version: "1.0.0-1+{{ grains['oscodename'] }}.stable"
+    {%- else %}
+    # Packages version for RHEL/CentOS systems
+    #version: '1.0.0-1'
+    {%- endif %}
+    packages:
+      - zoomdata-zdmanage
 
   ## Configuration settings
   #
