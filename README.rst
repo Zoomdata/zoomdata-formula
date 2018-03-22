@@ -45,6 +45,11 @@ Configure package repositories for installing the Zoomdata packages.
 
 Restore the Zoomdata databases in a PostgreSQL cluster.
 
+``zoomdata.remove``
+-------------------
+
+Disable the Zoomdata services and uninstall the Zoomdata packages.
+
 ``zoomdata.tls``
 ----------------
 

@@ -180,12 +180,15 @@ def list_repos():
     return zd_repos
 
 
-def list_pkgs(include_edc=False):
+def list_pkgs(include_edc=False, include_tools=False):
     '''
     List Zoomdata packages currently installed as a list
 
     include_edc : False
         Include EDC packages as well
+
+    include_edc : False
+        Include tool packages as well
 
     CLI Example:
 
@@ -200,6 +203,8 @@ def list_pkgs(include_edc=False):
     for pkg in sorted(pkg_names):
         if pkg.startswith(ZOOMDATA):
             if not include_edc and pkg.startswith(EDC):
+                pass
+            elif not include_tools and __salt__['service.missing'](pkg):
                 pass
             else:
                 zd_pkgs.append(pkg)
