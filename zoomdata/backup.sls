@@ -76,15 +76,13 @@ zoomdata_dump_state:
     {%- set config = zoomdata.config.get(service, {}).properties|
                      default(config, true) %}
 
-{#-
-Detect if the service configured for backup would be upgraded
+{#- Detect if the service configured for backup would be upgraded
 during zoomdata.install SLS run. This will trigger the backup process.
 Nothing would happen if nothing to upgrade.
 If called directly as ``state.apply zoomdata.backup``, always do the backup.
-#}
 
-{#- The service supposed to be started back by applying ``zoomdata`` or
-    ``zoomdata.install`` SLS. #}
+The service supposed to be started back by applying ``zoomdata`` or
+``zoomdata.install`` states. #}
 
 {{ service }}_stop:
   service.dead:

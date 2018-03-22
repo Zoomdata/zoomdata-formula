@@ -43,6 +43,12 @@ zoomdata:
   # provisioning until all configured services would be started.
   enforce: True
 
+  # Remove Zoomdata services which HAVE NOT explicitly defined here or in the
+  # defaults. If set ``False``, remove all specified (or default) packages and
+  # disable corresponding services when manually calling ``zoomdata.remove``
+  # state.
+  erase: False
+
   # Exact version of Zoomdata Server packages to install, use ``latest``
   # keyword to always upgrade to the latest minor version in the release.
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.

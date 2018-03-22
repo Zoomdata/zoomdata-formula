@@ -1,6 +1,11 @@
 {%- from 'zoomdata/map.jinja' import zoomdata -%}
 
 include:
+  {%- if zoomdata['erase'] and not zoomdata['bootstrap'] %}
+  # Drop packages which do not being defined for installation.
+  # Usually takes effect when switching releases.
+  - zoomdata.remove
+  {%- endif %}
   - zoomdata.install
   - zoomdata.tools
 

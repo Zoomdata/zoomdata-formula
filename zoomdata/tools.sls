@@ -14,7 +14,7 @@ zoomdata-tools:
     - skip_verify: {{ zoomdata.gpgkey|default(none, true) is none }}
     - require:
       - sls: zoomdata.repo
-    
+
   {%- endif %}
 
 {%- endif %}

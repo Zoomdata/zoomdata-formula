@@ -8,9 +8,10 @@
     merge=true,
 ) %}
 
-{# Make sure EDC dict always exists #}
+{# Make sure EDC and tools dicts always exist #}
 {% do zoomdata.update({
     'edc': zoomdata.edc|default({}, true),
+    'tools': zoomdata.tools|default(defaults.zoomdata.tools, true),
 }) %}
 
 {# Install our module to gather data #}
