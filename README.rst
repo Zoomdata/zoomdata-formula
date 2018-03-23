@@ -35,6 +35,11 @@ Make backup of the Zoomdata (PostgreSQL) databases and installation state.
 
 Install the Zoomdata packages. Configure, enable and start the services.
 
+``zoomdata.remove``
+-------------------
+
+Disable the Zoomdata services and uninstall the Zoomdata packages.
+
 ``zoomdata.repo``
 -----------------
 
@@ -44,11 +49,6 @@ Configure package repositories for installing the Zoomdata packages.
 --------------------
 
 Restore the Zoomdata databases in a PostgreSQL cluster.
-
-``zoomdata.remove``
--------------------
-
-Disable the Zoomdata services and uninstall the Zoomdata packages.
 
 ``zoomdata.tls``
 ----------------
