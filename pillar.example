@@ -24,7 +24,10 @@ zoomdata:
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
-    - microservices
+    # The branch "microservices" is deprecated in the Zoomdata repository
+    # starting from version 2.6.6. All packages have been moved under "stable"
+    # component of the main repository.
+    #- microservices
     - tools
 
   # Release repository components to enable and install packages from
@@ -38,7 +41,6 @@ zoomdata:
   # Setting it to ``False`` changes the formula behaviour to "relaxed
   # configuration management mode": detect installed packages and
   # running services with only upgrading or restarting them if needed.
-  #
   # Please note that it would not take effect during the first time
   # provisioning until all configured services would be started.
   enforce: True
@@ -89,14 +91,15 @@ zoomdata:
     # Zoomdata EDC packages to install
     packages:
       - zoomdata-edc-apache-solr
-      - zoomdata-edc-aurora
+      # The Amazon Aurora connector was deprecated in Zoomdata 2.6.2
+      #- zoomdata-edc-aurora
       - zoomdata-edc-cloudera-search
-      # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1 release
+      # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1
       #- zoomdata-edc-elasticsearch-1.7
-      # The ElasticSearch 2.0 connector will be deprecated in release 2.6.5
+      # The ElasticSearch 2.0 connector was deprecated in Zoomdata 2.6.5
       #- zoomdata-edc-elasticsearch-2.0
       - zoomdata-edc-elasticsearch-5.0
-      # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3 release
+      # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3
       - zoomdata-edc-elasticsearch-6.0
       - zoomdata-edc-impala
       - zoomdata-edc-memsql
@@ -104,7 +107,7 @@ zoomdata:
       - zoomdata-edc-mssql
       - zoomdata-edc-mysql
       - zoomdata-edc-oracle
-      # The Phoenix 4.5 was deprecated in Zoomdata 2.6.0 release
+      # The Phoenix 4.5 was deprecated in Zoomdata 2.6.0
       #- zoomdata-edc-phoenix-4.5
       - zoomdata-edc-phoenix-4.7-queryserver
       - zoomdata-edc-postgresql
@@ -269,14 +272,15 @@ zoomdata:
     # not included into the distribution. Uncomment them after you have
     # installed proper driver library file (see above).
     - zoomdata-edc-apache-solr
+    # The Amazon Aurora connector was deprecated in Zoomdata 2.6.2
     #- zoomdata-edc-aurora
     - zoomdata-edc-cloudera-search
-    # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1 release
+    # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1
     #- zoomdata-edc-elasticsearch-1.7
-    # The ElasticSearch 2.0 connector will be deprecated in release 2.6.5
+    # The ElasticSearch 2.0 connector was deprecated in Zoomdata 2.6.5
     # - zoomdata-edc-elasticsearch-2.0
     - zoomdata-edc-elasticsearch-5.0
-    # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3 release
+    # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3
     - zoomdata-edc-elasticsearch-6.0
     - zoomdata-edc-impala
     #- zoomdata-edc-memsql
@@ -284,7 +288,7 @@ zoomdata:
     #- zoomdata-edc-mssql
     #- zoomdata-edc-mysql
     #- zoomdata-edc-oracle
-    # The Phoenix 4.5 was deprecated in Zoomdata 2.6.0 release
+    # The Phoenix 4.5 was deprecated in Zoomdata 2.6.0
     #- zoomdata-edc-phoenix-4.5
     - zoomdata-edc-phoenix-4.7-queryserver
     - zoomdata-edc-postgresql
@@ -293,7 +297,9 @@ zoomdata:
     - zoomdata-edc-sparksql
     - zoomdata-edc-tez
 
-    # Microservices
+    # Former "microservices". These are flat file support services, i.e. used
+    # to create CSV/JSON-based data sources. They require that the
+    # ``zoomdata-edc-postgresql`` service must be up and running.
     - zoomdata-stream-writer
     - zoomdata-upload-service
 
