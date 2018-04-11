@@ -9,7 +9,7 @@ include:
 
 zoomdata-tools:
   pkg.installed:
-    - pkgs: {{ zoomdata.tools.packages }}
+    - pkgs: {{ zoomdata.tools['packages']|yaml() }}
     - version: {{ zoomdata.tools.version|default(none, true) }}
     - skip_verify: {{ zoomdata.gpgkey|default(none, true) is none }}
     - require:
