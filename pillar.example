@@ -55,11 +55,11 @@ zoomdata:
   # keyword to always upgrade to the latest minor version in the release.
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
   {%- if grains['os'] == 'Ubuntu' %}
-  # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-  #version: "2.6.5-1+{{ grains['oscodename'] }}.stable"
+  # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
+  #version: "2.6.6-1+{{ grains['oscodename'] }}.stable"
   {%- else %}
   # Packages version for RHEL/CentOS systems
-  #version: '2.6.5'
+  #version: '2.6.6'
   {%- endif %}
 
   # Zoomdata Server packages to install
@@ -81,11 +81,11 @@ zoomdata:
     # keyword to always upgrade to the latest minor version in the release.
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
-    # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-    #version: "2.6.5-1+{{ grains['oscodename'] }}.stable"
+    # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
+    #version: "2.6.6-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL/CentOS systems
-    #version: '2.6.5'
+    #version: '2.6.6'
     {%- endif %}
 
     # Zoomdata EDC packages to install
