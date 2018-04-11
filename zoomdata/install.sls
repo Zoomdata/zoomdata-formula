@@ -123,7 +123,7 @@ include:
     - mode: 0644
     - makedirs: True
     - defaults:
-        header: {{ zoomdata.header|default('', true)|yaml }}
+        header: {{ zoomdata.header|default('', true)|yaml() }}
         sections:
           Service:
       {%- for item, limit in zoomdata.limits|default({}, true)|dictsort() %}
@@ -165,9 +165,9 @@ zoomdata-user-limits-conf:
     - group: root
     - mode: 0644
     - defaults:
-        header: {{ zoomdata.header|default('', true)|yaml }}
+        header: {{ zoomdata.header|default('', true)|yaml() }}
         release: {{ zoomdata.release }}
-        limits: {{ zoomdata.limits }}
+        limits: {{ zoomdata.limits|yaml() }}
         user: {{ zoomdata.user|default('root', true) }}
     - require:
       - pkg: {{ packages|first() }}_package
@@ -195,9 +195,9 @@ zoomdata-user-limits-conf:
     - source: salt://zoomdata/templates/env.sh
     - template: jinja
     - defaults:
-        header: {{ zoomdata.header|default('', true)|yaml }}
+        header: {{ zoomdata.header|default('', true)|yaml() }}
         release: {{ zoomdata.release }}
-        environment: {{ environment['variables'] }}
+        environment: {{ environment['variables']|yaml() }}
     {%- else %}
     - replace: False
     {%- endif %}
@@ -245,9 +245,9 @@ zoomdata-user-limits-conf:
     - source: salt://zoomdata/templates/service.properties
     - template: jinja
     - defaults:
-        header: {{ zoomdata.header|default('', true)|yaml }}
+        header: {{ zoomdata.header|default('', true)|yaml() }}
         release: {{ zoomdata.release }}
-        properties: {{ config['properties'] }}
+        properties: {{ config['properties']|yaml() }}
     {%- else %}
     - replace: False
     {%- endif %}
