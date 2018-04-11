@@ -1,9 +1,17 @@
 zoomdata-formula
 ================
 
+2.6.6 (2018-05-11)
+
+- Added ``zoomdata.remove`` states
+- Added ``zoomdata.tools`` states
+- Removed deprecated Amazon Aurora connector from the example
+- Removed "microservices" repository
+- Zoomdata 2.6 became Long Term Support (LTS) release!
+
 2.6.5 (2018-03-14)
 
-- Removed ElasticSearch 2.0 connector from the example
+- Removed deprecated ElasticSearch 2.0 connector from the example
 - Recognize new environment variables: ``ZOOMDATA_PACKAGES``,
   ``ZOOMDATA_EDC_PACKAGES``, ``ZOOMDATA_SERVICES``
 - Temporarily disabled ``zoomdata-zdmanage`` package in the example,
