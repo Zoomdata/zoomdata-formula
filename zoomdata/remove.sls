@@ -20,7 +20,7 @@
   {%- set uninstall = [] %}
 
   {%- for pkg in installed %}
-    {% if pkg not in packages %}
+    {%- if pkg not in packages %}
       {%- do uninstall.append(pkg) %}
     {%- elif pkg in services %}
       {%- do services.remove(pkg) %}    
@@ -43,4 +43,4 @@
 
 zoomdata-remove:
   pkg.removed:
-    - pkgs: {{ uninstall }}
+    - pkgs: {{ uninstall|yaml() }}

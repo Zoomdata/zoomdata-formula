@@ -5,7 +5,7 @@
 include:
   - zoomdata.repo
 
-  {%- if zoomdata.tools.packages|default([]) %}
+  {%- if zoomdata.tools['packages'] %}
 
 zoomdata-tools:
   pkg.installed:
