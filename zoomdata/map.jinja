@@ -74,25 +74,29 @@
 {# Fix short names for Zoomdata sevices and connectors by appending
    approptiate prefix to each package and service defined via environment
    variable. #}
-{% for group, prefix in ((none, 'zoomdata'), ('edc', 'zoomdata-edc')) %}
+{% for group, prefix in ((none, 'zoomdata'), ('edc', 'zoomdata-edc'), ('tools', 'zoomdata')) %}
     {% for item in ('packages', 'services') %}
         {% set map = zoomdata.get(group, zoomdata) %}
-        {% if map.get(item) is string %}
-            {% set items = map[item].split(',') %}
-            {% set srvs = [] %}
-            {% for srv in items %}
-                {% if srv and not srv.startswith(prefix) %}
-                    {% do srvs.append(prefix ~ '-' ~ srv) %}
-                {% elif srv %}
-                    {% do srvs.append(srv) %}
-                {% endif %}
-            {% endfor %}
-            {% set param = {item: srvs} %}
-            {% if group %}
-                {% do zoomdata[group].update(param) %}
-            {% else %}
-                {% do zoomdata.update(param) %}
+        {% set value = map.get(item) %}
+        {% set items = value %}
+        {% if value is string %}
+            {% set items = value.split(',') %}
+        {% elif not value or value is not sequence %}
+            {% set items = [] %}
+        {% endif %}
+        {% set srvs = [] %}
+        {% for srv in items %}
+            {% if srv and not srv.startswith(prefix) %}
+                {% do srvs.append(prefix ~ '-' ~ srv) %}
+            {% elif srv %}
+                {% do srvs.append(srv) %}
             {% endif %}
+        {% endfor %}
+        {% set param = {item: srvs} %}
+        {% if group %}
+            {% do zoomdata[group].update(param) %}
+        {% else %}
+            {% do zoomdata.update(param) %}
         {% endif %}
     {% endfor %}
 {% endfor %}
