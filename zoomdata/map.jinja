@@ -28,15 +28,30 @@
    already installed. #}
 {% set packages = zoomdata.local['packages'] +
                   zoomdata.local.edc['packages'] %}
+
 {% do zoomdata.update({
     'bootstrap': packages == [] or
-                 salt['grains.get']('zoomdata:bootstrap', False),
+                 salt['grains.get']('zoomdata:bootstrap', false),
+}) %}
+
+{# Read envrionment variables #}
+{% do zoomdata.update({
+    'base_url': salt['environ.get']('ZOOMDATA_REPOSITORY', zoomdata['base_url']),
+    'release':  salt['environ.get']('ZOOMDATA_RELEASE', zoomdata['release'])|string(),
+}) %}
+
+{# Detect release upgrades or repo changes #}
+{% do zoomdata.update({
+    'upgrade': not zoomdata['bootstrap'] and (
+               zoomdata['release'] != zoomdata.local['release']|string() or
+               zoomdata['base_url'] != zoomdata.local['base_url']
+               ),
 }) %}
 
 {% if not zoomdata['bootstrap'] and not zoomdata['enforce'] %}
     {# Bypass state enforcement: work only with locally installed and
        running services. #}
-    {% if zoomdata.release == zoomdata.local.release %}
+    {% if not zoomdata['upgrade'] %}
         {# Keep core packages and services only within minor (by SemVer)
            version number, i.e. release cycle. #}
         {% do zoomdata.update({
@@ -52,8 +67,6 @@
 
 {# Read envrionment variables #}
 {% do zoomdata.update({
-    'base_url': salt['environ.get']('ZOOMDATA_REPOSITORY', zoomdata.base_url),
-    'release':  salt['environ.get']('ZOOMDATA_RELEASE', zoomdata.release),
     'version':  salt['environ.get']('ZOOMDATA_VERSION', zoomdata.get('version')),
     'packages': salt['environ.get']('ZOOMDATA_PACKAGES', zoomdata.get('packages')),
     'services': salt['environ.get']('ZOOMDATA_SERVICES', zoomdata.get('services')),
