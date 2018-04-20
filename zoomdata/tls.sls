@@ -6,9 +6,6 @@
 {%- set keystore = properties['server.ssl.key-store']|default(none, true) %}
 {%- set password = properties['server.ssl.key-store-password']|default(none, true) %}
 
-include:
-  - zoomdata
-
 {%- if zoomdata.tls.certificate|default('', true)
    and zoomdata.tls.key|default('', true)
    and keystore
