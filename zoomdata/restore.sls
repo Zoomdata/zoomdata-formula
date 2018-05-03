@@ -61,8 +61,8 @@ zoomdata_restore_{{ salt['file.basename'](zoomdata.restore['dir']) }}_{{ dump }}
     - runas: {{ zoomdata.restore['user'] }}
       {%- if postgres.password %}
     - env:
-      - PGUSER: {{ postgres.user }}
-      - PGPASSWORD: {{ postgres.password }}
+      - PGUSER: {{ postgres.user|yaml() }}
+      - PGPASSWORD: {{ postgres.password|yaml() }}
       {%- endif %}
     - require:
       - test: zoomdata_services_stopped
