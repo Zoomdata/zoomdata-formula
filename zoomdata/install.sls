@@ -42,9 +42,11 @@ include:
 {{ package }}_package:
   pkg.installed:
     - name: {{ package }}
-    - version: {{ versions.get(package) }}
+    {%- if versions.get(package) %}
+    - version: {{ versions[package] }}
     {#- Update local metadata only when installing the first pkg #}
     - refresh: {{ loop.index == 1 }}
+    {%- endif %}
     - skip_verify: {{ zoomdata.gpgkey|default(none, true) is none }}
     - require:
       - sls: zoomdata.repo
