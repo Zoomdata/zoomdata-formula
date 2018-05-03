@@ -121,8 +121,8 @@ The service supposed to be started back by applying ``zoomdata`` or
         --stdout {{ zoomdata.backup['comp_opts'] }} >
         {{ salt['file.join'](backup_dir, database ~ zoomdata.backup['comp_ext']) }}
     - env:
-      - PGUSER: {{ user }}
-      - PGPASSWORD: {{ password }}
+      - PGUSER: {{ user|yaml() }}
+      - PGPASSWORD: {{ password|yaml() }}
     - onchanges:
       - file: zoomdata_backup_dir
     - onchanges_in:
@@ -146,6 +146,6 @@ zoomdata_backup_retension:
     - name: {{ zoomdata.backup['destination'] }}
     - retain:
         most_recent: {{ zoomdata.backup['retention'] }}
-    - strptime_format: "{{ zoomdata.backup['strptime'] }}"
+    - strptime_format: {{ zoomdata.backup['strptime']|yaml() }}
 
 {%- endif %}
