@@ -28,12 +28,28 @@ Bootstrap the Zoomdata services from scratch or upgrade existing installation.
 ``zoomdata.backup``
 -------------------
 
-Make backup of the Zoomdata (PostgreSQL) databases and installation state.
+Make backup of the Zoomdata installation state and metadata (PostgreSQL)
+databases.
 
-``zoomdata.install``
---------------------
+``zoomdata.backup.layout``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Install the Zoomdata packages. Configure, enable and start the services.
+Prepare a directory on local filesystem to store backups.
+
+``zoomdata.backup.metadata``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Write compressed dumps of PostgreSQL databases.
+
+``zoomdata.backup.retension``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Remove old backups. Keep last 10 by default.
+
+``zoomdata.backup.state``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Write a Pillar SLS file that describes current Zoomdata installation state.
 
 ``zoomdata.remove``
 -------------------
@@ -48,7 +64,32 @@ Configure package repositories for installing the Zoomdata packages.
 ``zoomdata.restore``
 --------------------
 
+Restore the Zoomdata installation from previously made backup.
+
+``zoomdata.restore.metadata``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Restore the Zoomdata databases in a PostgreSQL cluster.
+
+``zoomdata.services``
+---------------------
+
+Install, configure, enable and start the Zoomdata services.
+
+``zoomdata.services.install``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Install the Zoomdata packages and write the configuration files.
+
+``zoomdata.services.start``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Start the Zoomdata services.
+
+``zoomdata.services.stop``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Stop the Zoomdata services.
 
 ``zoomdata.tls``
 ----------------

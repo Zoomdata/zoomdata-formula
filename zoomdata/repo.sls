@@ -2,8 +2,8 @@
 {%- import_yaml 'zoomdata/defaults.yaml' as defaults %}
 
 {%- set repositories = [] %}
-{%- set default_components = defaults.zoomdata.components %}
-{%- if zoomdata.base_url and zoomdata.release %}
+{%- set default_components = defaults.zoomdata['components'] %}
+{%- if zoomdata['base_url'] and zoomdata['release'] %}
   {#- Create list of repos to make full OS dependent entries of them #}
   {%- set repositories = [zoomdata.release] +
                          zoomdata.repositories|default([], true) %}
@@ -84,12 +84,12 @@ zoomdata-repo-is-mission:
   pkgrepo.managed:
     - humanname: {{ zoomdata.repo_desc|format(**zoomdata) }}
     - baseurl: {{ zoomdata.repo_url|format(**zoomdata) }}
-      {%- if zoomdata.gpgkey %}
+    {%- if zoomdata.gpgkey %}
     - gpgcheck: 1
     - gpgkey: {{ zoomdata.gpgkey }}
-      {%- else %}
+    {%- else %}
     - gpgcheck: 0
-      {%- endif %}
+    {%- endif %}
 
     {%- endfor %}
   {%- endif %}
