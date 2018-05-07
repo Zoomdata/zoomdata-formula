@@ -1,11 +1,9 @@
-{%- from 'zoomdata/map.jinja' import init_available,
-                                     zoomdata with context %}
+{%- from 'zoomdata/map.jinja' import zoomdata with context %}
 
 {%- set packages = [] %}
-{%- set services = zoomdata.services|default([], true) %}
 {%- set versions = {} %}
 
-{%- for install in (zoomdata, zoomdata.edc) %}
+{%- for install in (zoomdata, zoomdata.edc, zoomdata.microservices) %}
   {%- for package in install.packages|default([], true) %}
     {%- if package and package not in packages %}
       {%- do packages.append(package) %}
@@ -14,28 +12,17 @@
   {%- endfor %}
 {%- endfor %}
 
-{%- set includes = ['zoomdata'] %}
-
-{%- set backup = false %}
-{%- if zoomdata.backup and not zoomdata['bootstrap'] %}
-  {%- set backup = true %}
-  {%- do includes.append('zoomdata.backup') %}
-{%- endif %}
-
-{%- if packages %}
-  {%- do includes.append('zoomdata.repo') %}
-{%- endif %}
-
-{%- if 'zoomdata' in packages %}
-  {%- do includes.append('zoomdata.tls') %}
-{%- endif %}
-
-{%- if includes -%}
-
 include:
-  {{ includes|yaml(false)|indent(2) }}
+  - zoomdata.repo
 
-{%- endif %}
+zoomdata_repository_update:
+  test.configurable_test_state:
+    - changes: {{ zoomdata['upgrade'] }}
+    - result: True
+    {%- if not zoomdata['bootstrap'] %}
+    - prereq_in:
+      - file: zoomdata_backup_dir
+    {%- endif %}
 
 {%- for package in packages %}
 
@@ -44,15 +31,21 @@ include:
     - name: {{ package }}
     {%- if versions.get(package) %}
     - version: {{ versions[package] }}
-    {#- Update local metadata only when installing the first pkg #}
-    - refresh: {{ loop.index == 1 }}
+    {#- Update local metadata when changing repository definitions. #}
+    - refresh: {{ zoomdata['upgrade'] }}
     {%- endif %}
     - skip_verify: {{ zoomdata.gpgkey|default(none, true) is none }}
-    - require:
-      - sls: zoomdata.repo
-    {%- if backup and package in zoomdata.backup['services']|default([], true) %}
+    {%- if not zoomdata['bootstrap'] and not zoomdata['upgrade'] %}
     - prereq_in:
+      - service: {{ package }}_stop_disable
+      {%- if zoomdata.backup['destination'] and
+             package in zoomdata.backup['services']|default([], true) %}
       - file: zoomdata_backup_dir
+      {%- endif %}
+    {%- endif %}
+    {%- if package in zoomdata['services'] %}
+    - watch_in:
+      - service: {{ package }}_start_enable
     {%- endif %}
 
 {%- endfor %}
@@ -97,10 +90,10 @@ include:
     - show_change: False
     - require:
       - pkg: {{ package }}_package
-        {%- if package in services and init_available %}
+    {%- if package in zoomdata['services'] %}
     - watch_in:
-      - service: {{ package }}_service
-        {%- endif %}
+      - service: {{ package }}_start_enable
+    {%- endif %}
 
       {%- endfor %}
     {%- endif %}
@@ -128,31 +121,21 @@ include:
         header: {{ zoomdata.header|default('', true)|yaml() }}
         sections:
           Service:
-      {%- for item, limit in zoomdata.limits|default({}, true)|dictsort() %}
-        {%- if 'hard' in limit|default({}, true) %}
+          {%- for item, limit in zoomdata.limits|default({}, true)|dictsort() %}
+            {%- if 'hard' in limit|default({}, true) %}
             Limit{{ item|upper() }}: >-
-                {{ (limit.get('soft', none),limit.hard)|reject("none")|join(":") }}
-        {%- endif %}
-      {%- endfor %}
+                {{ (limit.get('soft', none), limit.hard)|reject("none")|join(":") }}
+            {%- endif %}
+          {%- endfor %}
     - require:
       - pkg: {{ service }}_package
-      {%- if init_available %}
     - watch_in:
       - module: systemctl_reload
-        {%- if service in services %}
-      - service: {{ service }}_service
-        {%- endif %}
+      {%- if service in zoomdata['services'] %}
+      - service: {{ service }}_start_enable
       {%- endif %}
 
     {%- endfor %}
-
-    {%- if init_available %}
-
-systemctl_reload:
-  module.wait:
-    - name: service.systemctl_reload
-
-    {%- endif %}
 
   {%- else %}
 
@@ -173,10 +156,10 @@ zoomdata-user-limits-conf:
         user: {{ zoomdata.user|default('root', true) }}
     - require:
       - pkg: {{ packages|first() }}_package
-    {%- if services and init_available %}
+    {%- if zoomdata['services'] %}
     - watch_in:
-      {%- for service in packages %}
-      - service: {{ service }}_service
+      {%- for service in zoomdata['services'] %}
+      - service: {{ service }}_start_enable
       {%- endfor %}
     {%- endif %}
 
@@ -211,9 +194,9 @@ zoomdata-user-limits-conf:
     - require:
       - pkg: {{ service }}_package
     {%- endif %}
-    {%- if service in services and init_available %}
+    {%- if service in zoomdata['services'] %}
     - watch_in:
-      - service: {{ service }}_service
+      - service: {{ service }}_start_enable
     {%- endif %}
     # Prevent `test=True` failures on a fresh system
     - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
@@ -233,10 +216,10 @@ zoomdata-user-limits-conf:
 {{ service }}_legacy_config:
   file.absent:
     - name: {{ config.old_path }}
-      {%- if service in services and init_available %}
+    {%- if service in zoomdata['services'] %}
     - watch_in:
-      - service: {{ service }}_service
-      {%- endif %}
+      - service: {{ service }}_start_enable
+    {%- endif %}
 
     {%- endif %}
 
@@ -259,9 +242,9 @@ zoomdata-user-limits-conf:
     - makedirs: True
     - require:
       - pkg: {{ service }}_package
-    {%- if service in services and init_available %}
+    {%- if service in zoomdata['services'] %}
     - watch_in:
-      - service: {{ service }}_service
+      - service: {{ service }}_start_enable
     {%- endif %}
     # Prevent ``test=True`` failures on a fresh system
     - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
@@ -269,65 +252,3 @@ zoomdata-user-limits-conf:
   {%- endif %}
 
 {%- endfor %}
-
-# Manage Zoomdata services: first stop those were not explicitly declared and
-# finally start all defined in defaults or Pillar.
-
-{%- if init_available %}
-
-  {%- for service in packages %}
-
-    {%- if service not in services %}
-
-{{ service }}_service:
-  service.dead:
-    - name: {{ service }}
-    - require:
-      - pkg: {{ service }}_package
-
-    {%- endif %}
-
-  {%- endfor %}
-
-  {%- for service in services %}
-
-    {%- if service in packages %}
-
-{{ service }}_service:
-  service.running:
-    - name: {{ service }}
-    - enable: True
-    - watch:
-      - pkg: {{ service }}_package
-    # Skip dealing with daemons if there are no binaries at all.
-    # Fixes applying the state with ``test=True``.
-    - onlyif: test -d "{{ salt['file.join'](zoomdata.prefix, 'bin') }}"
-
-    {%- endif %}
-
-  {%- endfor %}
-
-{%- else %}
-
-# Try to enable Zoomdata services in "manual" way if Salt `service` state
-# module is currently not available (e.g. during Docker or Packer build when
-# there is no init system running).
-
-  {%- for service in packages %}
-
-{{ service }}_enable:
-  cmd.run:
-    {%- if salt['file.file_exists']('/bin/systemctl') %}
-    - name: systemctl enable {{ service }}
-    {%- elif salt['cmd.which']('chkconfig') %}
-    - name: chkconfig {{ service }} on
-    {%- elif salt['file.file_exists']('/usr/sbin/update-rc.d') %}
-    - name: update-rc.d {{ service }} defaults
-    {%- else %}
-    # Nothing to do
-    - name: 'true'
-    {%- endif %}
-
-  {%- endfor %}
-
-{%- endif %}

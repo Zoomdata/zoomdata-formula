@@ -1,6 +1,9 @@
-{%- from 'zoomdata/map.jinja' import zoomdata, postgres %}
+{%- from 'zoomdata/map.jinja' import zoomdata, postgres with context %}
 
 {%- if zoomdata.restore['dir'] %}
+
+include:
+  - zoomdata.services.stop
 
   {%- for service in zoomdata.backup['services'] %}
     {%- set config = zoomdata.config.get(service, {}).properties|
@@ -15,7 +18,7 @@
         {%- endif %}
       {%- endfor %}
 
-      {%- if has_properties|last %}
+      {%- if has_properties|last() %}
         {%- set user = config[properties[1]] %}
         {%- set password = config[properties[2]] %}
 
@@ -24,24 +27,11 @@
     - name: {{ user }}
     - password: {{ password }}
     - user: {{ zoomdata.restore['user'] }}
-    - require_in:
-      - test: zoomdata_services_stopped
 
       {%- endif %}
     {%- endfor %}
 
-{{ service }}_stop:
-  service.dead:
-    - name: {{ service }}
-    - require_in:
-      - test: zoomdata_services_stopped
-
   {%- endfor %}
-
-# Verify that all services have been stop before executing SQL scripts
-
-zoomdata_services_stopped:
-  test.succeed_without_changes
 
 zoomdata_backup_decompressor:
   pkg.installed:
@@ -65,7 +55,7 @@ zoomdata_restore_{{ salt['file.basename'](zoomdata.restore['dir']) }}_{{ dump }}
       - PGPASSWORD: {{ postgres.password|yaml() }}
       {%- endif %}
     - require:
-      - test: zoomdata_services_stopped
+      - sls: zoomdata.services.stop
       - pkg: zoomdata_backup_decompressor
 
     {%- endif %}
@@ -74,9 +64,8 @@ zoomdata_restore_{{ salt['file.basename'](zoomdata.restore['dir']) }}_{{ dump }}
 {%- else %}
 
 zoomdata_restore:
-  test.show_notification:
-   - text: |
-      Nothing to restore.
-      Please define `zoomdata:restore:dir` Pillar value.
+  test.fail_without_changes:
+   - name: 'Please define `zoomdata:restore:dir` Pillar value.'
+   - failhard: True
 
 {%- endif %}

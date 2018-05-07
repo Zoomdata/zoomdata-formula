@@ -1,0 +1,50 @@
+{%- from 'zoomdata/map.jinja' import init_available,
+                                     zoomdata with context %}
+
+{%- set packages = zoomdata['packages'] +
+                   zoomdata.edc['packages'] +
+                   zoomdata.microservices['packages'] %}
+
+{%- if init_available %}
+
+  {%- if salt['test.provider']('service') == 'systemd' %}
+
+systemctl_reload:
+  module.wait:
+    - name: service.systemctl_reload
+
+  {%- endif %}
+
+  {%- for service in zoomdata['services'] if service in packages %}
+
+{{ service }}_start_enable:
+  service.running:
+    - name: {{ service }}
+    - enable: True
+
+  {%- endfor %}
+
+{%- else %}
+
+# Try to enable Zoomdata services in "manual" way if Salt ``service`` state
+# module is currently not available (e.g. during Docker or Packer build when
+# there is no init system running).
+
+  {%- for service in packages %}
+
+{{ service }}_start_enable:
+  cmd.run:
+    {%- if salt['file.file_exists']('/bin/systemctl') %}
+    - name: systemctl enable {{ service }}
+    {%- elif salt['cmd.which']('chkconfig') %}
+    - name: chkconfig {{ service }} on
+    {%- elif salt['file.file_exists']('/usr/sbin/update-rc.d') %}
+    - name: update-rc.d {{ service }} defaults
+    {%- else %}
+    # Nothing to do
+    - name: 'true'
+    {%- endif %}
+
+  {%- endfor %}
+
+{%- endif %}

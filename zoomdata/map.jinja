@@ -8,9 +8,10 @@
     merge=true,
 ) %}
 
-{# Make sure EDC and tools dicts always exist #}
+{# Make sure EDC, MS and tools dicts always exist #}
 {% do zoomdata.update({
     'edc': zoomdata.edc|default({}, true),
+    'microservices': zoomdata.microservices|default({}, true),
     'tools': zoomdata.tools|default(defaults.zoomdata.tools, true),
 }) %}
 
@@ -21,13 +22,14 @@
 
 {# Try to inspect local installation #}
 {% do zoomdata.update({
-    'local': salt['zoomdata.inspect'](versions=true)['zoomdata'],
+    'local': salt['zoomdata.inspect'](versions=true, full=true)['zoomdata'],
 }) %}
 
 {# Make sure we have finished bootstrapping when some packages were
    already installed. #}
 {% set packages = zoomdata.local['packages'] +
-                  zoomdata.local.edc['packages'] %}
+                  zoomdata.local.edc['packages'] +
+                  zoomdata.local.microservices['packages'] %}
 
 {% do zoomdata.update({
     'bootstrap': packages == [] or
@@ -87,7 +89,12 @@
 {# Fix short names for Zoomdata sevices and connectors by appending
    approptiate prefix to each package and service defined via environment
    variable. #}
-{% for group, prefix in ((none, 'zoomdata'), ('edc', 'zoomdata-edc'), ('tools', 'zoomdata')) %}
+{% for group, prefix in (
+        (none, 'zoomdata'),
+        ('edc', 'zoomdata-edc'),
+        ('microservices', 'zoomdata'),
+        ('tools', 'zoomdata')
+) %}
     {% for item in ('packages', 'services') %}
         {% set map = zoomdata.get(group, zoomdata) %}
         {% set value = map.get(item) %}

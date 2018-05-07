@@ -180,14 +180,17 @@ def list_repos():
     return zd_repos
 
 
-def list_pkgs(include_edc=False, include_tools=False):
+def list_pkgs(include_edc=False, include_microservices=False, include_tools=False):
     '''
     List Zoomdata packages currently installed as a list
 
     include_edc : False
         Include EDC packages as well
 
-    include_edc : False
+    include_microservices : False
+        Include microservices packages as well
+
+    include_tools : False
         Include tool packages as well
 
     CLI Example:
@@ -203,6 +206,9 @@ def list_pkgs(include_edc=False, include_tools=False):
     for pkg in sorted(pkg_names):
         if pkg.startswith(ZOOMDATA):
             if not include_edc and pkg.startswith(EDC):
+                pass
+            elif not include_microservices and \
+                    pkg in __salt__['pillar.get']('zoomdata:microservices:packages', []):
                 pass
             elif not include_tools and __salt__['service.missing'](pkg):
                 pass
@@ -230,9 +236,31 @@ def list_pkgs_edc():
     return edc_pkgs
 
 
-def version():
+def list_pkgs_ms():
+    '''
+    List only Zoomdata microservices packages currently installed as a list
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' zoomdata.list_pkgs_ms
+    '''
+    ms_pkgs = []
+    for pkg in list_pkgs(include_microservices=True):
+        # pylint: disable=undefined-variable
+        if pkg in __salt__['pillar.get']('zoomdata:microservices:packages', []):
+            ms_pkgs.append(pkg)
+
+    return ms_pkgs
+
+
+def version(full=True):
     '''
     Display Zoomdata packages version
+
+    full : True
+        Return full version. If set False, return only short version (X.Y.Z).
 
     CLI Example:
 
@@ -245,16 +273,21 @@ def version():
     for pkg in zd_pkgs:
         # pylint: disable=undefined-variable
         zd_version = __salt__['pkg.version'](pkg)
+        if not full:
+            return zd_version.split('-')[0]
         break
 
     return zd_version
 
 
-def version_edc():
+def version_edc(full=True):
     '''
     Display Zoomdata EDC packages version
 
     CLI Example:
+
+    full : True
+        Return full version. If set False, return only short version (X.Y.Z).
 
     .. code-block:: bash
 
@@ -265,9 +298,36 @@ def version_edc():
     for pkg in edc_pkgs:
         # pylint: disable=undefined-variable
         edc_version = __salt__['pkg.version'](pkg)
+        if not full:
+            return edc_version.split('-')[0]
         break
 
     return edc_version
+
+
+def version_microservices(full=True):
+    '''
+    Display Zoomdata microservices packages version
+
+    CLI Example:
+
+    full : True
+        Return full version. If set False, return only short version (X.Y.Z).
+
+    .. code-block:: bash
+
+        salt '*' zoomdata.version_microservices
+    '''
+    ms_version = ''
+    ms_pkgs = list_pkgs_ms()
+    for pkg in ms_pkgs:
+        # pylint: disable=undefined-variable
+        ms_version = __salt__['pkg.version'](pkg)
+        if not full:
+            return ms_version.split('-')[0]
+        break
+
+    return ms_version
 
 
 def services(running=False):
@@ -303,7 +363,8 @@ def services(running=False):
 
 
 def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
-            versions=False):
+            versions=False,
+            full=True):
     '''
     Inspect Zoomdata installation and return info as dictionary structure
 
@@ -313,6 +374,10 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
 
     versions : False
         Include exact versions of Zoomdata and EDC installed
+
+    full : True
+        Return full version. If set False, return only short version (X.Y.Z).
+        Has effect only when ``versions`` parameter set True.
 
     CLI Example:
 
@@ -391,6 +456,9 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
             'edc': {
                 'packages': list_pkgs_edc(),
             },
+            'microservices': {
+                'packages': list_pkgs_ms(),
+            },
             'environment': env,
             'config': config,
             'services': services(True),
@@ -406,10 +474,15 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
 
     if versions:
         ret[ZOOMDATA].update({
-            'version': version(),
+            'version': version(full=full),
         })
         ret[ZOOMDATA]['edc'].update({
-            'version': version_edc(),
+            # Some EDC packages has different iteration (build number),
+            # so we strip it off.
+            'version': version_edc(full=False),
+        })
+        ret[ZOOMDATA]['microservices'].update({
+            'version': version_microservices(full=full),
         })
 
     return ret
