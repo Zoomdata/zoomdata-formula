@@ -388,6 +388,8 @@ zoomdata:
     # authentication for this user. Usually it is ``peer`` authentication type
     # on localhost. For other authentication options against remote servers,
     # set ``root`` or ``Null`` here and look for relevant settings below.
+    # Also, this user would have group write permissions to the backup
+    # directory created. The group name must match the user name set here.
     user: postgres
     # The directory where Zoomdata service databases dumps are located
     #dir: /opt/zoomdata/data/backups/18-01-31_12:01:08

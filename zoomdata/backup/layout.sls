@@ -10,14 +10,14 @@ zoomdata_backup_dir:
   file.directory:
     - name: {{ backup_dir }}
     - user: root
-    - group: {{ zoomdata.restore['user'] }}
+    - group: {{ zoomdata.restore['user']|default('root', true) }}
     - mode: 0775
     - makedirs: True
 
 zoomdata_backup_latest:
   file.symlink:
     - name: {{ salt['file.join'](zoomdata.backup['destination'], 'latest') }}
-    - target: "{{ timestamp }}"
+    - target: {{ timestamp|yaml() }}
     - force: True
     - onchanges:
       - file: zoomdata_backup_dir
