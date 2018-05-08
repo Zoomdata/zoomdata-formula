@@ -20,7 +20,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
-  release: 2.6
+  release: 3.0
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
