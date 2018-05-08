@@ -1,7 +1,15 @@
 zoomdata-formula
 ================
 
-2.6.6 (2018-05-11)
+3.0.0 (2018-05-08)
+
+- Fixed compatibilities with Salt versions between 2016.11 and 2018.3
+- Do backup of the state when repository settings would be changed
+- Fixed PostgreSQL related default settings and states
+- Stop services before upgrade or manually initiated backup
+- Added support for new Rapid Release of Zoomdata 3.0!
+
+2.6.6 (2018-04-11)
 
 - Added ``zoomdata.remove`` states
 - Added ``zoomdata.tools`` states
