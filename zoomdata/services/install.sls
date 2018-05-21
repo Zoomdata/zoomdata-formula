@@ -29,10 +29,11 @@ zoomdata_repository_update:
 {{ package }}_package:
   pkg.installed:
     - name: {{ package }}
-    {%- if versions.get(package) %}
+    {%- if versions[package] %}
     - version: {{ versions[package] }}
-    {#- Update local metadata when changing repository definitions. #}
-    - refresh: {{ zoomdata['upgrade'] }}
+    {#- Update local package metadata only on the first state.
+        This speed ups execution during upgrades. #}
+    - refresh: {{ loop.index == 1 }}
     {%- endif %}
     - skip_verify: {{ zoomdata.gpgkey|default(none, true) is none }}
     {%- if not zoomdata['bootstrap'] and not zoomdata['upgrade'] %}
