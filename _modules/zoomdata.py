@@ -361,8 +361,8 @@ def services(running=False):
 
     return zd_services
 
-
-def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
+# pylint: disable=too-many-locals,too-many-branches,too-many-statements
+def inspect(limits=False,
             versions=False,
             full=True):
     '''
@@ -387,6 +387,7 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
     '''
     baseurl = None
     gpgkey = None
+    gpgcheck = False
     release = None
     components = []
     env = {}
@@ -396,6 +397,11 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
         url = urlparse.urlparse(params['baseurl'].strip())
         if baseurl is None:
             baseurl = urlparse.urlunparse((url.scheme, url.netloc, '', '', '', ''))
+        try:
+            if int(params.get('gpgcheck', '0')):
+                gpgcheck = True
+        except ValueError:
+            pass
         if gpgkey is None and 'gpgkey' in params:
             gpgkey = params['gpgkey'].strip()
 
@@ -449,7 +455,6 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
     ret = {
         ZOOMDATA: {
             'base_url': baseurl,
-            'gpgkey': gpgkey,
             'release': release,
             'components': components,
             'packages': list_pkgs(),
@@ -464,6 +469,12 @@ def inspect(limits=False,  # pylint: disable=too-many-locals,too-many-branches
             'services': services(True),
         },
     }
+
+    if not gpgcheck:
+        ret[ZOOMDATA]['gpgkey'] = None
+    elif gpgkey:
+        # Return the key only when it is really used
+        ret[ZOOMDATA]['gpgkey'] = gpgkey
 
     if limits:
         # TO DO: implement reading limits.
