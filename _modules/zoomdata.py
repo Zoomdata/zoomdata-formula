@@ -249,7 +249,7 @@ def list_pkgs_ms():
     ms_pkgs = []
     for pkg in list_pkgs(include_microservices=True):
         # pylint: disable=undefined-variable
-        if pkg in __salt__['pillar.get']('zoomdata:microservices:packages', []):
+        if pkg in __salt__['defaults.get']('zoomdata:zoomdata:microservices:packages', []):
             ms_pkgs.append(pkg)
 
     return ms_pkgs
@@ -360,6 +360,7 @@ def services(running=False):
         zd_services.append(ZOOMDATA)
 
     return zd_services
+
 
 # pylint: disable=too-many-locals,too-many-branches,too-many-statements
 def inspect(limits=False,
