@@ -49,6 +49,12 @@ zoomdata:
       drivers: {}
       install: False
 
+  microservices:
+    #version: 'latest'
+    packages:
+      - zoomdata-stream-writer
+      - zoomdata-upload-service
+
   tools:
     packages: []
 
