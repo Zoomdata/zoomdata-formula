@@ -16,13 +16,11 @@ import urlparse
 ENVIRONMENT = {
     'zoomdata': '/etc/zoomdata/zoomdata.env',
     'zoomdata-scheduler': '/etc/zoomdata/scheduler.env',
-    'zoomdata-spark-proxy': '/etc/zoomdata/spark-proxy.env',
 }
 
 PROPERTIES = {
     'zoomdata': '/etc/zoomdata/zoomdata.properties',
     'zoomdata-scheduler': '/etc/zoomdata/scheduler.properties',
-    'zoomdata-spark-proxy': '/etc/zoomdata/spark-proxy.properties',
 }
 
 ZOOMDATA = 'zoomdata'
@@ -88,24 +86,6 @@ def environment_scheduler(path=ENVIRONMENT['zoomdata-scheduler']):
     return _parse_ini(path)
 
 
-def environment_spark_proxy(path=ENVIRONMENT['zoomdata-spark-proxy']):
-    '''
-    Display Zoomdata Spark Proxy environment variables as dictionary
-
-    Returns ``None`` if environment file cannot be read.
-
-    path
-        Full path to the property file
-
-    CLI Example:
-
-    .. code-block:: bash
-
-        salt '*' zoomdata.environment_spark_proxy
-    '''
-    return _parse_ini(path)
-
-
 def properties(path=PROPERTIES['zoomdata']):
     '''
     Display Zoomdata properties as dictionary
@@ -138,24 +118,6 @@ def properties_scheduler(path=PROPERTIES['zoomdata-scheduler']):
     .. code-block:: bash
 
         salt '*' zoomdata.properties_scheduler
-    '''
-    return _parse_ini(path)
-
-
-def properties_spark_proxy(path=PROPERTIES['zoomdata-spark-proxy']):
-    '''
-    Display Zoomdata Spark Proxy properties as dictionary
-
-    Returns ``None`` if property file cannot be read.
-
-    path
-        Full path to the property file
-
-    CLI Example:
-
-    .. code-block:: bash
-
-        salt '*' zoomdata.properties_spark_proxy
     '''
     return _parse_ini(path)
 
