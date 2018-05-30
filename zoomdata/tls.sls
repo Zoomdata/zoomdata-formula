@@ -6,11 +6,11 @@
 {%- set keystore = properties['server.ssl.key-store']|default(none, true) %}
 {%- set password = properties['server.ssl.key-store-password']|default(none, true) %}
 
-{%- if zoomdata.tls.certificate|default('', true)
-   and zoomdata.tls.key|default('', true)
+{%- if zoomdata.tls['certificate']|default('', true)
+   and zoomdata.tls['key']|default('', true)
    and keystore
    and password
-   and 'zoomdata' in zoomdata.packages|default([], true) %}
+   and 'zoomdata' in zoomdata['packages']|default([], true) %}
 
   {%- set pem = keystore.split('.')[:-1]|join('.') %}
   {%- set crt = pem ~ '.crt' %}
@@ -61,13 +61,6 @@ zoomdata-create-jks:
         -deststorepass '{{ password }}'
         -destkeypass '{{ password }}'
     - unless: test -f '{{ keystore }}'
-    - require:
-      - pkg: zoomdata_package
-  {%- if 'zoomdata' in zoomdata.services|default([], true)
-     and init_available %}
-    - watch_in:
-      - service: zoomdata_service
-  {%- endif %}
 
 zoomdata-jks-permissions:
   file.managed:
@@ -78,11 +71,6 @@ zoomdata-jks-permissions:
     - replace: False
     - require:
       - cmd: zoomdata-create-jks
-  {%- if 'zoomdata' in zoomdata.services|default([], true)
-     and init_available %}
-    - require_in:
-      - service: zoomdata_service
-  {%- endif %}
 
 zoomdata-remove-tls-crt:
   file.absent:
