@@ -225,9 +225,11 @@ zoomdata:
         screenshots.datasource-charts.enabled: False
         ## Configure HTTPS for Zoomdata (see ``tls`` item below):
         # https://www.zoomdata.com/docs/2.6/adding-ssl-certificate-to-the-zoomdata-server.html
+        #server.ssl.enabled: True
         #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
         #server.ssl.key-store-password: 'your_keystore_password'
         # Optional redirect to https scheme, this requires HAProxy (see below)
+        # ATTENTION: this is deprecated in Zoomdata 2.6.2!
         #http.redirect.port: '443'
       # Merge properties with hard-coded defaults. This is useful to skip
       # common configuration values. Set ``False`` to disable such behavior.
