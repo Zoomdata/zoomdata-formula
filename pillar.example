@@ -71,7 +71,8 @@ zoomdata:
     - zoomdata-scheduler
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
-    - zoomdata-xvfb
+    # The X framebuffer is deprecated in Zoomdata 3.1 release
+    #- zoomdata-xvfb
 
   # Zoomdata EDC section
   edc:
@@ -140,6 +141,7 @@ zoomdata:
 
     # Zoomdata microservice packages to install
     packages:
+      - zoomdata-screenshot-service
       - zoomdata-stream-writer
       - zoomdata-upload-service
 
@@ -318,6 +320,7 @@ zoomdata:
     # Former "microservices". These are flat file support services, i.e. used
     # to create CSV/JSON-based data sources. They require that the
     # ``zoomdata-edc-postgresql`` service must be up and running.
+    - zoomdata-screenshot-service
     - zoomdata-stream-writer
     - zoomdata-upload-service
 
@@ -328,7 +331,7 @@ zoomdata:
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
 
-    # Usually you don't need to keep screenshotting service always running
+    # The X framebuffer is deprecated in Zoomdata 3.1 release
     #- zoomdata-xvfb
 
     # Zoomdata Server starts last
