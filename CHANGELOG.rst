@@ -1,6 +1,14 @@
 zoomdata-formula
 ================
 
+3.1.0 (2018-06-11)
+
+- Fixed upgrades and installation state detection
+- Made ``zoomdata.tls`` SLS separated from the Zoomdata services installation
+- Deprecated ``http.redirect.port`` setting in the Zoomdata Server
+- Dropped legacy service (``zoomdata-spark-proxy``) from execution module
+- Added new ``zoomdata-screenshot-service`` package
+
 3.0.0 (2018-05-08)
 
 - Fixed compatibilities with Salt versions between 2016.11 and 2018.3
