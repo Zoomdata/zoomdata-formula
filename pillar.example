@@ -142,7 +142,9 @@ zoomdata:
     # Zoomdata microservice packages to install
     packages:
       - zoomdata-screenshot-service
-      - zoomdata-stream-writer
+      # The Stream Writer service was renamed in Zoomdata 3.2 release.
+      #- zoomdata-stream-writer
+      - zoomdata-stream-writer-postgresql
       - zoomdata-upload-service
 
   tools:
@@ -256,7 +258,7 @@ zoomdata:
       #merge: True
       #update: False
       #discard: True
-    # Zoomdata Spark Proxy. It has been gone entirely in release 2.6.
+    # Zoomdata Spark Proxy. It has been gone entirely in Zoomdata 2.6 release.
     # See the following article for additional info:
     # https://www.zoomdata.com/docs/2.5/changing-the-default-configuration-for-an-embedded-spark-server.html
     #zoomdata-spark-proxy:
@@ -320,7 +322,9 @@ zoomdata:
     # to create CSV/JSON-based data sources. They require that the
     # ``zoomdata-edc-postgresql`` service must be up and running.
     - zoomdata-screenshot-service
-    - zoomdata-stream-writer
+    # The Stream Writer service was renamed in Zoomdata 3.2 release.
+    #- zoomdata-stream-writer
+    - zoomdata-stream-writer-postgresql
     - zoomdata-upload-service
 
     # Zoomdata core
