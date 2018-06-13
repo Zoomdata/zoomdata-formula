@@ -53,7 +53,8 @@ zoomdata:
     #version: 'latest'
     packages:
       - zoomdata-screenshot-service
-      - zoomdata-stream-writer
+      # FIXME: this breaks detection of microservices before Zoomdata 3.2 release.
+      - zoomdata-stream-writer-postgresql
       - zoomdata-upload-service
 
   tools:
