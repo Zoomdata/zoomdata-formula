@@ -1,6 +1,12 @@
 zoomdata-formula
 ================
 
+3.2.0 (2018-07-02)
+
+- Deprecated the ``zoomdata-xvfb`` service
+- The service ``zoomdata-stream-writer`` has been renamed to
+  ``zoomdata-stream-writer-postgresql``
+
 3.1.0 (2018-06-11)
 
 - Fixed upgrades and installation state detection
