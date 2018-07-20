@@ -19,7 +19,7 @@ zoomdata_repository_update:
   test.configurable_test_state:
     - changes: {{ zoomdata['upgrade'] }}
     - result: True
-    {%- if not zoomdata['bootstrap'] %}
+    {%- if not zoomdata['bootstrap'] and zoomdata.backup['destination'] %}
     - prereq_in:
       - file: zoomdata_backup_dir
     {%- endif %}
