@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+3.3.0 (2018-07-30)
+
+- Fixed state run when ``backup:destination`` Pillar is unset
+
 3.2.0 (2018-07-02)
 
 - Deprecated the ``zoomdata-xvfb`` service
