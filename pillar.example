@@ -69,6 +69,9 @@ zoomdata:
     - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
+    # The tracing servive based on OpenZipkin is going to be available since
+    # Zoomdata 3.4 release. This is optional and should be installed manually.
+    #- zoomdata-tracing
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
     # The X framebuffer is deprecated in Zoomdata 3.1 release
@@ -288,6 +291,10 @@ zoomdata:
     # The Consul service is mandatory since Zoomdata 2.4 release,
     # comment out for 2.3
     - zoomdata-consul  # always start it first
+
+    # The tracing servive based on OpenZipkin is going to be available since
+    # Zoomdata 3.4 release. This is optional and should be started manually.
+    #- zoomdata-tracing
 
     # EDC connectors. Some services are commented out due to licensed drivers
     # not included into the distribution. Uncomment them after you have
