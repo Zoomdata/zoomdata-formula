@@ -80,19 +80,7 @@ zoomdata:
 
   config_dir: '/etc/zoomdata'
 
-  environment:
-    zoomdata:
-      path: /etc/zoomdata/zoomdata.env
-      variables:
-        JAVA_OPTS: '-Xss256k -Xms2048m -Xmx8192m'
-    zoomdata-scheduler:
-      path: /etc/zoomdata/scheduler.env
-      variables:
-        SCHEDULER_JAVA_OPTS: '-Xms512m -Xmx1024m'
-    zoomdata-spark-proxy:
-      path: /etc/zoomdata/spark-proxy.env
-      variables:
-        SPARK_PROXY_JAVA_OPTS: '-Xss256k -Xms512m -Xmx2048m'
+  environment: {}
 
   config:
     zoomdata:
