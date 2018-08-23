@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+3.4.0 (2018-07-23)
+
+- Disabled (re)setting environment variables for services by default
+- Added optional ``zoomdata-tracing`` service (OpenZipkin) to Pillar example
+
 3.3.0 (2018-07-30)
 
 - Fixed state run when ``backup:destination`` Pillar is unset
