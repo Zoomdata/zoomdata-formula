@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml ts=2 sts=2 sw=2 et
 
-### Zoomdata 3.3 provisioning configuration example.
+### Zoomdata 3.4 provisioning configuration example.
 ###
 ### This is Salt Pillar file that written in SaltStack (SLS) format:
 ### YAML rendered with Jinja2.
@@ -20,7 +20,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
-  release: 3.3
+  release: 3.4
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
@@ -56,10 +56,10 @@ zoomdata:
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-  #version: "3.3.0-6+{{ grains['oscodename'] }}.stable"
+  #version: "3.4.0-4+{{ grains['oscodename'] }}.stable"
   {%- else %}
   # Packages version for RHEL/CentOS systems
-  #version: '3.3.0'
+  #version: '3.4.0'
   {%- endif %}
 
   # Zoomdata Server packages to install
@@ -84,10 +84,10 @@ zoomdata:
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-    #version: "3.3.0-1+{{ grains['oscodename'] }}.stable"
+    #version: "3.4.0-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL/CentOS systems
-    #version: '3.3.0'
+    #version: '3.4.0'
     {%- endif %}
 
     # Zoomdata EDC packages to install
@@ -136,10 +136,10 @@ zoomdata:
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-    #version: "3.3.0-1+{{ grains['oscodename'] }}.stable"
+    #version: "3.4.0-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL/CentOS systems
-    #version: '3.3.0'
+    #version: '3.4.0'
     {%- endif %}
 
     # Zoomdata microservice packages to install
@@ -224,14 +224,14 @@ zoomdata:
         upload.batch-size: 1000
         ## Screenshot Feature: we disable it by default.
         # Look at these pages for instructions how to set it up on your platform:
-        # https://www.zoomdata.com/docs/3.3/screenshot-for-rpm.html
-        # https://www.zoomdata.com/docs/3.3/setting-up-the-screenshot-feature-for-ubuntu.html
+        # https://www.zoomdata.com/docs/3.4/screenshot-for-rpm.html
+        # https://www.zoomdata.com/docs/3.4/setting-up-the-screenshot-feature-for-ubuntu.html
         screenshot.daemon.enabled: False
         screenshot.daemon.schedule.rate: '168h'  # 1 week
         screenshots.dashboards.enabled: False
         screenshots.datasource-charts.enabled: False
         ## Configure HTTPS for Zoomdata (see ``tls`` item below):
-        # https://www.zoomdata.com/docs/3.3/adding-ssl-certificate-to-the-zoomdata-server.html
+        # https://www.zoomdata.com/docs/3.4/adding-ssl-certificate-to-the-zoomdata-server.html
         #server.ssl.enabled: True
         #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
         #server.ssl.key-store-password: 'your_keystore_password'
