@@ -51,7 +51,7 @@ zoomdata:
   # state.
   erase: False
 
-  # Exact version of Zoomdata Server packages to install, use ``latest``
+  # Exact version of Zoomdata core packages to install, use ``latest``
   # keyword to always upgrade to the latest minor version in the release.
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
   {%- if grains['os'] == 'Ubuntu' %}
@@ -62,16 +62,13 @@ zoomdata:
   #version: '3.4.0'
   {%- endif %}
 
-  # Zoomdata Server packages to install
+  # Zoomdata core packages to install
   packages:
     - zoomdata
     # The Consul package is mandatory since Zoomdata 2.4 release, comment out for 2.3
     - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
-    # The tracing servive based on OpenZipkin is going to be available since
-    # Zoomdata 3.4 release. This is optional and should be installed manually.
-    #- zoomdata-tracing
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
     # The X framebuffer is deprecated in Zoomdata 3.1 release
@@ -148,6 +145,11 @@ zoomdata:
       # The Stream Writer service was renamed in Zoomdata 3.2 release.
       #- zoomdata-stream-writer
       - zoomdata-stream-writer-postgresql
+      # The tracing service based on OpenZipkin is available since Zoomdata 3.4
+      # release. This is optional and disabled by default.
+      # If you previously have installed ``zoomdata-tracing`` package, you have
+      # to remove it manually before uncommenting the line below.
+      #- zoomdata-tracing-server
       - zoomdata-upload-service
 
   tools:
@@ -292,9 +294,11 @@ zoomdata:
     # comment out for 2.3
     - zoomdata-consul  # always start it first
 
-    # The tracing servive based on OpenZipkin is going to be available since
-    # Zoomdata 3.4 release. This is optional and should be started manually.
-    #- zoomdata-tracing
+    # The tracing service based on OpenZipkin is available since Zoomdata 3.4
+    # release. This is optional and disabled by default.
+    # If you previously have installed ``zoomdata-tracing`` package, you have
+    # to remove it manually before uncommenting the line below.
+    #- zoomdata-tracing-server
 
     # EDC connectors. Some services are commented out due to licensed drivers
     # not included into the distribution. Uncomment them after you have
@@ -410,7 +414,7 @@ zoomdata:
     #dir: /opt/zoomdata/data/backups/18-01-31_12:01:08
 
 
-### PostgreSQL configuration
+### PostgreSQL configuration for postgres-formula
 #
 # Salt Minion settings. PROVIDE ONLY FOR REMOTE POSTGRESQL CLUSTER.
 # These options are intended to be configured only when connecting to the
