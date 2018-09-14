@@ -71,7 +71,7 @@ zoomdata:
     - zoomdata-scheduler
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
-    # The X framebuffer is deprecated in Zoomdata 3.1 release
+    # The X framebuffer was deprecated in Zoomdata 3.1 release
     #- zoomdata-xvfb
 
   # Zoomdata EDC section
@@ -141,16 +141,20 @@ zoomdata:
 
     # Zoomdata microservice packages to install
     packages:
+      # New screenshot service was introduced in Zoomdata 3.1 release
       - zoomdata-screenshot-service
-      # The Stream Writer service was renamed in Zoomdata 3.2 release.
+      # The Stream Writer service was renamed in Zoomdata 3.2 release
       #- zoomdata-stream-writer
       - zoomdata-stream-writer-postgresql
+      - zoomdata-upload-service
+      # The admin service based on Spring Boot Admin is going to be available
+      # in Zoomdata 3.5 release. This is optional and disabled by default.
+      #- zoomdata-admin-server
       # The tracing service based on OpenZipkin is available since Zoomdata 3.4
       # release. This is optional and disabled by default.
       # If you previously have installed ``zoomdata-tracing`` package, you have
       # to remove it manually before uncommenting the line below.
       #- zoomdata-tracing-server
-      - zoomdata-upload-service
 
   tools:
     # Exact version of Zoomdata Tools packages to install, use ``latest``
@@ -332,7 +336,6 @@ zoomdata:
     # Former "microservices". These are flat file support services, i.e. used
     # to create CSV/JSON-based data sources. They require that the
     # ``zoomdata-edc-postgresql`` service must be up and running.
-    - zoomdata-screenshot-service
     # The Stream Writer service was renamed in Zoomdata 3.2 release.
     #- zoomdata-stream-writer
     - zoomdata-stream-writer-postgresql
@@ -345,8 +348,14 @@ zoomdata:
     # The Spark Proxy has gone in Zoomdata 2.6 release
     #- zoomdata-spark-proxy
 
-    # The X framebuffer is deprecated in Zoomdata 3.1 release
+    # The X framebuffer was deprecated in Zoomdata 3.1 release. New screenshot
+    # service was introduced instead.
     #- zoomdata-xvfb
+    - zoomdata-screenshot-service
+
+    # The admin service based on Spring Boot Admin is going to be available
+    # in Zoomdata 3.5 release. This is optional and disabled by default.
+    #- zoomdata-admin-server
 
     # Zoomdata Server starts last
     - zoomdata
