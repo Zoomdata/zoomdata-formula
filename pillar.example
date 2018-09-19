@@ -16,7 +16,7 @@ zoomdata:
   # masterless mode).
   base_url: 'http://repo.zoomdata.com'
   # URL to the GnuPG public key for the repo/pkgs verification.
-  # Put `none` or empty string to skip GnuPG check (for internal repos).
+  # Put ``None`` or empty string to skip GnuPG check (for internal repos).
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
@@ -171,16 +171,15 @@ zoomdata:
 
   ## Configuration settings
   #
-  # Global system limits for Zoomdata user
-  # (per-service limits for systemd based OS):
-  # https://www.zoomdata.com/docs/2.6/installation-prerequisites.html
-  limits:
-    nproc:
-      soft: '4096'
-      hard: '4096'
-    nofile:
-      soft: '1048576'
-      hard: '1048576'
+  # Global system limits for Zoomdata user (per-service limits for systemd based OS):
+  # https://www.zoomdata.com/docs/3/Topics/Installation/configure_maxOpenProcFiles.html
+  #limits:
+  #  nproc:
+  #    soft: '4096'
+  #    hard: '4096'
+  #  nofile:
+  #    soft: '1048576'
+  #    hard: '1048576'
 
   # Configuration property files and their corresponding variables:
   # https://www.zoomdata.com/docs/2.6/zoomdata-configuration-property-files-and-their-corresponding-variables.html
