@@ -243,6 +243,12 @@ zoomdata:
         # Optional redirect to https scheme, this requires HAProxy (see below)
         # ATTENTION: this is deprecated in Zoomdata 2.6.2!
         #http.redirect.port: '443'
+        # Zoomdata Admin Service (Spring Boot Admin) related settings.
+        # This requires running ``zoomdata-admin-server`` service and valid user
+        # credentials set in Zoomdata after the first launch.
+        #actuator.user.name: 'admin'
+        #actuator.user.password: 'password'
+        #actuator.logging.external-file: '/opt/zoomdata/logs/zoomdata.log'
       # Merge properties with hard-coded defaults. This is useful to skip
       # common configuration values. Set ``False`` to disable such behavior.
       merge: True
@@ -276,6 +282,14 @@ zoomdata:
     #  merge: True
     #  update: False
     #  discard: True
+    # Zoomdata Admin Service AKA Zerebro based on Spring Boot Admin. Uncomment
+    # the section below to set up admin user credentials for accessing the
+    # ``zoomdata-admin-server`` service.
+    #zoomdata-admin-server:
+    #  path: '/etc/zoomdata/admin-server.properties'
+    #  properties:
+    #    zerebro.user.name: 'admin'
+    #    zerebro.user.password: 'admin'
 
   # Zoomdata TLS: paste certificates chain and private key for your domain here.
   # Pay attention to indent exactly with 4 spaces for all lines under
