@@ -1,10 +1,18 @@
 zoomdata-formula
 ================
 
-3.4.0 (2018-07-23)
+3.5.0 (2018-09-24)
+
+- The tracing service (OpenZipkin) was renamed to ``zoomdata-tracing-server``
+- Added optional ``zoomdata-admin-server`` service (Spring Boot Admin) to the
+  Pillar example
+- Disabled setting operating system limits by default
+- Updated links to the Zoomdata Knowledge Base
+
+3.4.0 (2018-08-23)
 
 - Disabled (re)setting environment variables for services by default
-- Added optional ``zoomdata-tracing`` service (OpenZipkin) to Pillar example
+- Added optional ``zoomdata-tracing`` service (OpenZipkin) to the Pillar example
 
 3.3.0 (2018-07-30)
 
