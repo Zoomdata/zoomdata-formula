@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml ts=2 sts=2 sw=2 et
 
-### Zoomdata 3.4 provisioning configuration example.
+### Zoomdata 3.5 provisioning configuration example.
 ###
-### This is Salt Pillar file that written in SaltStack (SLS) format:
-### YAML rendered with Jinja2.
+### This is Salt Pillar file written in SaltStack's (SLS) format:
+### YAML rendered with Jinja2 template engine.
 
 
 zoomdata:
@@ -20,7 +20,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
-  release: 3.4
+  release: 3.5
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
@@ -56,10 +56,10 @@ zoomdata:
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-  #version: "3.4.0-4+{{ grains['oscodename'] }}.stable"
+  #version: "3.5.0-5+{{ grains['oscodename'] }}.stable"
   {%- else %}
   # Packages version for RHEL/CentOS systems
-  #version: '3.4.0'
+  #version: '3.5.0'
   {%- endif %}
 
   # Zoomdata core packages to install
@@ -81,10 +81,10 @@ zoomdata:
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-    #version: "3.4.0-1+{{ grains['oscodename'] }}.stable"
+    #version: "3.5.0-2+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL/CentOS systems
-    #version: '3.4.0'
+    #version: '3.5.0'
     {%- endif %}
 
     # Zoomdata EDC packages to install
@@ -116,6 +116,7 @@ zoomdata:
       - zoomdata-edc-tez
 
     # Install JDBC jar drivers which are not packaged with EDC connectors.
+    # More here: https://www.zoomdata.com/docs/3/Topics/Installation/adding-a-jdbc-driver.html
     # This is an example for MySQL connector (``zoomdata-edc-mysql``):
     #jdbc:
     #  drivers:
@@ -133,10 +134,10 @@ zoomdata:
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-    #version: "3.4.0-1+{{ grains['oscodename'] }}.stable"
+    #version: "3.5.0-5+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL/CentOS systems
-    #version: '3.4.0'
+    #version: '3.5.0'
     {%- endif %}
 
     # Zoomdata microservice packages to install
@@ -181,8 +182,8 @@ zoomdata:
   #    soft: '1048576'
   #    hard: '1048576'
 
-  # Configuration property files and their corresponding variables:
-  # https://www.zoomdata.com/docs/2.6/zoomdata-configuration-property-files-and-their-corresponding-variables.html
+  # Environment variables. Setting memory limits here is DEPRECATED. See:
+  # https://www.zoomdata.com/docs/3/Topics/Config/configuring-memory.html
   #environment:
     # Zoomdata Server
     #zoomdata:
@@ -200,6 +201,8 @@ zoomdata:
     #  variables:
     #    SPARK_PROXY_JAVA_OPTS: '-Xss256k -Xms512m -Xmx2048m'
 
+  # Configuration property files and their corresponding variables:
+  # https://www.zoomdata.com/docs/3/Topics/Config/config_props_vars.html
   config:
     # Zoomdata Server
     zoomdata:
@@ -229,14 +232,13 @@ zoomdata:
         upload.batch-size: 1000
         ## Screenshot Feature: we disable it by default.
         # Look at these pages for instructions how to set it up on your platform:
-        # https://www.zoomdata.com/docs/3.4/screenshot-for-rpm.html
-        # https://www.zoomdata.com/docs/3.4/setting-up-the-screenshot-feature-for-ubuntu.html
+        # https://www.zoomdata.com/docs/3/Topics/Installation/screenshot-for-rpm.html
         screenshot.daemon.enabled: False
         screenshot.daemon.schedule.rate: '168h'  # 1 week
         screenshots.dashboards.enabled: False
         screenshots.datasource-charts.enabled: False
         ## Configure HTTPS for Zoomdata (see ``tls`` item below):
-        # https://www.zoomdata.com/docs/3.4/adding-ssl-certificate-to-the-zoomdata-server.html
+        # https://www.zoomdata.com/docs/3/Topics/Security/adding-ssl-certificate-to-the-zoomdata-server.html
         #server.ssl.enabled: True
         #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
         #server.ssl.key-store-password: 'your_keystore_password'
@@ -366,8 +368,8 @@ zoomdata:
     #- zoomdata-xvfb
     - zoomdata-screenshot-service
 
-    # The admin service based on Spring Boot Admin is going to be available
-    # in Zoomdata 3.5 release. This is optional and disabled by default.
+    # The admin service based on Spring Boot Admin is available in
+    # Zoomdata 3.5 release. This is optional and disabled by default.
     #- zoomdata-admin-server
 
     # Zoomdata Server starts last
