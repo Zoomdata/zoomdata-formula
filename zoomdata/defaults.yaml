@@ -130,6 +130,9 @@ zoomdata:
     - zoomdata
     #- zoomdata-xvfb
 
+  setup:
+    passwords: {}
+
   backup:
     services: []
     databases: []

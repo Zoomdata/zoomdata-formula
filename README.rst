@@ -91,6 +91,11 @@ Start the Zoomdata services.
 
 Stop the Zoomdata services.
 
+``zoomdata.setup``
+------------------
+
+Setup initial runtime parameters for the Zoomdata server.
+
 ``zoomdata.tls``
 ----------------
 
