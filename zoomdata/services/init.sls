@@ -16,3 +16,6 @@ include:
   - zoomdata.services.install
   - zoomdata.tls
   - zoomdata.services.start
+{%- if zoomdata['bootstrap'] %}
+  - zoomdata.setup
+{%- endif %}
