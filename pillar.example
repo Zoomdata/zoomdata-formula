@@ -377,6 +377,9 @@ zoomdata:
 
   # Perform additional post-installation setup
   #setup:
+  #  # How much time to wait in seconds until Zoomdata server would start to
+  #  # respond on API calls.
+  #  timeout: 900
   #  # Configure users for accessing Zoomdata web interface. Setting passwords
   #  # for admin/supervisor is allowed only once after initial installation.
   #  # The keyword ``random`` or empty value means generate random passwords and

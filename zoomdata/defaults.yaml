@@ -131,6 +131,7 @@ zoomdata:
     #- zoomdata-xvfb
 
   setup:
+    timeout: 900
     passwords: {}
     toggles: {}
     connectors: {}
