@@ -35,7 +35,7 @@
 zoomdata-wait:
   http.wait_for_successful_query:
     - name: '{{ url }}/zoomdata/service/version'
-    - wait_for: 600
+    - wait_for: {{ zoomdata.setup['timeout'] }}
     - status: 200
     - failhard: True
 
