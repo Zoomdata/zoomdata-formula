@@ -1,23 +1,35 @@
 {%- from 'zoomdata/map.jinja' import zoomdata -%}
 
 {%- set url = 'http://localhost:8080' -%}
+{%- set users = {} %}
 {%- set data = [] %}
 {%- set show = {} %}
 
 {%- for user in zoomdata.setup.passwords|default({}, true) %}
-  {%- if zoomdata.setup.passwords[user] == 'random' %}
-    {%- set password = salt['random.get_str'](20) %}
+
+  {%- if not zoomdata.setup.passwords[user] or
+             zoomdata.setup.passwords[user] == 'random' %}
+
+    {%- set password = salt['grains.get']('zoomdata:users:' ~ user,
+                                          salt['random.get_str'](20)) %}
+
     {%- if '_' not in password %}
       {%- set password = password[0] + '_' + password[1:] %}
     {%- endif %}
+
     {%- do show.update({user: password}) %}
+
   {%- else %}
     {%- set password = zoomdata.setup.passwords[user] %}
   {%- endif %}
-  {% do data.append({'user': user, 'password': password}) %}
-{%- endfor %}
 
-{%- if data %}
+  {%- do users.update({user: password}) %}
+
+  {%- if not salt['grains.has_value']('zoomdata:users:' ~ user) %}
+    {%- do data.append({'user': user, 'password': password}) %}
+  {%- endif %}
+
+{%- endfor %}
 
 # Wait until Zoomdata server will be available
 zoomdata-wait:
@@ -25,6 +37,9 @@ zoomdata-wait:
     - name: '{{ url }}/zoomdata/service/version'
     - wait_for: 600
     - status: 200
+    - failhard: True
+
+{%- if data %}
 
 # Setup user passwords
 zoomdata-setup-passwords:
@@ -38,10 +53,15 @@ zoomdata-setup-passwords:
     - username: admin
     - password: admin
     - data: '{{ data|json }}'
-    - require:
-      - http: zoomdata-wait
 
   {%- if show %}
+
+zoomdata-save-generated-passwords:
+  grains.present:
+    - name: zoomdata:users
+    - value: {{ show|yaml }}
+    - require:
+      - http: zoomdata-setup-passwords
 
 zoomdata-show-passwords:
   test.show_notification:
@@ -53,7 +73,29 @@ zoomdata-show-passwords:
 
   {%- endif %}
 
-{%- else %}
+{%- endif %}
+
+{%- if 'supervisor' in users %}
+
+  {%- for key, value in zoomdata.setup.toggles|dictsort %}
+
+zoomdata-supervisor-toggle-{{ key }}:
+  http.query:
+    - name: '{{ url }}/zoomdata/api/system/variables/ui/{{ key }}'
+    - status: 204
+    - method: POST
+    - header_dict:
+        Accept: '*/*'
+        Content-Type: 'text/plain'
+    - username: supervisor
+    - password: {{ users['supervisor'] }}
+    - data: '{{ value|string|lower }}'
+
+  {%- endfor %}
+
+{%- endif %}
+
+{%- if not zoomdata.setup|default({}, true) %}
 
 zoomdata-setup:
   test.show_notification:
