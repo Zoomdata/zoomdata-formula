@@ -132,6 +132,7 @@ zoomdata:
 
   setup:
     passwords: {}
+    toggles: {}
 
   backup:
     services: []
