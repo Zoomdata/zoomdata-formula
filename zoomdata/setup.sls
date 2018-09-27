@@ -93,6 +93,22 @@ zoomdata-supervisor-toggle-{{ key }}:
 
   {%- endfor %}
 
+  {%- for key, value in zoomdata.setup.connectors|dictsort %}
+
+zoomdata-connector-{{ key }}:
+  http.query:
+    - name: '{{ url }}/zoomdata/service/connection/types/{{ key }}'
+    - status: 200
+    - method: PATCH
+    - header_dict:
+        Accept: '*/*'
+        Content-Type: 'application/vnd.zoomdata.v2+json'
+    - username: supervisor
+    - password: {{ users['supervisor'] }}
+    - data: '{"enabled": {{ value|string|lower }}}'
+
+  {%- endfor %}
+
 {%- endif %}
 
 {%- if not zoomdata.setup|default({}, true) %}

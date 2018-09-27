@@ -389,6 +389,11 @@ zoomdata:
   #  toggles:
   #    custom-charts-enabled: False
   #    hide-tile-provider: False
+  #  # Configure available connectors (connections to data sources).
+  #  # This requires ``supervisor`` user password set above.
+  #  connectors:
+  #    RFS_CSV: False
+  #    STREAMING_API: False
 
   # Backup PostgreSQL databases which used by following services as
   # metadata and persistent cache storage before upgrades.
