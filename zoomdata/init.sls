@@ -3,7 +3,9 @@
 include:
   - zoomdata.services
   - zoomdata.tools
+{%- if 'zoomdata' in zoomdata['services']|default([], true) %}
   - zoomdata.setup
+{%- endif %}
 
 {%- if zoomdata['bootstrap'] %}
 

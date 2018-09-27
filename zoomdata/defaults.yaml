@@ -133,6 +133,7 @@ zoomdata:
   setup:
     passwords: {}
     toggles: {}
+    connectors: {}
 
   backup:
     services: []
