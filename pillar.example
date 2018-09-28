@@ -384,19 +384,21 @@ zoomdata:
   #  # for admin/supervisor is allowed only once after initial installation.
   #  # The keyword ``random`` or empty value means generate random passwords and
   #  # print them out as a ``Comment`` during the state run.
+  #  # All other setting below require ``supervisor`` user password set here.
   #  passwords:
   #    admin: random
   #    supervisor: random
-  #  # Configure server level variables (supervisor toggles).
-  #  # This requires ``supervisor`` user password set above.
-  #  toggles:
-  #    custom-charts-enabled: False
-  #    hide-tile-provider: False
+  #  # Customize Zoomdata UI by providing an URL to JSON file.
+  #  branding:
+  #    file: salt://zoomdata/files/custom-ui-payload-sample.json
   #  # Configure available connectors (connections to data sources).
-  #  # This requires ``supervisor`` user password set above.
   #  connectors:
   #    RFS_CSV: False
   #    STREAMING_API: False
+  #  # Configure server level variables (supervisor toggles).
+  #  toggles:
+  #    custom-charts-enabled: False
+  #    hide-tile-provider: False
 
   # Backup PostgreSQL databases which used by following services as
   # metadata and persistent cache storage before upgrades.
