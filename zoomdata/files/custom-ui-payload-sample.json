@@ -1,0 +1,28 @@
+{
+  "background": "",
+  "brandingTs": 1536932328614,
+  "copyright": "On",
+  "customCss": false,
+  "customHtml": {
+    "enableFooter": true,
+    "enableHeader": false,
+    "footerContent": "<script type=\"text/javascript\">\n    var accepted = sessionStorage.getItem('acceptedGDPR');\n    if ((location.pathname === '/zoomdata/visualization' || location.pathname === 'zoomdata/admin.html') && !accepted) {      \n        var modal = $('<div class=\"gdpr-modal\"></div>');        \n        var GDPR = $('<div id=\"GDPR\" class=\"modal-content\"></div>');\n\n        var p1 = $('<p>The General Data Protection Regulation (GDPR) (EU Regulation 2016/679) provides rules and guidance that personal data shall only be processed for a defined, explicit and legally-based purpose. Personal data processing needs to be limited to what is necessary to the explicit processing purpose. Data between different purposes cannot not be mixed. Everyone working with personal data needs to be aware of GDPR rules. When you process personal data, you need to be aware of the governing rules and acknowledge your compliance with purpose based processing of personal data.</p>');\n\n        var p2 = $('<p class=\"acknowledge\">By proceeding with login: <br> You acknowledge <br> 1) That you have read and understood the GDPR requirement of purpose based processing and your responsibility to process personal data for a defined, explicit and legally-based purpose only <br> 2) That Zoomdata is not intended to process personally identifiable information (PII) and that no PII will be processed throught this application.</p>')\n\n        var p2 = $('<p class=\"acknowledge\">By proceeding with login: <br>You acknowledge <br>1) That you have read, understand and will comply with your organizations GDPR requirements. <br>2) You understand that you are the data Controller.<br>3) That you have read, understand and will comply with the GDPR requirement of purpose based processing and your responsibility to process personal data for a defined, explicit and legally-based purpose only <br>4) That Zoomdata is not intended to process personally identifiable information (PII) and that no PII will be processed through this application.<br>5) That Zoomdata its employees or its contractors does not control, or act as the Controller for  any of your data.</p>')\n\n        var acceptBtn = $('<button id=\"accept-gdpr\">Accept</button>');\n        acceptBtn.on('click', function() {\n            sessionStorage.setItem('acceptedGDPR', true);\n            modal.css({display: 'none'});\n        })\n\n        GDPR.append([p1, p2, acceptBtn]);\n        modal.append(GDPR);\n        $('body').append(modal);\n    }\n</script>\n<style type=\"text/css\">\n    /* The Modal (background) */\n    .gdpr-modal {\n        display: block; /* Hidden by default */\n        position: fixed; /* Stay in place */\n        z-index: 999999; /* Sit on top */\n        padding-top: 100px; /* Location of the box */\n        left: 0;\n        top: 0;\n        width: 100%; /* Full width */\n        height: 100%; /* Full height */\n        overflow: auto; /* Enable scroll if needed */\n        background-color: rgb(0,0,0); /* Fallback color */\n        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */\n    }\n\n    /* Modal Content */\n    .modal-content {\n        background-color: #fefefe;\n        margin: auto;\n        padding: 20px;\n        border: 1px solid #888;\n        width: 80%;\n    }\n</style>",
+    "footerHeight": "0",
+    "headerContent": "",
+    "headerHeight": "20"
+  },
+  "customJs": false,
+  "customMessage": "",
+  "defaultLogo": true,
+  "favicon": "",
+  "headerLogo": "",
+  "loginLogo": "",
+  "quickstartEnabled": true,
+  "terms": "",
+  "title": "Zoomdata",
+  "url": "https://www.zoomdata.com/",
+  "zdContactLink": false,
+  "zdQuickstartLink": "true",
+  "zdQuickstartVal": "Show Tutorial Videos",
+  "zdSupportLink": false
+}

@@ -133,8 +133,9 @@ zoomdata:
   setup:
     timeout: 900
     passwords: {}
-    toggles: {}
+    branding: {}
     connectors: {}
+    toggles: {}
 
   backup:
     services: []

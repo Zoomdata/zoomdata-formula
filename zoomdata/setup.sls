@@ -1,6 +1,11 @@
 {%- from 'zoomdata/map.jinja' import zoomdata -%}
 
 {%- set url = 'http://localhost:8080' -%}
+{%- set headers = {
+  'Accept': '*/*',
+  'Content-Type': 'application/vnd.zoomdata.v2+json'
+} %}
+
 {%- set users = {} %}
 {%- set data = [] %}
 {%- set show = {} %}
@@ -47,9 +52,7 @@ zoomdata-setup-passwords:
     - name: '{{ url }}/zoomdata/service/user/initUsers'
     - status: 200
     - method: POST
-    - header_dict:
-        Accept: '*/*'
-        Content-Type: 'application/vnd.zoomdata.v2+json'
+    - header_dict: {{ headers|yaml }}
     - username: admin
     - password: admin
     - data: '{{ data|json }}'
@@ -100,14 +103,28 @@ zoomdata-connector-{{ key }}:
     - name: '{{ url }}/zoomdata/service/connection/types/{{ key }}'
     - status: 200
     - method: PATCH
-    - header_dict:
-        Accept: '*/*'
-        Content-Type: 'application/vnd.zoomdata.v2+json'
+    - header_dict: {{ headers|yaml }}
     - username: supervisor
     - password: {{ users['supervisor'] }}
     - data: '{"enabled": {{ value|string|lower }}}'
 
   {%- endfor %}
+
+  {%- if zoomdata.setup.branding['file']|default(none) %}
+
+    {%- set file = zoomdata.setup.branding['file'] %}
+
+zoomdata-branding-from-file-{{ salt['file.basename'](file) }}:
+  http.query:
+    - name: '{{ url }}/zoomdata/api/branding'
+    - status: 200
+    - method: POST
+    - header_dict: {{ headers|yaml }}
+    - username: supervisor
+    - password: {{ users['supervisor'] }}
+    - data_file: {{ salt['cp.cache_file'](file) }}
+
+  {%- endif %}
 
 {%- endif %}
 
