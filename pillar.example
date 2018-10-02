@@ -388,14 +388,22 @@ zoomdata:
   #  passwords:
   #    admin: random
   #    supervisor: random
-  #  # Customize Zoomdata UI by providing an URL to JSON file.
+  #  # Customize Zoomdata UI by providing an URL to JSON file
   #  branding:
   #    file: salt://zoomdata/files/custom-ui-payload-sample.json
   #  # Configure available connectors (connections to data sources).
   #  connectors:
   #    RFS_CSV: False
   #    STREAMING_API: False
-  #  # Configure server level variables (supervisor toggles).
+  #  # Obtain Zoomdata license key from URL and install it into the server
+  #  license:
+  #    URL: 'http://licensing.server/api'
+  #    expirationDate: Null
+  #    licenseType: 'ZD'
+  #    userCount: '1'
+  #    concurrentUserCount: '1'
+  #    enforcementLevel: 'AT'
+  #  # Configure server level variables (supervisor toggles)
   #  toggles:
   #    custom-charts-enabled: False
   #    hide-tile-provider: False
