@@ -135,6 +135,14 @@ zoomdata:
     passwords: {}
     branding: {}
     connectors: {}
+    license:
+      URL: Null
+      expirationDate: Null
+      licenseType: 'TRIAL'
+      userCount: '1'
+      concurrentUserCount: '1'
+      enforcementLevel: 'PS'
+      force: False
     toggles: {}
 
   backup:

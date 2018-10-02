@@ -16,7 +16,7 @@
              zoomdata.setup.passwords[user] == 'random' %}
 
     {%- set password = salt['grains.get']('zoomdata:users:' ~ user,
-                                          salt['random.get_str'](20)) %}
+                                          salt['random.get_str'](24)) %}
 
     {%- if '_' not in password %}
       {%- set password = password[0] + '_' + password[1:] %}
@@ -80,36 +80,6 @@ zoomdata-show-passwords:
 
 {%- if 'supervisor' in users %}
 
-  {%- for key, value in zoomdata.setup.toggles|dictsort %}
-
-zoomdata-supervisor-toggle-{{ key }}:
-  http.query:
-    - name: '{{ url }}/zoomdata/api/system/variables/ui/{{ key }}'
-    - status: 204
-    - method: POST
-    - header_dict:
-        Accept: '*/*'
-        Content-Type: 'text/plain'
-    - username: supervisor
-    - password: {{ users['supervisor'] }}
-    - data: '{{ value|string|lower }}'
-
-  {%- endfor %}
-
-  {%- for key, value in zoomdata.setup.connectors|dictsort %}
-
-zoomdata-connector-{{ key }}:
-  http.query:
-    - name: '{{ url }}/zoomdata/service/connection/types/{{ key }}'
-    - status: 200
-    - method: PATCH
-    - header_dict: {{ headers|yaml }}
-    - username: supervisor
-    - password: {{ users['supervisor'] }}
-    - data: '{"enabled": {{ value|string|lower }}}'
-
-  {%- endfor %}
-
   {%- if zoomdata.setup.branding['file']|default(none) %}
 
     {%- set file = zoomdata.setup.branding['file'] %}
@@ -125,6 +95,53 @@ zoomdata-branding-from-file-{{ salt['file.basename'](file) }}:
     - data_file: {{ salt['cp.cache_file'](file) }}
 
   {%- endif %}
+
+  {%- for key, value in zoomdata.setup.connectors|dictsort %}
+
+zoomdata-connector-{{ key }}:
+  http.query:
+    - name: '{{ url }}/zoomdata/service/connection/types/{{ key }}'
+    - status: 200
+    - method: PATCH
+    - header_dict: {{ headers|yaml }}
+    - username: supervisor
+    - password: {{ users['supervisor'] }}
+    - data: '{"enabled": {{ value|string|lower }}}'
+
+  {%- endfor %}
+
+  {%- if zoomdata.setup.license['URL']|default(none, true) %}
+
+zoomdata-license:
+  zoomdata.licensing:
+    - name: '{{ url }}'
+    - username: supervisor
+    - password: {{ users['supervisor'] }}
+    - url: {{ zoomdata.setup.license['URL'] }}
+    - expire: {{ zoomdata.setup.license['expirationDate']|yaml }}
+    - license_type: {{ zoomdata.setup.license['licenseType'] }}
+    - users: {{ zoomdata.setup.license['userCount'] }}
+    - sessions: {{ zoomdata.setup.license['concurrentUserCount'] }}
+    - concurrency: {{ zoomdata.setup.license['enforcementLevel'] }}
+    - force: {{ zoomdata.setup.license['force'] }}
+
+  {%- endif %}
+
+  {%- for key, value in zoomdata.setup.toggles|dictsort %}
+
+zoomdata-supervisor-toggle-{{ key }}:
+  http.query:
+    - name: '{{ url }}/zoomdata/api/system/variables/ui/{{ key }}'
+    - status: 204
+    - method: POST
+    - header_dict:
+        Accept: '*/*'
+        Content-Type: 'text/plain'
+    - username: supervisor
+    - password: {{ users['supervisor'] }}
+    - data: '{{ value|string|lower }}'
+
+  {%- endfor %}
 
 {%- endif %}
 
