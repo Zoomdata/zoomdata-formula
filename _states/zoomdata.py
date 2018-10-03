@@ -42,14 +42,15 @@ def licensing(name,
               concurrency='PS',
               force=False):
     """
-    Retrieve and install license into Zoomdata server.
+    Retrieve and install license into the Zoomdata server.
 
     name
-        The Zoomdata server URL to install licence into, for example:
-        ``http://localhost:8080``
+        The Zoomdata server URL to install licence into. Must contain a context
+        path ending with slash ``/``. For example:
+        ``http://localhost:8080/zoomdata/``
 
     url
-        The URL of licensing server endpoint to get license key
+        The URL of licensing server endpoint to get a license key
 
     expire
         Expiration date as sting in ``YYYY-MM-DD`` format. If not given, assume
@@ -86,7 +87,7 @@ def licensing(name,
         return ret
 
     # Retrive Zoomdata instance ID and current license type
-    zoomdata_api = urljoin(name, 'zoomdata/api/license')
+    zoomdata_api = urljoin(name, 'api/license')
     res = http.query(
         zoomdata_api,
         username=username,

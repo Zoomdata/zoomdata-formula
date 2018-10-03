@@ -1,6 +1,9 @@
 {%- from 'zoomdata/map.jinja' import zoomdata -%}
 
-{%- set url = 'http://localhost:8080' -%}
+{%- set url = 'http://localhost:8080' ~
+               zoomdata.config.zoomdata.properties['server.servlet.context-path'] |
+               default('/zoomdata', true) -%}
+
 {%- set headers = {
   'Accept': '*/*',
   'Content-Type': 'application/vnd.zoomdata.v2+json'
@@ -39,7 +42,7 @@
 # Wait until Zoomdata server will be available
 zoomdata-wait:
   http.wait_for_successful_query:
-    - name: '{{ url }}/zoomdata/service/version'
+    - name: '{{ url }}/service/version'
     - wait_for: {{ zoomdata.setup['timeout'] }}
     - status: 200
     - failhard: True
@@ -49,7 +52,7 @@ zoomdata-wait:
 # Setup user passwords
 zoomdata-setup-passwords:
   http.query:
-    - name: '{{ url }}/zoomdata/service/user/initUsers'
+    - name: '{{ url }}/service/user/initUsers'
     - status: 200
     - method: POST
     - header_dict: {{ headers|yaml }}
@@ -86,7 +89,7 @@ zoomdata-show-passwords:
 
 zoomdata-branding-from-file-{{ salt['file.basename'](file) }}:
   http.query:
-    - name: '{{ url }}/zoomdata/api/branding'
+    - name: '{{ url }}/api/branding'
     - status: 200
     - method: POST
     - header_dict: {{ headers|yaml }}
@@ -100,7 +103,7 @@ zoomdata-branding-from-file-{{ salt['file.basename'](file) }}:
 
 zoomdata-connector-{{ key }}:
   http.query:
-    - name: '{{ url }}/zoomdata/service/connection/types/{{ key }}'
+    - name: '{{ url }}/service/connection/types/{{ key }}'
     - status: 200
     - method: PATCH
     - header_dict: {{ headers|yaml }}
@@ -114,7 +117,7 @@ zoomdata-connector-{{ key }}:
 
 zoomdata-license:
   zoomdata.licensing:
-    - name: '{{ url }}'
+    - name: '{{ url }}/'
     - username: supervisor
     - password: {{ users['supervisor'] }}
     - url: {{ zoomdata.setup.license['URL'] }}
@@ -131,7 +134,7 @@ zoomdata-license:
 
 zoomdata-supervisor-toggle-{{ key }}:
   http.query:
-    - name: '{{ url }}/zoomdata/api/system/variables/ui/{{ key }}'
+    - name: '{{ url }}/api/system/variables/ui/{{ key }}'
     - status: 204
     - method: POST
     - header_dict:
