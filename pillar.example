@@ -245,6 +245,9 @@ zoomdata:
         # Optional redirect to https scheme, this requires HAProxy (see below)
         # ATTENTION: this is deprecated in Zoomdata 2.6.2!
         #http.redirect.port: '443'
+        ## Web Server Content Security Policy (CSP):
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
+        http.response.header.content-security-policy.frame-ancestors: 'self'
         # Zoomdata Admin Service (Spring Boot Admin) related settings.
         # This requires running ``zoomdata-admin-server`` service and valid user
         # credentials set in Zoomdata after the first launch.
