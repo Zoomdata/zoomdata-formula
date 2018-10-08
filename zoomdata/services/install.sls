@@ -252,4 +252,36 @@ zoomdata-user-limits-conf:
 
   {%- endif %}
 
+  {%- if config.options|default({}, true) and service in packages %}
+
+    {%- if service.startswith('zoomdata-') %}
+      {%- set srv = service|replace('zoomdata-', '', 1) %}
+    {%- else %}
+      {%- set srv = service %}
+    {%- endif %}
+    {%- set jvm_file = salt['file.join'](zoomdata.prefix, srv ~ '.jvm') %}
+
+{{ service }}_jvm:
+  file.managed:
+    - name: {{ jvm_file }}
+    - source: salt://zoomdata/templates/service.jvm
+    - template: jinja
+    - defaults:
+        header: {{ zoomdata.header|default('', true)|yaml() }}
+        options: {{ config['options']|yaml() }}
+    - user: root
+    - group: {{ zoomdata.group }}
+    - mode: 0640
+    - makedirs: True
+    - require:
+      - pkg: {{ service }}_package
+    {%- if service in zoomdata['services'] %}
+    - watch_in:
+      - service: {{ service }}_start_enable
+    {%- endif %}
+    # Prevent ``test=True`` failures on a fresh system
+    - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
+
+  {%- endif %}
+
 {%- endfor %}

@@ -1,0 +1,17 @@
+{%- if header %}
+{{- header|trim }}
+{# blank line inserted here #}
+{%- endif -%}
+{%- if options is string %}
+    {%- set options = options.strip().split(' ') %}
+{%- endif %}
+{%- for opt in options %}
+    {%- if opt.startswith('-') %}
+{{ opt }}
+    {%- else %}
+-{{ opt }}
+    {%- endif %}
+{%- endfor %}
+
+{#- vim: ft=jinja sw=4 sts=4 et
+VIM modeline should end with newline -#}
