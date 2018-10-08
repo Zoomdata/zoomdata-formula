@@ -265,11 +265,32 @@ zoomdata:
       # all. Set ``False`` if you would like to keep local modifications, but
       # add some options from above.
       discard: True
+    # Zoomdata Query Engine
+    #zoomdata-query-engine:
+      ## JVM options to start the service with
+      #options:
+        ## This is a mandatory JVM option
+        #- server
+        ## Java memory limits:
+        ## https://www.zoomdata.com/docs/3/Topics/Config/configuring-memory.html
+        #- Xms1g
+        ## You have 32 GiB of RAM and you want Zoomdata to be lightning fast
+        #- Xmx20g
+        #- XX:NewRatio=3
+        #- XX:+UseConcMarkSweepGC
+        #- XX:+HeapDumpOnOutOfMemoryError
+        #- XX:HeapDumpPath=temp/query-engine-dump
+        #- Djava.io.tmpdir=temp/query-engine
+        #- Dlog.console.level=OFF
+        #- Dlogback.console=OFF
+        #- Dfile.encoding=UTF-8
+        #- Duser.timezone=GMT
+        #- Dquery.engine.application.mode=default
     # Zoomdata Scheduler
     zoomdata-scheduler:
       path: '/etc/zoomdata/scheduler.properties'
       properties:
-        ## Metadata DB connection details.
+        # Metadata DB connection details.
         # (REMEMBER TO CHANGE VALUES BELOW IN ``postgres`` SECTION ACCORDINGLY!)
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: 'zoomdata'
