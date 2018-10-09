@@ -34,8 +34,6 @@ zoomdata:
   components:
     - stable
     #- unstable
-    # Lisensed repo became obsoleted
-    #- licensed
 
   # Enforce the state defined by configured Pillar values or provided defaults.
   # Setting it to ``False`` changes the formula behaviour to "relaxed
@@ -65,12 +63,9 @@ zoomdata:
   # Zoomdata core packages to install
   packages:
     - zoomdata
-    # The Consul package is mandatory since Zoomdata 2.4 release, comment out for 2.3
     - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
-    # The Spark Proxy has gone in Zoomdata 2.6 release
-    #- zoomdata-spark-proxy
     # The X framebuffer was deprecated in Zoomdata 3.1 release
     #- zoomdata-xvfb
 
@@ -106,8 +101,6 @@ zoomdata:
       - zoomdata-edc-mssql
       - zoomdata-edc-mysql
       - zoomdata-edc-oracle
-      # The Phoenix 4.5 was deprecated in Zoomdata 2.6.0
-      #- zoomdata-edc-phoenix-4.5
       - zoomdata-edc-phoenix-4.7-queryserver
       - zoomdata-edc-postgresql
       - zoomdata-edc-redshift
@@ -148,8 +141,8 @@ zoomdata:
       #- zoomdata-stream-writer
       - zoomdata-stream-writer-postgresql
       - zoomdata-upload-service
-      # The admin service based on Spring Boot Admin is going to be available
-      # in Zoomdata 3.5 release. This is optional and disabled by default.
+      # The admin service based on Spring Boot Admin was added in Zoomdata 3.5
+      # release. This is optional and disabled by default.
       #- zoomdata-admin-server
       # The tracing service based on OpenZipkin is available since Zoomdata 3.4
       # release. This is optional and disabled by default.
@@ -298,16 +291,6 @@ zoomdata:
       #merge: True
       #update: False
       #discard: True
-    # Zoomdata Spark Proxy. It has been gone entirely in Zoomdata 2.6 release.
-    # See the following article for additional info:
-    # https://www.zoomdata.com/docs/2.5/changing-the-default-configuration-for-an-embedded-spark-server.html
-    #zoomdata-spark-proxy:
-    #  path: '/etc/zoomdata/spark-proxy.properties'
-    #  properties:
-    #    hadoop.distro: 'cdh5'
-    #  merge: True
-    #  update: False
-    #  discard: True
     # Zoomdata Admin Service AKA Zerebro based on Spring Boot Admin. Uncomment
     # the section below to set up admin user credentials for accessing the
     # ``zoomdata-admin-server`` service.
@@ -333,8 +316,6 @@ zoomdata:
 
   # Services to enable and start in order
   services:
-    # The Consul service is mandatory since Zoomdata 2.4 release,
-    # comment out for 2.3
     - zoomdata-consul  # always start it first
 
     # The tracing service based on OpenZipkin is available since Zoomdata 3.4
@@ -343,9 +324,9 @@ zoomdata:
     # to remove it manually before uncommenting the line below.
     #- zoomdata-tracing-server
 
-    # EDC connectors. Some services are commented out due to licensed drivers
-    # not included into the distribution. Uncomment them after you have
-    # installed proper driver library file (see above).
+    # EDC (Enterprise Data Connector) services. Some of them are commented out
+    # due to licensed drivers not included into the distribution. Uncomment them
+    # after you have installed proper driver library file (see above).
     - zoomdata-edc-apache-solr
     # The Amazon Aurora connector was deprecated in Zoomdata 2.6.2
     #- zoomdata-edc-aurora
@@ -363,8 +344,6 @@ zoomdata:
     #- zoomdata-edc-mssql
     #- zoomdata-edc-mysql
     #- zoomdata-edc-oracle
-    # The Phoenix 4.5 was deprecated in Zoomdata 2.6.0
-    #- zoomdata-edc-phoenix-4.5
     - zoomdata-edc-phoenix-4.7-queryserver
     - zoomdata-edc-postgresql
     #- zoomdata-edc-redshift
@@ -383,9 +362,6 @@ zoomdata:
     # Zoomdata core
     - zoomdata-query-engine
     - zoomdata-scheduler
-
-    # The Spark Proxy has gone in Zoomdata 2.6 release
-    #- zoomdata-spark-proxy
 
     # The X framebuffer was deprecated in Zoomdata 3.1 release. New screenshot
     # service was introduced instead.
