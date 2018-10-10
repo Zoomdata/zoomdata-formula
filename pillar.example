@@ -175,24 +175,29 @@ zoomdata:
   #    soft: '1048576'
   #    hard: '1048576'
 
-  # Environment variables. Setting memory limits here is DEPRECATED. See:
-  # https://www.zoomdata.com/docs/3/Topics/Config/configuring-memory.html
+  # Environment variables per service.
   #environment:
     # Zoomdata Server
     #zoomdata:
     #  path: '/etc/zoomdata/zoomdata.env'
     #  variables:
-    #    JAVA_OPTS: '-Xss256k -Xms2048m -Xmx8192m'
+    #    DISCOVERY_REGISTRY_HOST: 'localhost'
+    #    ACTIVITY_LOGGING_UNIFIED: 'true'
+    #    LOGGING_UNIFIED_HOST: 'localhost'
+    #    LOGGING_UNIFIED_LEVEL: 'INFO'
+    # Zoomdata Query Engine
+    #zoomdata-query-engine:
+    #  path: '/etc/zoomdata/query-engine.env'
+    #  variables:
+    #    DISCOVERY_REGISTRY_HOST: 'localhost'
+    #    SPARK_MASTER: spark://localhost:7077
     # Zoomdata Scheduler
     #zoomdata-scheduler:
     #  path: '/etc/zoomdata/scheduler.env'
     #  variables:
-    #    SCHEDULER_JAVA_OPTS: '-Xms512m -Xmx1024m'
-    # Zoomdata SparkIT has gone in release 2.6
-    #zoomdata-spark-proxy:
-    #  path: '/etc/zoomdata/spark-proxy.env'
-    #  variables:
-    #    SPARK_PROXY_JAVA_OPTS: '-Xss256k -Xms512m -Xmx2048m'
+    #    DISCOVERY_REGISTRY_HOST: 'localhost'
+    #    LOGGING_UNIFIED_HOST: 'localhost'
+    #    LOGGING_UNIFIED_LEVEL: 'INFO'
 
   # Configuration property files and their corresponding variables:
   # https://www.zoomdata.com/docs/3/Topics/Config/config_props_vars.html
