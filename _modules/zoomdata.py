@@ -169,10 +169,12 @@ def list_pkgs(include_edc=False, include_microservices=False, include_tools=Fals
         if pkg.startswith(ZOOMDATA):
             if not include_edc and pkg.startswith(EDC):
                 pass
-            elif not include_microservices and \
-                    pkg in __salt__['pillar.get']('zoomdata:microservices:packages', []):
-                pass
             elif not include_tools and __salt__['service.missing'](pkg):
+                pass
+            elif not include_microservices and (
+                    pkg not in (__salt__['pillar.get']('zoomdata:packages') or []) or pkg not in
+                    __salt__['defaults.get']('zoomdata:zoomdata:packages', [])
+            ):
                 pass
             else:
                 zd_pkgs.append(pkg)
