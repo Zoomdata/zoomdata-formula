@@ -83,19 +83,16 @@ zoomdata-show-passwords:
 
 {%- if 'supervisor' in users %}
 
-  {%- if zoomdata.setup.branding['file']|default(none) %}
+  {%- if zoomdata.setup.branding['css']|default(none, true)
+      or zoomdata.setup.branding['file']|default(none, true) %}
 
-    {%- set file = zoomdata.setup.branding['file'] %}
-
-zoomdata-branding-from-file-{{ salt['file.basename'](file) }}:
-  http.query:
-    - name: '{{ url }}/api/branding'
-    - status: 200
-    - method: POST
-    - header_dict: {{ headers|yaml }}
+zoomdata-branding:
+  zoomdata.branding:
+    - name: '{{ url }}/'
     - username: supervisor
     - password: {{ users['supervisor'] }}
-    - data_file: {{ salt['cp.cache_file'](file) }}
+    - css: {{ zoomdata.setup.branding['css'] }}
+    - json_file: {{ zoomdata.setup.branding['file'] }}
 
   {%- endif %}
 
