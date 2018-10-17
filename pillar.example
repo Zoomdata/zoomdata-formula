@@ -393,8 +393,10 @@ zoomdata:
   #  passwords:
   #    admin: random
   #    supervisor: random
-  #  # Customize Zoomdata UI by providing an URL to JSON file
+  #  # Customize Zoomdata UI by providing CSS, login image and JSON file
   #  branding:
+  #    css: salt://branding/files/custom.css
+  #    login_logo: salt://branding/files/Zoomdata.svg
   #    file: salt://zoomdata/files/custom-ui-payload-sample.json
   #  # Configure available connectors (connections to data sources).
   #  connectors:

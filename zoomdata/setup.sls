@@ -91,8 +91,9 @@ zoomdata-branding:
     - name: '{{ url }}/'
     - username: supervisor
     - password: {{ users['supervisor'] }}
-    - css: {{ zoomdata.setup.branding['css'] }}
-    - json_file: {{ zoomdata.setup.branding['file'] }}
+    - css: {{ zoomdata.setup.branding['css']|default(none, true) }}
+    - login_logo: {{ zoomdata.setup.branding['login_logo']|default(none, true) }}
+    - json_file: {{ zoomdata.setup.branding['file']|default(none, true) }}
 
   {%- endif %}
 

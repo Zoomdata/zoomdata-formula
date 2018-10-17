@@ -14,8 +14,9 @@ Example:
       zoomdata.branding:
         - name: http://localhost:8080/zoomdata/
         - username: supervisor
-        - password: Secure_Pass
+        - password: Secure_Pas5
         - css: http://example.com/custom.css
+        - login_logo: salt://branding/files/Zoomdata.svg
         - json_file: salt://zoomdata/files/custom-ui-payload-sample.json
 
 Licensing
@@ -29,7 +30,7 @@ Example:
       zoomdata.licensing:
         - name: http://localhost:8080/zoomdata/
         - username: supervisor
-        - password: Secure_Pass
+        - password: Secure_Pas5
         - url: http://licensing.server/api
         - expire: '2018-10-02'
         - type: ZD
@@ -76,11 +77,13 @@ def _file_data_encode(filename):
     return headers, body
 
 
+# pylint: disable=too-many-arguments
 def branding(name,
              username,
              password,
-             json_file=None,
-             css=None):
+             css=None,
+             login_logo=None,
+             json_file=None):
     """
     Upload custom content files into the Zoomdata server.
 
@@ -93,14 +96,18 @@ def branding(name,
         The Zoomdata server user authorized to inject files, i.e. ``supervisor``
 
     password
-        The password
+        User password
+
+    css
+        The URI to the file containing custom CSS to apply on the Zoomdata UI
+
+    login_logo
+        The URI to the file containing PNG or SVG image to use as Zoomdata
+        login screen logo
 
     json_file
         The URI to the JSON file with branding settings to apply on the
         Zoomdata UI
-
-    css
-        The URI to the file containing custom CSS to apply on the Zoomdata UI
     """
     ret = {
         'name': name,
@@ -110,18 +117,19 @@ def branding(name,
         'pchanges': {},
     }
 
+    logo_id = None
+
     # pylint: disable=undefined-variable
     if __opts__['test']:
         ret['comment'] = 'The state will set custom branding for Zoomdata at {0}'.format(name)
         ret['result'] = None
         return ret
 
-    res = {'error': 'Need to supply either ``json_file`` or ``css`` parameter.'}
+    res = {'error': 'Need to supply either ``css`` or ``login_logo`` or ``json_file`` parameter.'}
 
     if css:
         headers, data = _file_data_encode(css)
         zoomdata_api = urljoin(name, 'api/branding/customCss')
-
         res = http.query(
             zoomdata_api,
             method='POST',
@@ -130,20 +138,41 @@ def branding(name,
             header_dict=headers,
             data=data
         )
-
         if 'error' in res:
             ret['comment'] = res
             return ret
 
+    if login_logo:
+        headers, data = _file_data_encode(login_logo)
+        zoomdata_api = urljoin(name, 'api/branding/loginLogo')
+        res = http.query(
+            zoomdata_api,
+            method='POST',
+            username=username,
+            password=password,
+            header_dict=headers,
+            data=data,
+            text=True
+        )
+        if 'error' in res:
+            ret['comment'] = res
+            return ret
+        logo_id = res['text']
+
     if json_file:
         zoomdata_api = urljoin(name, 'api/branding')
+        jf_ = __salt__['cp.get_file_str'](json_file)
+        if logo_id:
+            payload = json.loads(jf_)
+            payload.update({'loginLogo': logo_id})
+            jf_ = json.dumps(payload)
         res = http.query(
             zoomdata_api,
             method='POST',
             username=username,
             password=password,
             header_dict=HEADERS,
-            data_file=__salt__['cp.cache_file'](json_file)
+            data=jf_
         )
 
     if 'error' in res:
@@ -178,7 +207,7 @@ def licensing(name,
         The Zoomdata server user authorized to inject files, i.e. ``supervisor``
 
     password
-        The password
+        User password
 
     url
         The URL of licensing server endpoint to get a license key
