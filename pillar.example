@@ -238,6 +238,7 @@ zoomdata:
         ## Configure HTTPS for Zoomdata (see ``tls`` item below):
         # https://www.zoomdata.com/docs/3/Topics/Security/adding-ssl-certificate-to-the-zoomdata-server.html
         #server.ssl.enabled: True
+        #server.ssl.enabled-protocols: 'TLSv1.2'
         #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
         #server.ssl.key-store-password: 'your_keystore_password'
         # Optional redirect to https scheme, this requires HAProxy (see below)
