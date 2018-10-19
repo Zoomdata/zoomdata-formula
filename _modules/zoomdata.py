@@ -371,6 +371,7 @@ def inspect(limits=False,
             gpgkey = params['gpgkey'].strip()
 
         repo_root = url.path.split('/')[1]
+        # FIXME: handle ``latest`` catalog in the repo URL
         try:
             release = float(repo_root) if not release or float(repo_root) > release else release
         except ValueError:

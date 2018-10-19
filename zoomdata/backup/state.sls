@@ -17,6 +17,7 @@ zoomdata_dump_state:
     - group: root
     # Will contain passwords!
     - mode: 0600
+    # FIXME: subscribe on changes in repository settings
     - onchanges:
       - file: zoomdata_backup_dir
 
