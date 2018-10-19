@@ -4,6 +4,7 @@ include:
 {%- if not zoomdata['bootstrap'] %}
   - zoomdata.backup.layout
   - zoomdata.backup.state
+  # Stop services only when doing upgrade and services metadata backup
   - zoomdata.services.stop
   {%- if zoomdata['erase'] %}
   # Drop packages which do not being defined for installation.

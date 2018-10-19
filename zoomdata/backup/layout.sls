@@ -1,6 +1,8 @@
-{%- from 'zoomdata/map.jinja' import postgres, zoomdata %}
+{%- from 'zoomdata/map.jinja' import zoomdata %}
 
-{%- if zoomdata.backup['destination'] %}
+{%- if zoomdata.backup['destination'] and (
+       zoomdata.backup['state'] or zoomdata.backup['services']) %}
+
   {%- set timestamp = salt['status.time'](zoomdata.backup['strptime']) %}
   {%- do salt['grains.set']('zoomdata:backup:latest', timestamp) %}
   {%- set backup_dir = salt['file.join'](zoomdata.backup['destination'], timestamp) %}
@@ -21,8 +23,6 @@ zoomdata_backup_latest:
     - force: True
     - onchanges:
       - file: zoomdata_backup_dir
-
-  {%- if zoomdata.backup['state'] or zoomdata.backup['services'] %}
 
 zoomdata_dump_readme:
   file.managed:
@@ -45,5 +45,4 @@ zoomdata_dump_readme:
     - onchanges:
       - file: zoomdata_backup_dir
 
-  {%- endif %}
 {%- endif %}

@@ -15,15 +15,6 @@
 include:
   - zoomdata.repo
 
-zoomdata_repository_update:
-  test.configurable_test_state:
-    - changes: {{ zoomdata['upgrade'] }}
-    - result: True
-    {%- if not zoomdata['bootstrap'] and zoomdata.backup['destination'] %}
-    - prereq_in:
-      - file: zoomdata_backup_dir
-    {%- endif %}
-
 {%- for package in packages %}
 
 {{ package }}_package:
@@ -39,8 +30,9 @@ zoomdata_repository_update:
     {%- if not zoomdata['bootstrap'] and not zoomdata['upgrade'] %}
     - prereq_in:
       - service: {{ package }}_stop_disable
-      {%- if zoomdata.backup['destination'] and
-             package in zoomdata.backup['services']|default([], true) %}
+      {%- if zoomdata.backup['destination'] and (
+             zoomdata.backup['state'] or
+             package in zoomdata.backup['services']|default([], true)) %}
       - file: zoomdata_backup_dir
       {%- endif %}
     {%- endif %}
