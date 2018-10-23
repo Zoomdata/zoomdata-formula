@@ -204,18 +204,6 @@ zoomdata-user-limits-conf:
 
   {%- if config.path|default('') and service in packages %}
 
-    {%- if config.old_path|default('') %}
-
-{{ service }}_legacy_config:
-  file.absent:
-    - name: {{ config.old_path }}
-    {%- if service in zoomdata['services'] %}
-    - watch_in:
-      - service: {{ service }}_start_enable
-    {%- endif %}
-
-    {%- endif %}
-
 {{ service }}_config:
   file.managed:
     - name: {{ config.path }}

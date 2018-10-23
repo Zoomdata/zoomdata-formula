@@ -204,11 +204,6 @@ zoomdata:
   config:
     # Zoomdata Server
     zoomdata:
-      # Old path (legacy configuration file) will be removed if specified.
-      # This usually required when upgrading from 2.2 and older releases.
-      # Make sure you have set all necessary configuration to the
-      # ``properties`` dictionary.
-      #old_path: '/etc/zoomdata/zoomdata.conf'
       path: '/etc/zoomdata/zoomdata.properties'
       properties:
         ## Metadata DB connection details.
