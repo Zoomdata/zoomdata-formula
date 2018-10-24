@@ -1,6 +1,20 @@
 zoomdata-formula
 ================
 
+3.6.0 (2018-10-24)
+
+- Added new ``zoomdata.setup`` SLS that allows setting up initial passwords,
+  UI branding, adjust supervisor settings and install license for the Zoomdata
+  server
+- If the ``zoomdata`` service is configured to start (that's by default), it
+  will be queried for successful response on REST API call for 900 seconds,
+  when no other value specified in the ``zoomdata:setup:timeout`` Pillar value.
+- Added examples of security related configuration parameters
+- Added support for configuring ``*.jvm`` files (JVM command line options)
+- Fixed detection of core Zoomdata packages during upgrades
+- Fixed invoking backup state if no backup configured or nothing to upgrade
+- Cleaned up legacy stuff
+
 3.5.0 (2018-09-24)
 
 - The tracing service (OpenZipkin) was renamed to ``zoomdata-tracing-server``
