@@ -1,10 +1,7 @@
 {%- if header %}
 {{- header|trim }}
-
 {# blank line inserted here #}
 {%- endif -%}
-# See https://www.zoomdata.com/docs/{{ release }}/zoomdata-configuration-property-files-and-their-corresponding-variables.html
-{# blank line inserted here #}
 {%- for key, value in environment|dictsort() %}
     {%- if value is none %}
         {%- set value = '' %}
