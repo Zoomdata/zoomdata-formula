@@ -12,6 +12,8 @@
   {%- endfor %}
 {%- endfor %}
 
+{%- set jdbc = zoomdata.edc.jdbc|default({}, true) %}
+
 include:
   - zoomdata.repo
 
@@ -41,46 +43,13 @@ include:
       - service: {{ package }}_start_enable
     {%- endif %}
 
-{%- endfor %}
+  {%- if jdbc['install']|default(false) %}
 
-{%- set jdbc = zoomdata.edc.jdbc|default({}, true) %}
-
-{%- if jdbc.install|default(false) %}
-
-# Download provided JDBC drivers for EDC connectors
-
-  {%- for driver, jars in jdbc.drivers|default({}, true)|dictsort() %}
-    {%- set package = ('zoomdata-edc', driver)|join('-') %}
-    {%- if package in packages %}
-      {%- for jar in jars %}
-
-        {%- set jar_name = salt['file.basename'](jar) %}
-        {%- set jar_hash = jar|replace('http:', 'https:', 1) ~ '.sha1' %}
-
-        {#- Ugly workaround for bug in Salt 2016.11.3:
-            ``skip_verify`` leads to stack trace with KeyError on ``source_sum['hsum']``.
-            It is already fixed in upcoming 2016.11.4. #}
-
-        {%- if 'error' in salt['http.query'](jar_hash, method='HEAD') %}
-          {#- Check local cache or probe jar file URL #}
-          {%- if salt['cp.is_cached'](jar) or
-                 'body' in salt['http.query'](jar, method='HEAD') %}
-            {#- Cache jar file and get its hash #}
-            {%- set jar_hash = salt['hashutil.sha256_digest'](
-                               salt['cp.get_file_str'](jar)) %}
-          {%- endif %}
-        {%- endif %}
-
-{{ package }}_jdbc_{{ jar_name }}:
-  file.managed:
-    - name: {{ salt['file.join'](zoomdata.prefix, 'lib/edc-' ~ driver, jar_name) }}
-    - source: {{ jar }}
-    - source_hash: {{ jar_hash }}
-    - user: root
-    - group: {{ zoomdata.group }}
-    - mode: 0640
-    - makedirs: True
-    - show_change: False
+{{ package }}_libs:
+  zoomdata.libraries:
+    - name: {{ package }}
+    {#- Check if EDC JDBC driver URLs have been configured #}
+    - urls: {{ jdbc.drivers[package|replace('zoomdata-edc-', '', 1)]|default([], true) }}
     - require:
       - pkg: {{ package }}_package
     {%- if package in zoomdata['services'] %}
@@ -88,10 +57,9 @@ include:
       - service: {{ package }}_start_enable
     {%- endif %}
 
-      {%- endfor %}
-    {%- endif %}
-  {%- endfor %}
-{%- endif %}
+  {%- endif %}
+
+{%- endfor %}
 
 {%- if zoomdata.limits|default({}) and packages %}
 

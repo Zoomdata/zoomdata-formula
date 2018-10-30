@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# pylint: disable=line-too-long
 """
 Zoomdata states.
 
@@ -37,6 +38,19 @@ Example:
         - users: 5
         - sessions: 2
         - concurrency: AT
+
+External Libraries
+==================
+
+Example:
+
+.. code-block:: yaml
+
+    zoomdata-edc-mysql-libs:
+      zoomdata.libraries:
+        - name: zoomdata-edc-mysql
+        - urls:
+          - 'https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/1.3.2/mariadb-java-client-1.3.2.jar'
 """
 
 
@@ -51,6 +65,8 @@ HEADERS = {
     'Content-Type': 'application/vnd.zoomdata.v2+json',
 }
 
+
+# pylint: enable=line-too-long
 
 def _file_data_encode(filename):
     """Encode file as multipart form data."""
@@ -310,4 +326,99 @@ def licensing(name,
         ret['changes'] = res['dict']
         ret['result'] = True
 
+    return ret
+
+
+def libraries(name,
+              urls=None,
+              metadata_path='docs',
+              install_path='lib'):
+    """
+    Retrieve and install external jar files for Zoomdata service.
+
+    name
+        The name of the Zoomdata service
+
+    urls
+        List of URL links to download library files from. If not provided,
+        try to read package metadata file and obtain the URLs from there.
+
+    metadata_path
+        The subdirectory relative to the Zoomdata installation path where the
+        metadata file installed
+
+    install_path
+        The subdirectory relative to the Zoomdata installation path where the
+        library files will be downloaded
+    """
+    ret = {
+        'name': name,
+        'changes': {},
+        'result': False,
+        'comment': 'No library URLs found in the metadata file and no URLs given.',
+        'pchanges': {},
+    }
+
+    # pylint: disable=undefined-variable
+    if __opts__['test']:
+        ret['comment'] = 'The state will download libraries for {0} service'.format(name)
+        ret['result'] = None
+        return ret
+
+    prefix = __salt__['pillar.get'](
+        'zoomdata:prefix',
+        __salt__['defaults.get']('zoomdata:zoomdata:prefix')
+    )
+
+    if not prefix:
+        ret['comment'] = ('Unable to read Zoomdata installation directory neither from '
+                          '``zoomdata:prefix`` Pillar nor defaults.')
+        return ret
+
+    libs = {}
+    service = name.replace('zoomdata-', '', 1)
+
+    if urls:
+        for i, url in enumerate(urls):
+            libs.update({'url{0}'.format(i + 1): url})
+    else:
+        meta_file = __salt__['file.join'](prefix, metadata_path, service, 'PACKAGE-METADATA')
+        if __salt__['file.file_exists'](meta_file):
+            libs = __salt__['ini.get_section'](meta_file, 'libs')
+        else:
+            ret['comment'] = 'The metadata file not found.'
+
+    if not libs:
+        ret['result'] = True
+        return ret
+
+    comments = []
+    res = {}
+    for key in libs:
+        if not key.startswith('url'):
+            continue
+        target = __salt__['file.join'](
+            __salt__['file.join'](prefix, install_path, service),
+            __salt__['file.basename'](libs[key]))
+        res = __states__['file.managed'](
+            target,
+            source=libs[key],
+            skip_verify=True,
+            user='root',
+            group='root',
+            mode=644,
+            makedirs=True,
+            dir_mode=755,
+            show_changes=False
+        )
+        if not res['result']:
+            return res
+        comments.append(res['comment'])
+
+    if res:
+        ret = res
+        ret['comment'] = '\n'.join(comments)
+        return ret
+
+    ret['result'] = True
     return ret
