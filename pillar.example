@@ -114,7 +114,7 @@ zoomdata:
     #jdbc:
     #  drivers:
     #    mysql:
-    #      - 'http://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/1.3.2/mariadb-java-client-1.3.2.jar'
+    #      - 'https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/1.3.2/mariadb-java-client-1.3.2.jar'
     #
     # Do the similar for other connectors which require external drivers.
     # To actually make it work, set ``install`` to ``True``:
