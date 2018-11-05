@@ -82,7 +82,7 @@ zoomdata:
     #version: '3.6.0'
     {%- endif %}
 
-    # Zoomdata EDC packages to install
+    # Zoomdata EDC (datasource connector) packages to install
     packages:
       - zoomdata-edc-apache-solr
       # The Amazon Aurora connector was deprecated in Zoomdata 2.6.2
@@ -96,6 +96,9 @@ zoomdata:
       # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3
       - zoomdata-edc-elasticsearch-6.0
       - zoomdata-edc-impala
+      # The generic Hive connector is going to be added in Zoomdata 3.7.0
+      # COMMENT OUT FOR EARLIER RELEASES. Use the ``zoomdata-edc-tez`` package.
+      - zoomdata-edc-hive
       - zoomdata-edc-memsql
       - zoomdata-edc-mongo
       - zoomdata-edc-mssql
@@ -106,7 +109,8 @@ zoomdata:
       - zoomdata-edc-redshift
       - zoomdata-edc-rts
       - zoomdata-edc-sparksql
-      - zoomdata-edc-tez
+      # The Hive-on-Tez connector is going to be deprecated in Zoomdata 3.7.0
+      #- zoomdata-edc-tez
 
     # Install JDBC jar drivers which are not packaged with EDC connectors.
     # More here: https://www.zoomdata.com/docs/3/Topics/Installation/adding-a-jdbc-driver.html
@@ -339,6 +343,9 @@ zoomdata:
     - zoomdata-edc-elasticsearch-5.0
     # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3
     - zoomdata-edc-elasticsearch-6.0
+    # The generic Hive connector is going to be added in Zoomdata 3.7.0
+    # COMMENT OUT FOR EARLIER RELEASES. Use the ``zoomdata-edc-tez`` package.
+    - zoomdata-edc-hive
     - zoomdata-edc-impala
     #- zoomdata-edc-memsql
     - zoomdata-edc-mongo
@@ -350,7 +357,8 @@ zoomdata:
     #- zoomdata-edc-redshift
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
-    - zoomdata-edc-tez
+    # The Hive-on-Tez connector is going to be deprecated in Zoomdata 3.7.0
+    #- zoomdata-edc-tez
 
     # Former "microservices". These are flat file support services, i.e. used
     # to create CSV/JSON-based data sources. They require that the
