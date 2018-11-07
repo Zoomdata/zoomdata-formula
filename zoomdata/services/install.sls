@@ -61,6 +61,20 @@ include:
 
 {%- endfor %}
 
+{%- if 'zoomdata-consul' in zoomdata['packages']|default([], true) %}
+
+# The Consul data dir needs to be purged on upgrades
+
+zoomdata-consul_data_dir:
+  file.directory:
+    # This assumes default installation location
+    - name: {{ salt['file.join'](zoomdata['prefix'], 'data/consul') }}
+    - clean: True
+    - onchanges:
+      - pkg: zoomdata-consul_package
+
+{%- endif %}
+
 {%- if zoomdata.limits|default({}) and packages %}
 
   {%- if salt['test.provider']('service') == 'systemd' %}
