@@ -206,7 +206,7 @@ zoomdata:
   # Configuration property files and their corresponding variables:
   # https://www.zoomdata.com/docs/3/Topics/Config/config_props_vars.html
   config:
-    # Zoomdata Server
+    # Zoomdata Web Server
     zoomdata:
       path: '/etc/zoomdata/zoomdata.properties'
       properties:
@@ -296,14 +296,13 @@ zoomdata:
       #merge: True
       #update: False
       #discard: True
-    # Zoomdata Admin Service AKA Zerebro based on Spring Boot Admin. Uncomment
-    # the section below to set up admin user credentials for accessing the
-    # ``zoomdata-admin-server`` service.
+    # Zoomdata Admin Server is based on Spring Boot Admin. Uncomment the
+    # section below to set up admin user credentials for accessing the web UI.
     #zoomdata-admin-server:
     #  path: '/etc/zoomdata/admin-server.properties'
     #  properties:
-    #    zerebro.user.name: 'admin'
-    #    zerebro.user.password: 'admin'
+    #    monitor.user.name: 'admin'
+    #    monitor.user.password: 'admin'
 
   # Zoomdata TLS: paste certificates chain and private key for your domain here.
   # Pay attention to indent exactly with 4 spaces for all lines under
