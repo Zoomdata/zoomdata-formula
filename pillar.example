@@ -145,11 +145,11 @@ zoomdata:
       #- zoomdata-stream-writer
       - zoomdata-stream-writer-postgresql
       - zoomdata-upload-service
-      # The admin service based on Spring Boot Admin was added in Zoomdata 3.5
-      # release. This is optional and disabled by default.
+      # The Admin Server based on Spring Boot Admin was added in
+      # Zoomdata 3.5 release. This is optional and disabled by default.
       #- zoomdata-admin-server
-      # The tracing service based on OpenZipkin is available since Zoomdata 3.4
-      # release. This is optional and disabled by default.
+      # The Tracing Service based on OpenZipkin is available since
+      # Zoomdata 3.4 release. This is optional and disabled by default.
       # If you previously have installed ``zoomdata-tracing`` package, you have
       # to remove it manually before uncommenting the line below.
       #- zoomdata-tracing-server
@@ -296,13 +296,22 @@ zoomdata:
       #merge: True
       #update: False
       #discard: True
-    # Zoomdata Admin Server is based on Spring Boot Admin. Uncomment the
-    # section below to set up admin user credentials for accessing the web UI.
+    # Zoomdata Admin Server.
+    # Uncomment the section below to set up the user credentials for accessing
+    # the web UI.
     #zoomdata-admin-server:
     #  path: '/etc/zoomdata/admin-server.properties'
     #  properties:
     #    monitor.user.name: 'admin'
     #    monitor.user.password: 'admin'
+    # Zoomdata Tracing Server.
+    # The example configuration below allows saving traces into locally
+    # installed ElasticSearch.
+    #zoomdata-tracing-server:
+    #  path: '/etc/zoomdata/tracing-server.properties'
+    #  properties:
+    #    zipkin.storage.type: 'elasticsearch'
+    #    zipkin.storage.elasticsearch.hosts: 'http://localhost:9200'
 
   # Zoomdata TLS: paste certificates chain and private key for your domain here.
   # Pay attention to indent exactly with 4 spaces for all lines under
@@ -322,7 +331,7 @@ zoomdata:
   services:
     - zoomdata-consul  # always start it first
 
-    # The tracing service based on OpenZipkin is available since Zoomdata 3.4
+    # The Tracing Service based on OpenZipkin is available since Zoomdata 3.4
     # release. This is optional and disabled by default.
     # If you previously have installed ``zoomdata-tracing`` package, you have
     # to remove it manually before uncommenting the line below.
