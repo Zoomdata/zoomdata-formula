@@ -112,17 +112,17 @@ zoomdata:
       # The Hive-on-Tez connector is going to be deprecated in Zoomdata 3.7.0
       #- zoomdata-edc-tez
 
-    # Install JDBC jar drivers which are not packaged with EDC connectors.
+    # Install JDBC jar drivers which are not packaged with Zoomdata connectors.
     # More here: https://www.zoomdata.com/docs/3/Topics/Installation/adding-a-jdbc-driver.html
     # This is an example for MySQL connector (``zoomdata-edc-mysql``):
     #jdbc:
-    #  drivers:
-    #    mysql:
-    #      - 'https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/1.3.2/mariadb-java-client-1.3.2.jar'
-    #
+      #drivers:
+        #mysql:
+          #- 'https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.13/mysql-connector-java-8.0.13.jar'
+
     # Do the similar for other connectors which require external drivers.
     # To actually make it work, set ``install`` to ``True``:
-    #  install: True
+      #install: True
 
   # Zoomdata microservices section
   microservices:
