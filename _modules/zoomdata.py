@@ -142,49 +142,43 @@ def list_repos():
     return zd_repos
 
 
-def list_pkgs(include_edc=False, include_microservices=False, include_tools=False):
+def list_pkgs(include_edc=True, include_microservices=True, include_tools=True):
     '''
-    List Zoomdata packages currently installed as a list
+    List currently installed Zoomdata packages
 
-    include_edc : False
+    include_edc : True
         Include EDC packages as well
 
-    include_microservices : False
+    include_microservices : True
         Include microservices packages as well
 
-    include_tools : False
+    include_tools : True
         Include tool packages as well
 
     CLI Example:
 
     .. code-block:: bash
 
-        salt '*' zoomdata.list_pkgs true
+        salt '*' zoomdata.list_pkgs include_tools=False
     '''
     # pylint: disable=undefined-variable
-    pkg_versions = __salt__['pkg.list_pkgs']()
-    pkg_names = pkg_versions.keys()
-    zd_pkgs = []
-    for pkg in sorted(pkg_names):
-        if pkg.startswith(ZOOMDATA):
-            if not include_edc and pkg.startswith(EDC):
-                pass
-            elif not include_tools and __salt__['service.missing'](pkg):
-                pass
-            elif not include_microservices and (
-                    pkg not in (__salt__['pillar.get']('zoomdata:packages') or []) or pkg not in
-                    __salt__['defaults.get']('zoomdata:zoomdata:packages', [])
-            ):
-                pass
-            else:
-                zd_pkgs.append(pkg)
+    zd_pkgs = [i for i in __salt__['pkg.list_pkgs']() if i.startswith(ZOOMDATA)]
 
-    return zd_pkgs
+    if not include_edc:
+        zd_pkgs = list(set(zd_pkgs) - set(list_pkgs_edc()))
+
+    if not include_microservices:
+        zd_pkgs = list(set(zd_pkgs) - set(list_pkgs_microservices()))
+
+    if not include_tools:
+        zd_pkgs = [i for i in zd_pkgs if i in __salt__['service.get_all']()]
+
+    return sorted(zd_pkgs)
 
 
 def list_pkgs_edc():
     '''
-    List only Zoomdata EDC packages currently installed as a list
+    List only currently installed Zoomdata EDC packages
 
     CLI Example:
 
@@ -192,31 +186,28 @@ def list_pkgs_edc():
 
         salt '*' zoomdata.list_pkgs_edc
     '''
-    edc_pkgs = []
-    for pkg in list_pkgs(include_edc=True):
-        if pkg.startswith(EDC):
-            edc_pkgs.append(pkg)
+    # pylint: disable=undefined-variable
+    edc_pkgs = [i for i in __salt__['pkg.list_pkgs']() if i.startswith(EDC)]
 
-    return edc_pkgs
+    return sorted(edc_pkgs)
 
 
-def list_pkgs_ms():
+def list_pkgs_microservices():
     '''
-    List only Zoomdata microservices packages currently installed as a list
+    List only currently installed Zoomdata microservices packages
 
     CLI Example:
 
     .. code-block:: bash
 
-        salt '*' zoomdata.list_pkgs_ms
+        salt '*' zoomdata.list_pkgs_microservices
     '''
-    ms_pkgs = []
-    for pkg in list_pkgs(include_microservices=True):
-        # pylint: disable=undefined-variable
-        if pkg in __salt__['defaults.get']('zoomdata:zoomdata:microservices:packages', []):
-            ms_pkgs.append(pkg)
+    # pylint: disable=undefined-variable
+    m_s = __salt__['defaults.get']('zoomdata:zoomdata:microservices:packages', [])
+    m_s.extend(__salt__['pillar.get']('zoomdata:microservices:packages') or [])
+    ms_pkgs = [i for i in __salt__['pkg.list_pkgs']() if i in list(set(m_s))]
 
-    return ms_pkgs
+    return sorted(ms_pkgs)
 
 
 def version(full=True):
@@ -233,7 +224,7 @@ def version(full=True):
         salt '*' zoomdata.version
     '''
     zd_version = ''
-    zd_pkgs = list_pkgs()
+    zd_pkgs = list_pkgs(include_tools=False)
     for pkg in zd_pkgs:
         # pylint: disable=undefined-variable
         zd_version = __salt__['pkg.version'](pkg)
@@ -283,7 +274,7 @@ def version_microservices(full=True):
         salt '*' zoomdata.version_microservices
     '''
     ms_version = ''
-    ms_pkgs = list_pkgs_ms()
+    ms_pkgs = list_pkgs_microservices()
     for pkg in ms_pkgs:
         # pylint: disable=undefined-variable
         ms_version = __salt__['pkg.version'](pkg)
@@ -418,17 +409,20 @@ def inspect(limits=False,
             'properties': configuration,
         })
 
+    # FIXME: detect installed tools and their version
     ret = {
         ZOOMDATA: {
             'base_url': baseurl,
             'release': release,
             'components': components,
-            'packages': list_pkgs(),
+            'packages': list_pkgs(include_edc=False,
+                                  include_microservices=False,
+                                  include_tools=False),
             'edc': {
                 'packages': list_pkgs_edc(),
             },
             'microservices': {
-                'packages': list_pkgs_ms(),
+                'packages': list_pkgs_microservices(),
             },
             'environment': env,
             'config': config,

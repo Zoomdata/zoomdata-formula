@@ -6,7 +6,7 @@
                    zoomdata.tools['packages'] %}
 
 {%- if zoomdata['erase'] %}
-  {%- set installed = salt['zoomdata.list_pkgs'](include_edc=true, include_tools=true) %}
+  {%- set installed = salt['zoomdata.list_pkgs']() %}
   {%- set uninstall = [] %}
 
   {%- for pkg in installed %}
