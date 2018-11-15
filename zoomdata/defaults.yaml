@@ -28,7 +28,6 @@ zoomdata:
     - zoomdata-scheduler
     - zoomdata-spark-proxy
     - zoomdata-xvfb
-    - zoomdata-zdmanage
 
   edc:
     #version: 'latest'
@@ -56,14 +55,11 @@ zoomdata:
 
   microservices:
     #version: 'latest'
-    packages:
-      - zoomdata-screenshot-service
-      # FIXME: this breaks detection of microservices before Zoomdata 3.2 release.
-      - zoomdata-stream-writer-postgresql
-      - zoomdata-upload-service
+    packages: []
 
   tools:
-    packages: []
+    packages:
+      - zoomdata-zdmanage
 
   # Comment added to each file modified by the formula
   header: |
@@ -91,18 +87,20 @@ zoomdata:
       update: False
       discard: True
     zoomdata-scheduler:
-      merge: True
       path: /etc/zoomdata/scheduler.properties
       properties:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'PleaseChangeMe'
-      update: False
-    zoomdata-spark-proxy:
       merge: True
+      update: False
+      discard: True
+    zoomdata-spark-proxy:
       path: '/etc/zoomdata/spark-proxy.properties'
       properties: {}
+      merge: True
       update: False
+      discard: True
 
   tls:
     name: zoomdata
