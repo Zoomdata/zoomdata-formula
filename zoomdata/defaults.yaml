@@ -7,11 +7,12 @@ zoomdata:
   user: zoomdata
   group: zoomdata
 
-  # Defaults which could be overridable in Pillar
+  # Defaults which could be overridden in Pillar
   base_url: 'http://repo.zoomdata.com'
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
-  release: '2.5'
-  repositories: []
+  release: 2.5
+  repositories:
+    - tools
   components:
     - stable
     #- licensed
