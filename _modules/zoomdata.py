@@ -171,14 +171,14 @@ def list_pkgs(include_edc=True, include_microservices=True, include_tools=True):
         zd_pkgs = list(set(zd_pkgs) - set(list_pkgs_microservices()))
 
     if not include_tools:
-        zd_pkgs = [i for i in zd_pkgs if i in __salt__['service.get_all']()]
+        zd_pkgs = list(set(zd_pkgs) - set(list_pkgs_tools()))
 
     return sorted(zd_pkgs)
 
 
 def list_pkgs_edc():
     '''
-    List only currently installed Zoomdata EDC packages
+    List only currently installed Zoomdata EDC (data connector) packages
 
     CLI Example:
 
@@ -194,7 +194,7 @@ def list_pkgs_edc():
 
 def list_pkgs_microservices():
     '''
-    List only currently installed Zoomdata microservices packages
+    List only currently installed Zoomdata microservice packages
 
     CLI Example:
 
@@ -208,6 +208,23 @@ def list_pkgs_microservices():
     ms_pkgs = [i for i in __salt__['pkg.list_pkgs']() if i in list(set(m_s))]
 
     return sorted(ms_pkgs)
+
+
+def list_pkgs_tools():
+    '''
+    List only currently installed Zoomdata tool packages
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' zoomdata.list_pkgs_tools
+    '''
+    # pylint: disable=undefined-variable
+    tools = [i for i in __salt__['pkg.list_pkgs']()
+             if i.startswith(ZOOMDATA) and i not in __salt__['service.get_all']()]
+
+    return sorted(tools)
 
 
 def version(full=True):
@@ -237,7 +254,7 @@ def version(full=True):
 
 def version_edc(full=True):
     '''
-    Display Zoomdata EDC packages version
+    Display Zoomdata EDC (datasource connector) packages version
 
     CLI Example:
 
@@ -262,7 +279,7 @@ def version_edc(full=True):
 
 def version_microservices(full=True):
     '''
-    Display Zoomdata microservices packages version
+    Display Zoomdata microservice packages version
 
     CLI Example:
 
@@ -283,6 +300,31 @@ def version_microservices(full=True):
         break
 
     return ms_version
+
+
+def version_tools(full=True):
+    '''
+    Display Zoomdata tool packages version
+
+    CLI Example:
+
+    full : True
+        Return full version. If set False, return only short version (X.Y.Z).
+
+    .. code-block:: bash
+
+        salt '*' zoomdata.version_tools
+    '''
+    t_version = ''
+    tools = list_pkgs_tools()
+    for pkg in tools:
+        # pylint: disable=undefined-variable
+        t_version = __salt__['pkg.version'](pkg)
+        if not full:
+            return t_version.split('-')[0]
+        break
+
+    return t_version
 
 
 def services(running=False):
@@ -345,6 +387,7 @@ def inspect(limits=False,
     gpgkey = None
     gpgcheck = False
     release = None
+    repositories = []
     components = []
     env = {}
     config = {}
@@ -362,11 +405,13 @@ def inspect(limits=False,
             gpgkey = params['gpgkey'].strip()
 
         repo_root = url.path.split('/')[1]
-        # FIXME: handle ``latest`` catalog in the repo URL
         try:
             release = float(repo_root) if not release or float(repo_root) > release else release
         except ValueError:
-            pass
+            if repo_root == 'latest':
+                release = repo_root
+            else:
+                repositories.append(repo_root)
 
         component = url.path.rstrip('/').rsplit('/')[-1]
         if component not in components:
@@ -387,14 +432,6 @@ def inspect(limits=False,
         config[service] = {}
         configuration = {}
 
-        legacy_file = config_file.rsplit('.', 1)[0] + '.conf'
-        legacy_config = properties(legacy_file)
-        if legacy_config:
-            config[service].update({
-                'old_path': legacy_file,
-            })
-            configuration.update(legacy_config)
-
         new_config = properties(config_file)
         if new_config:
             configuration.update(new_config)
@@ -409,11 +446,11 @@ def inspect(limits=False,
             'properties': configuration,
         })
 
-    # FIXME: detect installed tools and their version
     ret = {
         ZOOMDATA: {
             'base_url': baseurl,
-            'release': release,
+            'release': str(release),
+            'repositories': repositories,
             'components': components,
             'packages': list_pkgs(include_edc=False,
                                   include_microservices=False,
@@ -423,6 +460,9 @@ def inspect(limits=False,
             },
             'microservices': {
                 'packages': list_pkgs_microservices(),
+            },
+            'tools': {
+                'packages': list_pkgs_tools(),
             },
             'environment': env,
             'config': config,
@@ -449,11 +489,14 @@ def inspect(limits=False,
         })
         ret[ZOOMDATA]['edc'].update({
             # Some EDC packages has different iteration (build number),
-            # so we strip it off.
+            # so we strip it off
             'version': version_edc(full=False),
         })
         ret[ZOOMDATA]['microservices'].update({
             'version': version_microservices(full=full),
+        })
+        ret[ZOOMDATA]['tools'].update({
+            'version': version_tools(full=full),
         })
 
     return ret

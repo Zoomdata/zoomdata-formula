@@ -45,7 +45,8 @@
 {# Detect release upgrades or repo changes #}
 {% do zoomdata.update({
     'upgrade': not zoomdata['bootstrap'] and (
-               zoomdata['release'] != zoomdata.local['release']|string() or
+               zoomdata['release'] == 'latest' or
+               zoomdata['release'] != zoomdata.local['release'] or
                zoomdata['base_url'] != zoomdata.local['base_url']
                ),
 }) %}
