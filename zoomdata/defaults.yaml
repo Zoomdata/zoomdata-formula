@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# Default variables for the Zoomdata LTS 2.6 release deployment
+
 zoomdata:
   # Constants
   prefix: '/opt/zoomdata'
@@ -10,12 +12,11 @@ zoomdata:
   # Defaults which could be overridden in Pillar
   base_url: 'http://repo.zoomdata.com'
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
-  release: 2.5
+  release: '2.6'
   repositories:
     - tools
   components:
     - stable
-    #- licensed
     #- unstable
 
   bootstrap: False
@@ -26,24 +27,24 @@ zoomdata:
   packages:
     - zoomdata
     - zoomdata-consul
+    - zoomdata-query-engine
     - zoomdata-scheduler
-    - zoomdata-spark-proxy
     - zoomdata-xvfb
 
   edc:
     #version: 'latest'
     packages:
       - zoomdata-edc-apache-solr
-      - zoomdata-edc-aurora
       - zoomdata-edc-cloudera-search
-      - zoomdata-edc-elasticsearch-1.7
-      - zoomdata-edc-elasticsearch-2.0
+      - zoomdata-edc-elasticsearch-5.0
+      - zoomdata-edc-elasticsearch-6.0
       - zoomdata-edc-impala
       - zoomdata-edc-memsql
+      - zoomdata-edc-mongo
       - zoomdata-edc-mssql
       - zoomdata-edc-mysql
       - zoomdata-edc-oracle
-      - zoomdata-edc-phoenix-4.5
+      - zoomdata-edc-phoenix-4.7-queryserver
       - zoomdata-edc-postgresql
       - zoomdata-edc-redshift
       - zoomdata-edc-rts
@@ -56,7 +57,9 @@ zoomdata:
 
   microservices:
     #version: 'latest'
-    packages: []
+    packages:
+      - zoomdata-stream-writer
+      - zoomdata-upload-service
 
   tools:
     packages:
@@ -80,6 +83,15 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: zoomdata
         spring.datasource.password: 'PleaseChangeMe'
+        keyset.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-keyset'
+        keyset.destination.params.user_name: 'zoomdata'
+        keyset.destination.params.password: 'PleaseChangeMe'
+        keyset.destination.schema: 'public'
+        upload.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-upload'
+        upload.destination.params.user_name: 'zoomdata'
+        upload.destination.params.password: 'PleaseChangeMe'
+        upload.destination.schema: 'public'
+        upload.batch-size: 1000
         screenshot.daemon.enabled: False
         screenshot.daemon.schedule.rate: '168h'
         screenshots.dashboards.enabled: False
@@ -109,23 +121,25 @@ zoomdata:
   services:
     - zoomdata-consul
     - zoomdata-edc-apache-solr
-    - zoomdata-edc-aurora
     - zoomdata-edc-cloudera-search
-    - zoomdata-edc-elasticsearch-1.7
-    - zoomdata-edc-elasticsearch-2.0
+    - zoomdata-edc-elasticsearch-5.0
+    - zoomdata-edc-elasticsearch-6.0
     - zoomdata-edc-impala
-    - zoomdata-edc-memsql
-    - zoomdata-edc-mssql
-    - zoomdata-edc-mysql
-    - zoomdata-edc-oracle
-    - zoomdata-edc-phoenix-4.5
+    #- zoomdata-edc-memsql
+    - zoomdata-edc-mongo
+    #- zoomdata-edc-mssql
+    #- zoomdata-edc-mysql
+    #- zoomdata-edc-oracle
+    - zoomdata-edc-phoenix-4.7-queryserver
     - zoomdata-edc-postgresql
-    - zoomdata-edc-redshift
+    #- zoomdata-edc-redshift
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
     - zoomdata-edc-tez
+    - zoomdata-query-engine
     - zoomdata-scheduler
-    - zoomdata-spark-proxy
+    - zoomdata-stream-writer
+    - zoomdata-upload-service
     - zoomdata
     #- zoomdata-xvfb
 
