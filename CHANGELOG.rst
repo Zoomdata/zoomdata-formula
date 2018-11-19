@@ -1,6 +1,16 @@
 zoomdata-formula
 ================
 
+2.6.23 (2018-11-19) **The end of Active Support for the Zoomdata release 2.6**
+
+- The Zoomdata 2.6 Long Term Support release has stopped receiving bugfixes.
+  The last version of the Zoomdata Core service binaries is ``2.6.23``.
+- The default variables were updated to reflect latest 2.6 release state
+- Allowed downloading JDBC drivers for datasource connectors (EDC services)
+  from URLs in package metadata file
+- Fixed the Zoomdata packages, services and versions detection
+- Cleaned up configuration file templates
+
 3.6.0 (2018-10-24)
 
 - Added new ``zoomdata.setup`` SLS that allows setting up initial passwords,

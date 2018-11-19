@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml ts=2 sts=2 sw=2 et
 
-### Zoomdata 3.6 provisioning configuration example.
+### The Zoomdata provisioning configuration example file
+### ====================================================
 ###
 ### This is Salt Pillar file written in SaltStack's (SLS) format:
-### YAML rendered with Jinja2 template engine.
-
+### a tree-like data structure in YAML rendered with Jinja2 templating engine.
+### https://docs.saltstack.com/en/latest/topics/tutorials/pillar.html
+### https://docs.saltstack.com/en/latest/topics/yaml/
+### https://docs.saltstack.com/en/latest/topics/jinja/
+###
+### It has default values for latest Generally Available Zoomdata release.
+### The settings for the last Long Term Supported release are coded within the
+### formula in the ``zoomdata/defaults.yaml`` file, which applies out of the
+### box unless redefined in the Pillar file.
 
 zoomdata:
   ## Package installation settings
