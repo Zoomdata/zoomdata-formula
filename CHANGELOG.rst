@@ -1,6 +1,17 @@
 zoomdata-formula
 ================
 
+3.7.0 (2018-11-20) **The Zoomdata 3.7 has become Long Term Supported release**
+
+- Updated defaults to match the Zoomdata 3.7.0 recommended installation options
+- Fixed ``zoomdata-consul`` service upgrade
+- The ``zoomdata-edc-tez`` services has been deprecated and replaced with
+  ```zoomdata-edc-hive`` (generic Hive datasource connector)
+- Fixed the example of ``zoomdata-admin-server`` service properties
+- Added the example of ElasticSearch backend configuration for
+  ``zoomdata-tracing-server`` service
+- Updated MySQL JDBC driver URL in the example
+
 2.6.23 (2018-11-19) **The end of Active Support for the Zoomdata release 2.6**
 
 - The Zoomdata 2.6 Long Term Support release has stopped receiving bugfixes.

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Default variables for the Zoomdata LTS 2.6 release deployment
+# Default variables for the Zoomdata LTS 3.7 release deployment
 
 zoomdata:
   # Constants
@@ -12,7 +12,7 @@ zoomdata:
   # Defaults which could be overridden in Pillar
   base_url: 'http://repo.zoomdata.com'
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
-  release: '2.6'
+  release: '3.7'
   repositories:
     - tools
   components:
@@ -29,7 +29,6 @@ zoomdata:
     - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
-    - zoomdata-xvfb
 
   edc:
     #version: 'latest'
@@ -38,6 +37,7 @@ zoomdata:
       - zoomdata-edc-cloudera-search
       - zoomdata-edc-elasticsearch-5.0
       - zoomdata-edc-elasticsearch-6.0
+      - zoomdata-edc-hive
       - zoomdata-edc-impala
       - zoomdata-edc-memsql
       - zoomdata-edc-mongo
@@ -49,7 +49,6 @@ zoomdata:
       - zoomdata-edc-redshift
       - zoomdata-edc-rts
       - zoomdata-edc-sparksql
-      - zoomdata-edc-tez
 
     jdbc:
       drivers: {}
@@ -58,6 +57,7 @@ zoomdata:
   microservices:
     #version: 'latest'
     packages:
+      - zoomdata-screenshot-service
       - zoomdata-stream-writer
       - zoomdata-upload-service
 
@@ -108,12 +108,6 @@ zoomdata:
       merge: True
       update: False
       discard: True
-    zoomdata-spark-proxy:
-      path: '/etc/zoomdata/spark-proxy.properties'
-      properties: {}
-      merge: True
-      update: False
-      discard: True
 
   tls:
     name: zoomdata
@@ -124,6 +118,7 @@ zoomdata:
     - zoomdata-edc-cloudera-search
     - zoomdata-edc-elasticsearch-5.0
     - zoomdata-edc-elasticsearch-6.0
+    - zoomdata-edc-hive
     - zoomdata-edc-impala
     #- zoomdata-edc-memsql
     - zoomdata-edc-mongo
@@ -135,13 +130,12 @@ zoomdata:
     #- zoomdata-edc-redshift
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
-    - zoomdata-edc-tez
+    #- zoomdata-screenshot-service
+    - zoomdata-stream-writer-postgresql
+    - zoomdata-upload-service
     - zoomdata-query-engine
     - zoomdata-scheduler
-    - zoomdata-stream-writer
-    - zoomdata-upload-service
     - zoomdata
-    #- zoomdata-xvfb
 
   setup:
     timeout: 900

@@ -28,7 +28,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
-  release: 3.6
+  release: 3.7
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
@@ -62,10 +62,10 @@ zoomdata:
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
   {%- if grains['os'] == 'Ubuntu' %}
   # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-  #version: "3.6.0-10+{{ grains['oscodename'] }}.stable"
+  #version: "3.7.0-3+{{ grains['oscodename'] }}.stable"
   {%- else %}
   # Packages version for RHEL/CentOS systems
-  #version: '3.6.0'
+  #version: '3.7.0'
   {%- endif %}
 
   # Zoomdata core packages to install
@@ -84,10 +84,10 @@ zoomdata:
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-    #version: "3.6.0-3+{{ grains['oscodename'] }}.stable"
+    #version: "3.7.0-2+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL/CentOS systems
-    #version: '3.6.0'
+    #version: '3.7.0'
     {%- endif %}
 
     # Zoomdata EDC (datasource connector) packages to install
@@ -103,10 +103,10 @@ zoomdata:
       - zoomdata-edc-elasticsearch-5.0
       # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3
       - zoomdata-edc-elasticsearch-6.0
-      - zoomdata-edc-impala
-      # The generic Hive connector is going to be added in Zoomdata 3.7.0
+      # The generic Hive connector was added in Zoomdata 3.7.0 version.
       # COMMENT OUT FOR EARLIER RELEASES. Use the ``zoomdata-edc-tez`` package.
       - zoomdata-edc-hive
+      - zoomdata-edc-impala
       - zoomdata-edc-memsql
       - zoomdata-edc-mongo
       - zoomdata-edc-mssql
@@ -117,7 +117,7 @@ zoomdata:
       - zoomdata-edc-redshift
       - zoomdata-edc-rts
       - zoomdata-edc-sparksql
-      # The Hive-on-Tez connector is going to be deprecated in Zoomdata 3.7.0
+      # The Hive-on-Tez connector was deprecated in Zoomdata 3.7.0
       #- zoomdata-edc-tez
 
     # Install JDBC jar drivers which are not packaged with Zoomdata connectors.
@@ -139,10 +139,10 @@ zoomdata:
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
     {%- if grains['os'] == 'Ubuntu' %}
     # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-    #version: "3.6.0-1+{{ grains['oscodename'] }}.stable"
+    #version: "3.7.0-1+{{ grains['oscodename'] }}.stable"
     {%- else %}
     # Packages version for RHEL/CentOS systems
-    #version: '3.6.0'
+    #version: '3.7.0'
     {%- endif %}
 
     # Zoomdata microservice packages to install
@@ -355,7 +355,7 @@ zoomdata:
     # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1
     #- zoomdata-edc-elasticsearch-1.7
     # The ElasticSearch 2.0 connector was deprecated in Zoomdata 2.6.5
-    # - zoomdata-edc-elasticsearch-2.0
+    #- zoomdata-edc-elasticsearch-2.0
     - zoomdata-edc-elasticsearch-5.0
     # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3
     - zoomdata-edc-elasticsearch-6.0
@@ -373,7 +373,7 @@ zoomdata:
     #- zoomdata-edc-redshift
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
-    # The Hive-on-Tez connector is going to be deprecated in Zoomdata 3.7.0
+    # The Hive-on-Tez connector was deprecated in Zoomdata 3.7.0
     #- zoomdata-edc-tez
 
     # Former "microservices". These are flat file support services, i.e. used
@@ -384,14 +384,14 @@ zoomdata:
     - zoomdata-stream-writer-postgresql
     - zoomdata-upload-service
 
-    # Zoomdata core
-    - zoomdata-query-engine
-    - zoomdata-scheduler
-
     # The X framebuffer was deprecated in Zoomdata 3.1 release. New screenshot
     # service was introduced instead.
     #- zoomdata-xvfb
-    - zoomdata-screenshot-service
+    #- zoomdata-screenshot-service
+
+    # Zoomdata core
+    - zoomdata-query-engine
+    - zoomdata-scheduler
 
     # The admin service based on Spring Boot Admin is available since
     # Zoomdata 3.5 release. This is optional and disabled by default.
