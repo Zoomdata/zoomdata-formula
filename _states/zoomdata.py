@@ -73,11 +73,16 @@ def _file_data_encode(filename):
     # pylint: disable=undefined-variable
     content = __salt__['cp.get_file_str'](filename)
     boundary = '----' + __salt__['random.get_str']().replace('_', '')
+    internal_content_type = 'application/octet-stream'
+    if filename.endswith('.css'):
+        internal_content_type = 'text/css'
+    if filename.endswith('.js'):
+        internal_content_type = 'text/js'
     lines = [
         '--{}'.format(boundary),
         'Content-Disposition: form-data; name="fileData"; filename="{}"'.format(
             __salt__['file.basename'](filename)),
-        'Content-Type: application/octet-stream',
+        'Content-Type: {}'.format(internal_content_type),
         '',
         content,
         '--{}--'.format(boundary),
