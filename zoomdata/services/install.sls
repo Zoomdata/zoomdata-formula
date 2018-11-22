@@ -244,3 +244,28 @@ zoomdata-user-limits-conf:
   {%- endif %}
 
 {%- endfor %}
+
+# Run post installation commands
+
+{%- for service, commands in zoomdata.post_install|default({}, true)|dictsort() %}
+
+  {%- if service in packages %}
+
+    {%- for command in commands %}
+
+{{ service }}-post-install-{{ loop.index }}:
+  cmd.run:
+    - name: {{ command }}
+    - timeout: 300
+    - onchanges:
+      - pkg: {{ service }}
+    {%- if service in zoomdata['services'] %}
+    - watch_in:
+      - service: {{ service }}_start_enable
+    {%- endif %}
+
+    {%- endfor %}
+
+  {%- endif %}
+
+{%- endfor %}

@@ -92,10 +92,6 @@ zoomdata:
         upload.destination.params.password: 'PleaseChangeMe'
         upload.destination.schema: 'public'
         upload.batch-size: 1000
-        screenshot.daemon.enabled: False
-        screenshot.daemon.schedule.rate: '168h'
-        screenshots.dashboards.enabled: False
-        screenshots.datasource-charts.enabled: False
       merge: True
       update: False
       discard: True
@@ -111,6 +107,8 @@ zoomdata:
 
   tls:
     name: zoomdata
+
+  post_install: {}
 
   services:
     - zoomdata-consul
