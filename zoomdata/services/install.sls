@@ -218,7 +218,7 @@ zoomdata-user-limits-conf:
     {%- else %}
       {%- set srv = service %}
     {%- endif %}
-    {%- set jvm_file = salt['file.join'](zoomdata.prefix, srv ~ '.jvm') %}
+    {%- set jvm_file = salt['file.join'](zoomdata.config_dir, srv ~ '.jvm') %}
 
 {{ service }}_jvm:
   file.managed:
