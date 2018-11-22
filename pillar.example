@@ -238,10 +238,10 @@ zoomdata:
         ## Screenshot Feature: we disable it by default.
         # Look at these pages for instructions how to set it up on your platform:
         # https://www.zoomdata.com/docs/3/Topics/Installation/screenshot-for-rpm.html
-        screenshot.daemon.enabled: False
-        screenshot.daemon.schedule.rate: '168h'  # 1 week
-        screenshots.dashboards.enabled: False
-        screenshots.datasource-charts.enabled: False
+        #screenshot.daemon.enabled: False
+        #screenshot.daemon.schedule.rate: '24h'  # 1 day
+        #screenshots.dashboards.enabled: False
+        #screenshots.datasource-charts.enabled: False
         ## Configure HTTPS for Zoomdata (see ``tls`` item below):
         # https://www.zoomdata.com/docs/3/Topics/Security/adding-ssl-certificate-to-the-zoomdata-server.html
         #server.ssl.enabled: True
@@ -312,6 +312,15 @@ zoomdata:
     #  properties:
     #    monitor.user.name: 'admin'
     #    monitor.user.password: 'admin'
+    # Zoomdata Screenshot Service.
+    # This is an example of setting default timeouts for dashboards to render.
+    #zoomdata-screenshot-service:
+    #  path: '/etc/zoomdata/screenshot-service.properties'
+    #  properties:
+    #    screenshot.webdriver.timeout: 30
+    #    export.dashboard.screenshot.timeout.seconds: 60
+    #    # Google ChromeDriver options:
+    #    driver.options: '--headless,--disable-gpu,--hide-scrollbars,--no-sandbox,--allow-insecure-localhost'
     # Zoomdata Tracing Server.
     # The example configuration below allows saving traces into locally
     # installed ElasticSearch.
@@ -334,6 +343,14 @@ zoomdata:
   #      -----BEGIN PRIVATE KEY-----
   #      MIIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   #      -----END PRIVATE KEY-----
+
+  # Run post installation commands for each defined service before actually
+  # starting it
+  post_install:
+    zoomdata-screenshot-service:
+      # Install operating system specific packages, which the Screenshot
+      # Service depends on
+      - /opt/zoomdata/docs/screenshot-service/install-dependencies.sh
 
   # Services to enable and start in order
   services:
@@ -387,7 +404,7 @@ zoomdata:
     # The X framebuffer was deprecated in Zoomdata 3.1 release. New screenshot
     # service was introduced instead.
     #- zoomdata-xvfb
-    #- zoomdata-screenshot-service
+    - zoomdata-screenshot-service
 
     # Zoomdata core
     - zoomdata-query-engine
