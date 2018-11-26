@@ -449,8 +449,12 @@ zoomdata:
   #    enforcementLevel: 'AT'
   #  # Configure server level variables (supervisor toggles)
   #  toggles:
+  #    # Toggle off ability to create custom charts
   #    custom-charts-enabled: False
+  #    # Remove tile provider choice
   #    hide-tile-provider: False
+  #    # Remove administer option
+  #    show-administer-column: False
 
   # Backup PostgreSQL databases which used by following services as
   # metadata and persistent cache storage before upgrades.
