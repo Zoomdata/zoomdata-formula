@@ -297,7 +297,7 @@ def licensing(name,
         'expirationDate': expire,
         'licenseType': license_type,
         'userCount': users,
-        'concurrentUserCount': sessions,
+        'concurrentSessionCount': sessions,
         'enforcementLevel': concurrency,
     }
 
