@@ -145,7 +145,7 @@ zoomdata:
       expirationDate: Null
       licenseType: 'TRIAL'
       userCount: '1'
-      concurrentUserCount: '1'
+      concurrentSessionCount: '1'
       enforcementLevel: 'PS'
       force: False
     toggles: {}

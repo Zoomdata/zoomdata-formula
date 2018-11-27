@@ -122,7 +122,7 @@ zoomdata-license:
     - expire: {{ zoomdata.setup.license['expirationDate']|yaml }}
     - license_type: {{ zoomdata.setup.license['licenseType'] }}
     - users: {{ zoomdata.setup.license['userCount'] }}
-    - sessions: {{ zoomdata.setup.license['concurrentUserCount'] }}
+    - sessions: {{ zoomdata.setup.license['concurrentSessionCount'] }}
     - concurrency: {{ zoomdata.setup.license['enforcementLevel'] }}
     - force: {{ zoomdata.setup.license['force'] }}
 

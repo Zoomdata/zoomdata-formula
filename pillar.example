@@ -444,8 +444,8 @@ zoomdata:
   #    URL: 'http://licensing.server/api'
   #    expirationDate: Null
   #    licenseType: 'ZD'
-  #    userCount: '1'
-  #    concurrentUserCount: '1'
+  #    userCount: '0'
+  #    concurrentSessionCount: '0'
   #    enforcementLevel: 'AT'
   #  # Configure server level variables (supervisor toggles)
   #  toggles:
