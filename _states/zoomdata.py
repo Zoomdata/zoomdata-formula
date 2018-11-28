@@ -52,11 +52,13 @@ Example:
         - urls:
           - 'https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/1.3.2/mariadb-java-client-1.3.2.jar'
 """
+# pylint: enable=line-too-long
 
 
 from datetime import datetime, timedelta
 from urlparse import urljoin
 import json
+import mimetypes
 import salt.utils.http as http
 
 
@@ -66,23 +68,21 @@ HEADERS = {
 }
 
 
-# pylint: enable=line-too-long
-
 def _file_data_encode(filename):
     """Encode file as multipart form data."""
+    mimetypes.init()
+    mimetypes.add_type('image/svg+xml', '.svg')
+    content_type = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+
     # pylint: disable=undefined-variable
     content = __salt__['cp.get_file_str'](filename)
     boundary = '----' + __salt__['random.get_str']().replace('_', '')
-    internal_content_type = 'application/octet-stream'
-    if filename.endswith('.css'):
-        internal_content_type = 'text/css'
-    if filename.endswith('.js'):
-        internal_content_type = 'text/js'
+
     lines = [
         '--{}'.format(boundary),
         'Content-Disposition: form-data; name="fileData"; filename="{}"'.format(
             __salt__['file.basename'](filename)),
-        'Content-Type: {}'.format(internal_content_type),
+        'Content-Type: {}'.format(content_type),
         '',
         content,
         '--{}--'.format(boundary),
