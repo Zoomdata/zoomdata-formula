@@ -18,12 +18,11 @@
   {%- if not zoomdata.setup.passwords[user] or
              zoomdata.setup.passwords[user] == 'random' %}
 
-    {%- set password = salt['grains.get']('zoomdata:users:' ~ user,
-                                          salt['random.get_str'](24)) %}
-
-    {%- if '_' not in password %}
-      {%- set password = password[0] + '_' + password[1:] %}
-    {%- endif %}
+    {%- set password = salt['grains.get'](
+      'zoomdata:users:' ~ user,
+      salt['random.get_str'](range(8, 15)|random()) + '_' +
+                             grains['server_id']|string()|random()
+    ) %}
 
     {%- do show.update({user: password}) %}
 
