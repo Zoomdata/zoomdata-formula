@@ -20,6 +20,20 @@ Example:
         - login_logo: salt://branding/files/Zoomdata.svg
         - json_file: salt://zoomdata/files/custom-ui-payload-sample.json
 
+Initial Passwords
+=================
+
+Example:
+
+.. code-block:: yaml
+
+    zoomdata-setup-passwords:
+      zoomdata.init_users:
+        - name: http://localhost:8080/zoomdata/
+        - users:
+            admin: Admin_Pas5
+            supervisor: Super_Pas5
+
 Licensing
 =========
 
@@ -123,8 +137,8 @@ def branding(name,
         The URI to the file containing custom CSS to apply on the Zoomdata UI
 
     login_logo
-        The URI to the file containing PNG or SVG image to use as Zoomdata
-        login screen logo
+        The URI to the file containing PNG or SVG image to use as login screen
+        logo for the Zoomdata server
 
     json_file
         The URI to the JSON file with branding settings to apply on the
@@ -142,7 +156,7 @@ def branding(name,
 
     # pylint: disable=undefined-variable
     if __opts__['test']:
-        ret['comment'] = 'The state will set custom branding for Zoomdata at {0}'.format(name)
+        ret['comment'] = 'The state will set custom branding for the Zoomdata at {0}'.format(name)
         ret['result'] = None
         return ret
 
@@ -200,6 +214,77 @@ def branding(name,
         ret['comment'] = res
     else:
         ret['comment'] = res['body']
+        ret['result'] = True
+
+    return ret
+
+
+def init_users(name,
+               users):
+    """
+    Intialize default users for the Zoomdata server.
+
+    name
+        The Zoomdata server URL to install licence into. Must contain a context
+        path ending with slash ``/``. For example:
+        ``http://localhost:8080/zoomdata/``
+
+    users
+        A dictionary with usernames as keys and passwords as value
+    """
+    ret = {
+        'name': name,
+        'changes': {},
+        'result': False,
+        'comment': '',
+        'pchanges': {},
+    }
+
+    # pylint: disable=undefined-variable
+    if __opts__['test']:
+        ret['comment'] = \
+            'The state will init default passwords for the Zoomdata at {0}'.format(name)
+        ret['result'] = None
+        return ret
+
+    init = __salt__['defaults.get']('zoomdata:zoomdata:setup:init')
+    # pylint: enable=undefined-variable
+
+    user_api = urljoin(name, 'service/user')
+    res = http.query(
+        user_api,
+        username=init['username'],
+        password=init['password']
+    )
+
+    if 'error' in res:
+        if res['status'] == 401:
+            ret['comment'] = 'The passwords already have been set.'
+            # This is a success and we have nothing to do
+            ret['result'] = True
+        else:
+            ret['comment'] = res['error']
+        return ret
+
+    init_api = urljoin(name, 'service/user/initUsers')
+    data = json.dumps([{'user': i, 'password': users[i]} for i in users])
+    res = http.query(
+        init_api,
+        method='POST',
+        header_dict=HEADERS,
+        username=init['username'],
+        password=init['password'],
+        data=data,
+        decode=True,
+        decode_type='json'
+    )
+
+    if 'error' in res:
+        ret['comment'] = 'Failed to set up initial passwords for default users.'
+        ret['changes'] = res
+    else:
+        ret['changes'] = res['dict']
+        ret['comment'] = 'Successfully set initial passwords for default users.'
         ret['result'] = True
 
     return ret
@@ -264,7 +349,7 @@ def licensing(name,
 
     # pylint: disable=undefined-variable
     if __opts__['test']:
-        ret['comment'] = 'The state will retrive license for Zoomdata at {0}'.format(name)
+        ret['comment'] = 'The state will retrive license for the Zoomdata at {0}'.format(name)
         ret['result'] = None
         return ret
 
