@@ -1,4 +1,4 @@
-{%- from 'zoomdata/map.jinja' import zoomdata -%}
+{%- from 'zoomdata/map.jinja' import zoomdata %}
 
 {%- set url = 'http://localhost:8080' ~
                zoomdata.config.zoomdata.properties['server.servlet.context-path'] |
@@ -10,33 +10,26 @@
 } %}
 
 {%- set users = {} %}
-{%- set data = [] %}
-{%- set show = {} %}
+{%- set generated_passwords = {} %}
 
 {%- for user in zoomdata.setup.passwords|default({}, true) %}
-
   {%- if not zoomdata.setup.passwords[user] or
              zoomdata.setup.passwords[user] == 'random' %}
 
-    {%- set password = salt['grains.get'](
-      'zoomdata:users:' ~ user,
-      salt['random.get_str'](range(8, 15)|random()) + '_' +
-                             grains['server_id']|string()|random()
-    ) %}
+    {%- set password = salt['grains.get']('zoomdata:users:' ~ user) %}
 
-    {%- do show.update({user: password}) %}
+    {%- if not password %}
+      {%- set password = '%s_%s'|format(salt['random.get_str'](range(8, 15)|random()),
+                                        grains['server_id']|string()|random()) %}
+      {%- do generated_passwords.update({user: password}) %}
+    {%- endif %}
 
   {%- else %}
     {%- set password = zoomdata.setup.passwords[user] %}
   {%- endif %}
 
   {%- do users.update({user: password}) %}
-
-  {%- if not salt['grains.has_value']('zoomdata:users:' ~ user) %}
-    {%- do data.append({'user': user, 'password': password}) %}
-  {%- endif %}
-
-{%- endfor %}
+{%- endfor -%}
 
 # Wait until Zoomdata server will be available
 zoomdata-wait:
@@ -47,37 +40,20 @@ zoomdata-wait:
     - status: 200
     - failhard: True
 
-{%- if data %}
-
 # Setup user passwords
 zoomdata-setup-passwords:
-  http.query:
-    - name: '{{ url }}/service/user/initUsers'
-    - status: 200
-    - method: POST
-    - header_dict: {{ headers|yaml }}
-    - username: admin
-    - password: admin
-    - data: '{{ data|json }}'
+  zoomdata.init_users:
+    - name: '{{ url }}/'
+    - users: {{ users|yaml() }}
 
-  {%- if show %}
+{%- if generated_passwords %}
 
 zoomdata-save-generated-passwords:
   grains.present:
     - name: zoomdata:users
-    - value: {{ show|yaml }}
-    - require:
-      - http: zoomdata-setup-passwords
-
-zoomdata-show-passwords:
-  test.show_notification:
-    - name: Passwords generated for users in Zoomdata
-    - text: |-
-        {{ show|yaml(false)|indent(8) }}
-    - require:
-      - http: zoomdata-setup-passwords
-
-  {%- endif %}
+    - value: {{ generated_passwords|yaml() }}
+    - onchanges:
+      - zoomdata: zoomdata-setup-passwords
 
 {%- endif %}
 
@@ -94,6 +70,10 @@ zoomdata-branding:
     - css: {{ zoomdata.setup.branding['css']|default(none, true) }}
     - login_logo: {{ zoomdata.setup.branding['login_logo']|default(none, true) }}
     - json_file: {{ zoomdata.setup.branding['file']|default(none, true) }}
+    {%- if 'supervisor' in generated_passwords %}
+    - onchanges:
+      - zoomdata: zoomdata-setup-passwords
+    {%- endif %}
 
   {%- endif %}
 
@@ -108,6 +88,10 @@ zoomdata-connector-{{ key }}:
     - username: supervisor
     - password: {{ users['supervisor'] }}
     - data: '{"enabled": {{ value|string|lower }}}'
+    {%- if 'supervisor' in generated_passwords %}
+    - onchanges:
+      - zoomdata: zoomdata-setup-passwords
+    {%- endif %}
 
   {%- endfor %}
 
@@ -125,6 +109,10 @@ zoomdata-license:
     - sessions: {{ zoomdata.setup.license['concurrentSessionCount'] }}
     - concurrency: {{ zoomdata.setup.license['enforcementLevel'] }}
     - force: {{ zoomdata.setup.license['force'] }}
+    {%- if 'supervisor' in generated_passwords %}
+    - onchanges:
+      - zoomdata: zoomdata-setup-passwords
+    {%- endif %}
 
   {%- endif %}
 
@@ -141,6 +129,10 @@ zoomdata-supervisor-toggle-{{ key }}:
     - username: supervisor
     - password: {{ users['supervisor'] }}
     - data: '{{ value|string|lower }}'
+    {%- if 'supervisor' in generated_passwords %}
+    - onchanges:
+      - zoomdata: zoomdata-setup-passwords
+    {%- endif %}
 
   {%- endfor %}
 

@@ -137,6 +137,9 @@ zoomdata:
 
   setup:
     timeout: 900
+    init:
+      username: admin
+      password: admin
     passwords: {}
     branding: {}
     connectors: {}
