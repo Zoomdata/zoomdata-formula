@@ -163,15 +163,8 @@ zoomdata:
       #- zoomdata-tracing-server
 
   tools:
-    # Exact version of Zoomdata Tools packages to install, use ``latest``
-    # keyword to always upgrade to the latest version.
-    {%- if grains['os'] == 'Ubuntu' %}
-    # Ubuntu-specific version template: EDIT NUMBERS BEFORE dash ('-') sign
-    #version: "1.0.0-1+{{ grains['oscodename'] }}.stable"
-    {%- else %}
-    # Packages version for RHEL/CentOS systems
-    #version: '1.0.0-1'
-    {%- endif %}
+    # Package version for all platforms
+    #version: '1.0.0-stable'
     packages:
       - zoomdata-zdmanage
 
