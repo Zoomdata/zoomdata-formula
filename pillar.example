@@ -71,6 +71,8 @@ zoomdata:
   # Zoomdata core packages to install
   packages:
     - zoomdata
+    # The Admin Server shares the exact same version as Zoomdata Core services.
+    #- zoomdata-admin-server
     - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
@@ -153,9 +155,6 @@ zoomdata:
       #- zoomdata-stream-writer
       - zoomdata-stream-writer-postgresql
       - zoomdata-upload-service
-      # The Admin Server based on Spring Boot Admin was added in
-      # Zoomdata 3.5 release. This is optional and disabled by default.
-      #- zoomdata-admin-server
       # The Tracing Service based on OpenZipkin is available since
       # Zoomdata 3.4 release. This is optional and disabled by default.
       # If you previously have installed ``zoomdata-tracing`` package, you have
