@@ -26,6 +26,7 @@ zoomdata:
   #version: 'latest'
   packages:
     - zoomdata
+    #- zoomdata-admin-server
     - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
