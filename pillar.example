@@ -68,14 +68,13 @@ zoomdata:
   #version: '3.7.0'
   {%- endif %}
 
-  # Zoomdata core packages to install
+  # Zoomdata Core packages to install
   packages:
     - zoomdata
-    # The Admin Server shares the exact same version as Zoomdata Core services.
-    #- zoomdata-admin-server
-    - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
+    # The Admin Server shares the exact same version as Zoomdata Core services.
+    #- zoomdata-admin-server
     # The X framebuffer was deprecated in Zoomdata 3.1 release
     #- zoomdata-xvfb
 
@@ -149,6 +148,9 @@ zoomdata:
 
     # Zoomdata microservice packages to install
     packages:
+      # The Consul service is mandatory for mutual discovery for all other
+      # Zoomdata services. It is just packaged separately from the Core.
+      - zoomdata-consul
       # New screenshot service was introduced in Zoomdata 3.1 release
       - zoomdata-screenshot-service
       # The Stream Writer service was renamed in Zoomdata 3.2 release

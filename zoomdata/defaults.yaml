@@ -26,10 +26,9 @@ zoomdata:
   #version: 'latest'
   packages:
     - zoomdata
-    #- zoomdata-admin-server
-    - zoomdata-consul
     - zoomdata-query-engine
     - zoomdata-scheduler
+    #- zoomdata-admin-server
 
   edc:
     #version: 'latest'
@@ -58,6 +57,7 @@ zoomdata:
   microservices:
     #version: 'latest'
     packages:
+      - zoomdata-consul
       - zoomdata-screenshot-service
       - zoomdata-stream-writer
       - zoomdata-upload-service
