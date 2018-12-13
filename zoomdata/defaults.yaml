@@ -137,6 +137,8 @@ zoomdata:
     - zoomdata
 
   setup:
+    # Zoomdata API v2 URI path
+    api: api
     timeout: 900
     init:
       username: admin

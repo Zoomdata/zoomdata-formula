@@ -13,7 +13,7 @@ Example:
 
     zoomdata-branding:
       zoomdata.branding:
-        - name: http://localhost:8080/zoomdata/
+        - name: http://localhost:8080/zoomdata/api/
         - username: supervisor
         - password: Secure_Pas5
         - css: http://example.com/custom.css
@@ -29,7 +29,7 @@ Example:
 
     zoomdata-setup-passwords:
       zoomdata.init_users:
-        - name: http://localhost:8080/zoomdata/
+        - name: http://localhost:8080/zoomdata/api/
         - users:
             admin: Admin_Pas5
             supervisor: Super_Pas5
@@ -43,7 +43,7 @@ Example:
 
     zoomdata-license:
       zoomdata.licensing:
-        - name: http://localhost:8080/zoomdata/
+        - name: http://localhost:8080/zoomdata/api/
         - username: supervisor
         - password: Secure_Pas5
         - url: http://licensing.server/api
@@ -112,6 +112,13 @@ def _file_data_encode(filename):
     return headers, body
 
 
+def _urljoin(prefix, document):
+    """Wrap around the function from urlparse."""
+    if not prefix.endswith('/'):
+        prefix = "{}/".format(prefix)
+    return urljoin(prefix, document)
+
+
 # pylint: disable=too-many-arguments
 def branding(name,
              username,
@@ -123,9 +130,8 @@ def branding(name,
     Upload custom content files into the Zoomdata server.
 
     name
-        The Zoomdata server URL to install licence into. Must contain a context
-        path ending with slash ``/``. For example:
-        ``http://localhost:8080/zoomdata/``
+        The Zoomdata server API URL to install licence into. For example:
+        ``http://localhost:8080/zoomdata/api/``
 
     username
         The Zoomdata server user authorized to inject files, i.e. ``supervisor``
@@ -164,7 +170,7 @@ def branding(name,
 
     if css:
         headers, data = _file_data_encode(css)
-        zoomdata_api = urljoin(name, 'api/branding/customCss')
+        zoomdata_api = _urljoin(name, 'branding/customCss')
         res = http.query(
             zoomdata_api,
             method='POST',
@@ -179,7 +185,7 @@ def branding(name,
 
     if login_logo:
         headers, data = _file_data_encode(login_logo)
-        zoomdata_api = urljoin(name, 'api/branding/loginLogo')
+        zoomdata_api = _urljoin(name, 'branding/loginLogo')
         res = http.query(
             zoomdata_api,
             method='POST',
@@ -195,7 +201,7 @@ def branding(name,
         logo_id = res['text']
 
     if json_file:
-        zoomdata_api = urljoin(name, 'api/branding')
+        zoomdata_api = _urljoin(name, 'branding')
         jf_ = __salt__['cp.get_file_str'](json_file)
         if logo_id:
             payload = json.loads(jf_)
@@ -225,9 +231,8 @@ def init_users(name,
     Intialize default users for the Zoomdata server.
 
     name
-        The Zoomdata server URL to install licence into. Must contain a context
-        path ending with slash ``/``. For example:
-        ``http://localhost:8080/zoomdata/``
+        The Zoomdata server API URL to install licence into. For example:
+        ``http://localhost:8080/zoomdata/service/``
 
     users
         A dictionary with usernames as keys and passwords as value
@@ -250,7 +255,7 @@ def init_users(name,
     init = __salt__['defaults.get']('zoomdata:zoomdata:setup:init')
     # pylint: enable=undefined-variable
 
-    user_api = urljoin(name, 'service/user')
+    user_api = _urljoin(name, 'user')
     res = http.query(
         user_api,
         username=init['username'],
@@ -266,7 +271,7 @@ def init_users(name,
             ret['comment'] = res['error']
         return ret
 
-    init_api = urljoin(name, 'service/user/initUsers')
+    init_api = _urljoin(name, 'user/initUsers')
     data = json.dumps([{'user': i, 'password': users[i]} for i in users])
     res = http.query(
         init_api,
@@ -305,9 +310,8 @@ def licensing(name,
     Retrieve and install license into the Zoomdata server.
 
     name
-        The Zoomdata server URL to install licence into. Must contain a context
-        path ending with slash ``/``. For example:
-        ``http://localhost:8080/zoomdata/``
+        The Zoomdata server URL to install licence into. For example:
+        ``http://localhost:8080/zoomdata/api/``
 
     username
         The Zoomdata server user authorized to inject files, i.e. ``supervisor``
@@ -354,7 +358,7 @@ def licensing(name,
         return ret
 
     # Retrive Zoomdata instance ID and current license type
-    zoomdata_api = urljoin(name, 'api/license')
+    zoomdata_api = _urljoin(name, 'license')
     res = http.query(
         zoomdata_api,
         username=username,
