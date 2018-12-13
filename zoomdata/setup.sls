@@ -3,6 +3,7 @@
 {%- set url = 'http://localhost:8080' ~
                zoomdata.config.zoomdata.properties['server.servlet.context-path'] |
                default('/zoomdata', true) -%}
+{%- set api = (url, zoomdata.setup['api'])|join('/') %}
 
 {%- set headers = {
   'Accept': '*/*',
@@ -34,7 +35,7 @@
 # Wait until Zoomdata server will be available
 zoomdata-wait:
   http.wait_for_successful_query:
-    - name: '{{ url }}/service/version'
+    - name: '{{ url }}/actuator/info'
     - wait_for: {{ zoomdata.setup['timeout'] }}
     - request_interval: 30
     - status: 200
@@ -43,7 +44,7 @@ zoomdata-wait:
 # Setup user passwords
 zoomdata-setup-passwords:
   zoomdata.init_users:
-    - name: '{{ url }}/'
+    - name: '{{ api }}'
     - users: {{ users|yaml() }}
 
 {%- if generated_passwords %}
@@ -64,7 +65,7 @@ zoomdata-save-generated-passwords:
 
 zoomdata-branding:
   zoomdata.branding:
-    - name: '{{ url }}/'
+    - name: '{{ api }}'
     - username: supervisor
     - password: {{ users['supervisor'] }}
     - css: {{ zoomdata.setup.branding['css']|default(none, true) }}
@@ -81,7 +82,7 @@ zoomdata-branding:
 
 zoomdata-connector-{{ key }}:
   http.query:
-    - name: '{{ url }}/service/connection/types/{{ key }}'
+    - name: '{{ api }}/connection/types/{{ key }}'
     - status: 200
     - method: PATCH
     - header_dict: {{ headers|yaml }}
@@ -99,7 +100,7 @@ zoomdata-connector-{{ key }}:
 
 zoomdata-license:
   zoomdata.licensing:
-    - name: '{{ url }}/'
+    - name: '{{ api }}'
     - username: supervisor
     - password: {{ users['supervisor'] }}
     - url: {{ zoomdata.setup.license['URL'] }}
@@ -120,7 +121,7 @@ zoomdata-license:
 
 zoomdata-supervisor-toggle-{{ key }}:
   http.query:
-    - name: '{{ url }}/api/system/variables/ui/{{ key }}'
+    - name: '{{ api }}/system/variables/ui/{{ key }}'
     - status: 204
     - method: POST
     - header_dict:
