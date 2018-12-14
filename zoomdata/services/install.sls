@@ -18,12 +18,20 @@ include:
   - zoomdata.repo
 
 {%- for package in packages %}
+  {%- set version = versions[package] %}
+  {%- if version and version != 'latest' and '-' not in version and
+         grains['saltversioninfo'] >= [2017, 7, 0, 0] and
+         grains['os_family'] == 'Debian' %}
+    {#- pkg state on Ubuntu allows wildcards instead of
+        specifying the full version #}
+    {%- set version = version ~ '-*' %}
+  {%- endif %}
 
 {{ package }}_package:
   pkg.installed:
     - name: {{ package }}
-    {%- if versions[package] %}
-    - version: {{ versions[package] }}
+    {%- if version %}
+    - version: {{ version }}
     {#- Update local package metadata only on the first state.
         This speed ups execution during upgrades. #}
     - refresh: {{ loop.index == 1 }}
@@ -58,7 +66,6 @@ include:
     {%- endif %}
 
   {%- endif %}
-
 {%- endfor %}
 
 {%- if 'zoomdata-consul' in zoomdata['packages']|default([], true) %}
