@@ -232,10 +232,10 @@ def init_users(name,
 
     name
         The Zoomdata server API URL to install licence into. For example:
-        ``http://localhost:8080/zoomdata/service/``
+        ``http://localhost:8080/zoomdata/api/``
 
     users
-        A dictionary with usernames as keys and passwords as value
+        A dictionary with usernames as keys and passwords as respecive values
     """
     ret = {
         'name': name,
