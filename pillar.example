@@ -60,13 +60,7 @@ zoomdata:
   # Exact version of Zoomdata core packages to install, use ``latest``
   # keyword to always upgrade to the latest minor version in the release.
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
-  {%- if grains['os'] == 'Ubuntu' %}
-  # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-  #version: "3.7.0-3+{{ grains['oscodename'] }}.stable"
-  {%- else %}
-  # Packages version for RHEL/CentOS systems
   #version: '3.7.0'
-  {%- endif %}
 
   # Zoomdata Core packages to install
   packages:
@@ -83,13 +77,7 @@ zoomdata:
     # Exact version of Zoomdata EDC packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
-    {%- if grains['os'] == 'Ubuntu' %}
-    # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-    #version: "3.7.0-2+{{ grains['oscodename'] }}.stable"
-    {%- else %}
-    # Packages version for RHEL/CentOS systems
     #version: '3.7.0'
-    {%- endif %}
 
     # Zoomdata EDC (datasource connector) packages to install
     packages:
@@ -137,14 +125,7 @@ zoomdata:
   microservices:
     # Exact version of Zoomdata microservice packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
-    # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
-    {%- if grains['os'] == 'Ubuntu' %}
-    # Ubuntu-specific version template: EDIT NUMBERS BEFORE curly braces!
-    #version: "3.7.0-1+{{ grains['oscodename'] }}.stable"
-    {%- else %}
-    # Packages version for RHEL/CentOS systems
     #version: '3.7.0'
-    {%- endif %}
 
     # Zoomdata microservice packages to install
     packages:
