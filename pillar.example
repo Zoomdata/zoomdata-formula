@@ -32,10 +32,6 @@ zoomdata:
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
-    # The branch "microservices" is deprecated in the Zoomdata repository
-    # starting from version 2.6.6. All packages have been moved under "stable"
-    # component of the main repository.
-    #- microservices
     - tools
 
   # Release repository components to enable and install packages from
@@ -69,10 +65,8 @@ zoomdata:
     - zoomdata-scheduler
     # The Admin Server shares the exact same version as Zoomdata Core services.
     #- zoomdata-admin-server
-    # The X framebuffer was deprecated in Zoomdata 3.1 release
-    #- zoomdata-xvfb
 
-  # Zoomdata EDC section
+  # Zoomdata EDC (Enterprise Data Connectors) section
   edc:
     # Exact version of Zoomdata EDC packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
@@ -82,18 +76,9 @@ zoomdata:
     # Zoomdata EDC (datasource connector) packages to install
     packages:
       - zoomdata-edc-apache-solr
-      # The Amazon Aurora connector was deprecated in Zoomdata 2.6.2
-      #- zoomdata-edc-aurora
       - zoomdata-edc-cloudera-search
-      # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1
-      #- zoomdata-edc-elasticsearch-1.7
-      # The ElasticSearch 2.0 connector was deprecated in Zoomdata 2.6.5
-      #- zoomdata-edc-elasticsearch-2.0
       - zoomdata-edc-elasticsearch-5.0
-      # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3
       - zoomdata-edc-elasticsearch-6.0
-      # The generic Hive connector was added in Zoomdata 3.7.0 version.
-      # COMMENT OUT FOR EARLIER RELEASES. Use the ``zoomdata-edc-tez`` package.
       - zoomdata-edc-hive
       - zoomdata-edc-impala
       - zoomdata-edc-memsql
@@ -106,8 +91,6 @@ zoomdata:
       - zoomdata-edc-redshift
       - zoomdata-edc-rts
       - zoomdata-edc-sparksql
-      # The Hive-on-Tez connector was deprecated in Zoomdata 3.7.0
-      #- zoomdata-edc-tez
 
     # Install JDBC jar drivers which are not packaged with Zoomdata connectors.
     # More here: https://www.zoomdata.com/docs/3/Topics/Installation/adding-a-jdbc-driver.html
@@ -132,20 +115,14 @@ zoomdata:
       # The Consul service is mandatory for mutual discovery for all other
       # Zoomdata services. It is just packaged separately from the Core.
       - zoomdata-consul
-      # New screenshot service was introduced in Zoomdata 3.1 release
       - zoomdata-screenshot-service
-      # The Stream Writer service was renamed in Zoomdata 3.2 release
-      #- zoomdata-stream-writer
       - zoomdata-stream-writer-postgresql
       - zoomdata-upload-service
-      # The Tracing Service based on OpenZipkin is available since
-      # Zoomdata 3.4 release. This is optional and disabled by default.
-      # If you previously have installed ``zoomdata-tracing`` package, you have
-      # to remove it manually before uncommenting the line below.
       #- zoomdata-tracing-server
 
   tools:
-    # Package version for all platforms
+    # Exact version of Zoomdata tools package to install, use ``latest``
+    # keyword to always upgrade to the latest minor version in the release.
     #version: '1.0.0-stable'
     packages:
       - zoomdata-zdmanage
@@ -198,8 +175,7 @@ zoomdata:
         spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata'
         spring.datasource.username: 'zoomdata'
         spring.datasource.password: 'PleaseChangeMe'
-        # Keyset database credentials. Required for Zoomdata versions starting
-        # from 2.6.4-1.
+        # Keyset database credentials.
         keyset.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-keyset'
         keyset.destination.params.user_name: 'zoomdata'
         keyset.destination.params.password: 'PleaseChangeMe'
@@ -210,7 +186,7 @@ zoomdata:
         upload.destination.params.password: 'PleaseChangeMe'
         upload.destination.schema: 'public'
         upload.batch-size: 1000
-        ## Screenshot Feature: we disable it by default.
+        ## Screenshot Feature is enabled by default.
         # Look at these pages for instructions how to set it up on your platform:
         # https://www.zoomdata.com/docs/3/Topics/Installation/screenshot-for-rpm.html
         #screenshot.daemon.enabled: False
@@ -223,9 +199,6 @@ zoomdata:
         #server.ssl.enabled-protocols: 'TLSv1.2'
         #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
         #server.ssl.key-store-password: 'your_keystore_password'
-        # Optional redirect to https scheme, this requires HAProxy (see below)
-        # ATTENTION: this is deprecated in Zoomdata 2.6.2!
-        #http.redirect.port: '443'
         ## Web Server Content Security Policy (CSP):
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
         http.response.header.content-security-policy.frame-ancestors: 'self'
@@ -234,7 +207,7 @@ zoomdata:
         # credentials set in Zoomdata after the first launch.
         #actuator.user.name: 'admin'
         #actuator.user.password: 'password'
-        #actuator.logging.external-file: '/opt/zoomdata/logs/zoomdata.log'
+        #actuator.logging.external-file: '/opt/zoomdata/logs/zoomdata-actuator.log'
       # Merge properties with hard-coded defaults. This is useful to skip
       # common configuration values. Set ``False`` to disable such behavior.
       merge: True
@@ -279,31 +252,31 @@ zoomdata:
       #merge: True
       #update: False
       #discard: True
+    # Zoomdata Screenshot Service.
+    # This is an example of setting default timeouts for dashboards to render.
+    #zoomdata-screenshot-service:
+      #path: '/etc/zoomdata/screenshot-service.properties'
+      #properties:
+        #screenshot.webdriver.timeout: 30
+        #export.dashboard.screenshot.timeout.seconds: 60
+        ## Google ChromeDriver options:
+        #driver.options: '--headless,--disable-gpu,--hide-scrollbars,--no-sandbox,--allow-insecure-localhost'
     # Zoomdata Admin Server.
     # Uncomment the section below to set up the user credentials for accessing
     # the web UI.
     #zoomdata-admin-server:
-    #  path: '/etc/zoomdata/admin-server.properties'
-    #  properties:
-    #    monitor.user.name: 'admin'
-    #    monitor.user.password: 'admin'
-    # Zoomdata Screenshot Service.
-    # This is an example of setting default timeouts for dashboards to render.
-    #zoomdata-screenshot-service:
-    #  path: '/etc/zoomdata/screenshot-service.properties'
-    #  properties:
-    #    screenshot.webdriver.timeout: 30
-    #    export.dashboard.screenshot.timeout.seconds: 60
-    #    # Google ChromeDriver options:
-    #    driver.options: '--headless,--disable-gpu,--hide-scrollbars,--no-sandbox,--allow-insecure-localhost'
+      #path: '/etc/zoomdata/admin-server.properties'
+      #properties:
+        #monitor.user.name: 'admin'
+        #monitor.user.password: 'admin'
     # Zoomdata Tracing Server.
     # The example configuration below allows saving traces into locally
     # installed ElasticSearch.
     #zoomdata-tracing-server:
-    #  path: '/etc/zoomdata/tracing-server.properties'
-    #  properties:
-    #    zipkin.storage.type: 'elasticsearch'
-    #    zipkin.storage.elasticsearch.hosts: 'http://localhost:9200'
+      #path: '/etc/zoomdata/tracing-server.properties'
+      #properties:
+        #zipkin.storage.type: 'elasticsearch'
+        #zipkin.storage.elasticsearch.hosts: 'http://localhost:9200'
 
   # Zoomdata TLS: paste certificates chain and private key for your domain here.
   # Pay attention to indent exactly with 4 spaces for all lines under
@@ -331,28 +304,17 @@ zoomdata:
   services:
     - zoomdata-consul  # always start it first
 
-    # The Tracing Service based on OpenZipkin is available since Zoomdata 3.4
-    # release. This is optional and disabled by default.
-    # If you previously have installed ``zoomdata-tracing`` package, you have
-    # to remove it manually before uncommenting the line below.
+    # The Tracing Service based on OpenZipkin is disabled by default.
+    # Make sure it will be started before all other Java services.
     #- zoomdata-tracing-server
 
     # EDC (Enterprise Data Connector) services. Some of them are commented out
     # due to licensed drivers not included into the distribution. Uncomment them
     # after you have installed proper driver library file (see above).
     - zoomdata-edc-apache-solr
-    # The Amazon Aurora connector was deprecated in Zoomdata 2.6.2
-    #- zoomdata-edc-aurora
     - zoomdata-edc-cloudera-search
-    # The ElasticSearch 1.7 connector was deprecated in Zoomdata 2.6.1
-    #- zoomdata-edc-elasticsearch-1.7
-    # The ElasticSearch 2.0 connector was deprecated in Zoomdata 2.6.5
-    #- zoomdata-edc-elasticsearch-2.0
     - zoomdata-edc-elasticsearch-5.0
-    # The ElasticSearch 6.0 connector was added in Zoomdata 2.6.3
     - zoomdata-edc-elasticsearch-6.0
-    # The generic Hive connector is going to be added in Zoomdata 3.7.0
-    # COMMENT OUT FOR EARLIER RELEASES. Use the ``zoomdata-edc-tez`` package.
     - zoomdata-edc-hive
     - zoomdata-edc-impala
     #- zoomdata-edc-memsql
@@ -365,28 +327,19 @@ zoomdata:
     #- zoomdata-edc-redshift
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
-    # The Hive-on-Tez connector was deprecated in Zoomdata 3.7.0
-    #- zoomdata-edc-tez
 
     # Former "microservices". These are flat file support services, i.e. used
     # to create CSV/JSON-based data sources. They require that the
     # ``zoomdata-edc-postgresql`` service must be up and running.
-    # The Stream Writer service was renamed in Zoomdata 3.2 release.
-    #- zoomdata-stream-writer
     - zoomdata-stream-writer-postgresql
     - zoomdata-upload-service
-
-    # The X framebuffer was deprecated in Zoomdata 3.1 release. New screenshot
-    # service was introduced instead.
-    #- zoomdata-xvfb
     - zoomdata-screenshot-service
 
-    # Zoomdata core
+    # Zoomdata Core
     - zoomdata-query-engine
     - zoomdata-scheduler
 
-    # The admin service based on Spring Boot Admin is available since
-    # Zoomdata 3.5 release. This is optional and disabled by default.
+    # The Admin Service is based on Spring Boot Admin and disabled by default.
     #- zoomdata-admin-server
 
     # Zoomdata Server starts last
@@ -438,7 +391,7 @@ zoomdata:
   backup:
     services:
       # Specifying the services is mandatory for backups to be made.
-      # These services are expected to have open databdase connections and
+      # These services are expected to have open database connections and
       # would be stopped prior to making a backup.
       - zoomdata
       - zoomdata-scheduler
@@ -467,7 +420,8 @@ zoomdata:
     # Compress the dump file with following tool. Default is ``gzip``.
     # Also supported compressors are: ``pigz``, ``[p]bzip2`` and ``[p]xz``.
     compressor: pxz
-    # Additional command line options to use on compress/decompress
+    # Additional command line options to use on compress/decompress.
+    # Use all CPU cores for parallel compression.
     comp_opts: --threads {{ salt['status.nproc']() }}
     # Extension or suffix to append to compressed dump file names.
     # Better to align it with compression format defined above.
@@ -538,7 +492,7 @@ postgres:
   # Append the lines under this item to your postgresql.conf file.
   # Pay attention to indent exactly with 4 spaces for all lines.
   #postgresconf: |
-  #  listen_addresses = '*'  # listen on all interfaces
+  #    listen_addresses = '*'  # listen on all interfaces
 
   # This section covers ACL management in the `pg_hba.conf` file.
   # acls list controls: which hosts are allowed to connect, how clients

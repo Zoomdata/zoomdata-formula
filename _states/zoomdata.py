@@ -235,7 +235,7 @@ def init_users(name,
         ``http://localhost:8080/zoomdata/api/``
 
     users
-        A dictionary with usernames as keys and passwords as respecive values
+        A dictionary with usernames as keys and passwords as respective values
     """
     ret = {
         'name': name,
