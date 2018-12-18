@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-'''
-Manage and inspect Zoomdata installation
+"""
+Manage and inspect the Zoomdata installation.
 
-:maintainer:    Denys Havrysh <denis.gavrysh@zoomdata.com>
-:maturity:      new
-:depends:       urlparse
+:depends:       urlparse (Python 2.7)
 :platform:      GNU/Linux
 
-'''
+"""
 
 
 import urlparse
@@ -28,10 +26,12 @@ EDC = 'zoomdata-edc'
 
 
 def _parse_ini(path, chars=(' \'"')):
-    '''
-    Parse ini-like files to a dictionary, which also could be
-    Java Spring application properties or shell environment files
-    '''
+    """
+    Parse ini-like files to a dictionary.
+
+    Those could be Java Spring application properties or shell environment
+    variable files.
+    """
     ret = {}
 
     # pylint: disable=undefined-variable
@@ -51,8 +51,8 @@ def _parse_ini(path, chars=(' \'"')):
 
 
 def environment(path=ENVIRONMENT['zoomdata']):
-    '''
-    Display Zoomdata environment variables as dictionary
+    """
+    Display Zoomdata environment variables as dictionary.
 
     Returns ``None`` if environment file cannot be read.
 
@@ -64,13 +64,13 @@ def environment(path=ENVIRONMENT['zoomdata']):
     .. code-block:: bash
 
         salt '*' zoomdata.environment
-    '''
+    """
     return _parse_ini(path)
 
 
 def environment_scheduler(path=ENVIRONMENT['zoomdata-scheduler']):
-    '''
-    Display Zoomdata Scheduler environment variables as dictionary
+    """
+    Display Zoomdata Scheduler environment variables as dictionary.
 
     Returns ``None`` if environment file cannot be read.
 
@@ -82,13 +82,13 @@ def environment_scheduler(path=ENVIRONMENT['zoomdata-scheduler']):
     .. code-block:: bash
 
         salt '*' zoomdata.environment_scheduler
-    '''
+    """
     return _parse_ini(path)
 
 
 def properties(path=PROPERTIES['zoomdata']):
-    '''
-    Display Zoomdata properties as dictionary
+    """
+    Display Zoomdata properties as dictionary.
 
     Returns ``None`` if property file cannot be read.
 
@@ -100,13 +100,13 @@ def properties(path=PROPERTIES['zoomdata']):
     .. code-block:: bash
 
         salt '*' zoomdata.properties
-    '''
+    """
     return _parse_ini(path)
 
 
 def properties_scheduler(path=PROPERTIES['zoomdata-scheduler']):
-    '''
-    Display Zoomdata Scheduler properties as dictionary
+    """
+    Display Zoomdata Scheduler properties as dictionary.
 
     Returns ``None`` if property file cannot be read.
 
@@ -118,20 +118,20 @@ def properties_scheduler(path=PROPERTIES['zoomdata-scheduler']):
     .. code-block:: bash
 
         salt '*' zoomdata.properties_scheduler
-    '''
+    """
     return _parse_ini(path)
 
 
 def list_repos():
-    '''
-    List Zoomdata repositories which are locally configured
+    """
+    List the Zoomdata repositories which are locally configured.
 
     CLI Example:
 
     .. code-block:: bash
 
         salt '*' zoomdata.list_repos
-    '''
+    """
     # pylint: disable=undefined-variable
     repos = __salt__['pkg.list_repos']()
     zd_repos = {}
@@ -143,8 +143,8 @@ def list_repos():
 
 
 def list_pkgs(include_edc=True, include_microservices=True, include_tools=True):
-    '''
-    List currently installed Zoomdata packages
+    """
+    List currently installed Zoomdata packages.
 
     include_edc : True
         Include EDC packages as well
@@ -160,7 +160,7 @@ def list_pkgs(include_edc=True, include_microservices=True, include_tools=True):
     .. code-block:: bash
 
         salt '*' zoomdata.list_pkgs include_tools=False
-    '''
+    """
     # pylint: disable=undefined-variable
     zd_pkgs = [i for i in __salt__['pkg.list_pkgs']() if i.startswith(ZOOMDATA)]
 
@@ -177,15 +177,15 @@ def list_pkgs(include_edc=True, include_microservices=True, include_tools=True):
 
 
 def list_pkgs_edc():
-    '''
-    List only currently installed Zoomdata EDC (data connector) packages
+    """
+    List only currently installed Zoomdata EDC (data connector) packages.
 
     CLI Example:
 
     .. code-block:: bash
 
         salt '*' zoomdata.list_pkgs_edc
-    '''
+    """
     # pylint: disable=undefined-variable
     edc_pkgs = [i for i in __salt__['pkg.list_pkgs']() if i.startswith(EDC)]
 
@@ -193,15 +193,15 @@ def list_pkgs_edc():
 
 
 def list_pkgs_microservices():
-    '''
-    List only currently installed Zoomdata microservice packages
+    """
+    List only currently installed Zoomdata microservice packages.
 
     CLI Example:
 
     .. code-block:: bash
 
         salt '*' zoomdata.list_pkgs_microservices
-    '''
+    """
     # pylint: disable=undefined-variable
     m_s = __salt__['defaults.get']('zoomdata:zoomdata:microservices:packages', [])
     m_s.extend(__salt__['pillar.get']('zoomdata:microservices:packages') or [])
@@ -211,15 +211,15 @@ def list_pkgs_microservices():
 
 
 def list_pkgs_tools():
-    '''
-    List only currently installed Zoomdata tool packages
+    """
+    List only currently installed Zoomdata tool packages.
 
     CLI Example:
 
     .. code-block:: bash
 
         salt '*' zoomdata.list_pkgs_tools
-    '''
+    """
     # pylint: disable=undefined-variable
     tools = [i for i in __salt__['pkg.list_pkgs']()
              if i.startswith(ZOOMDATA) and i not in __salt__['service.get_all']()]
@@ -228,8 +228,8 @@ def list_pkgs_tools():
 
 
 def version(full=True):
-    '''
-    Display Zoomdata packages version
+    """
+    Display Zoomdata packages version.
 
     full : True
         Return full version. If set False, return only short version (X.Y.Z).
@@ -239,7 +239,7 @@ def version(full=True):
     .. code-block:: bash
 
         salt '*' zoomdata.version
-    '''
+    """
     zd_version = ''
     zd_pkgs = list_pkgs(include_tools=False)
     for pkg in zd_pkgs:
@@ -253,8 +253,8 @@ def version(full=True):
 
 
 def version_edc(full=True):
-    '''
-    Display Zoomdata EDC (datasource connector) packages version
+    """
+    Display Zoomdata EDC (datasource connector) packages version.
 
     CLI Example:
 
@@ -264,7 +264,7 @@ def version_edc(full=True):
     .. code-block:: bash
 
         salt '*' zoomdata.version_edc
-    '''
+    """
     edc_version = ''
     edc_pkgs = list_pkgs_edc()
     for pkg in edc_pkgs:
@@ -278,8 +278,8 @@ def version_edc(full=True):
 
 
 def version_microservices(full=True):
-    '''
-    Display Zoomdata microservice packages version
+    """
+    Display Zoomdata microservice packages version.
 
     CLI Example:
 
@@ -289,7 +289,7 @@ def version_microservices(full=True):
     .. code-block:: bash
 
         salt '*' zoomdata.version_microservices
-    '''
+    """
     ms_version = ''
     ms_pkgs = list_pkgs_microservices()
     for pkg in ms_pkgs:
@@ -303,8 +303,8 @@ def version_microservices(full=True):
 
 
 def version_tools(full=True):
-    '''
-    Display Zoomdata tool packages version
+    """
+    Display Zoomdata tool packages version.
 
     CLI Example:
 
@@ -314,7 +314,7 @@ def version_tools(full=True):
     .. code-block:: bash
 
         salt '*' zoomdata.version_tools
-    '''
+    """
     t_version = ''
     tools = list_pkgs_tools()
     for pkg in tools:
@@ -328,8 +328,8 @@ def version_tools(full=True):
 
 
 def services(running=False):
-    '''
-    Return a list of available Zoomdata services
+    """
+    Return a list of available Zoomdata services.
 
     running : False
         Return only running services
@@ -339,7 +339,7 @@ def services(running=False):
     .. code-block:: bash
 
         salt '*' zoomdata.services true
-    '''
+    """
     # pylint: disable=undefined-variable
     zd_services = []
     for srv in __salt__['service.get_all']():
@@ -363,8 +363,8 @@ def services(running=False):
 def inspect(limits=False,
             versions=False,
             full=True):
-    '''
-    Inspect Zoomdata installation and return info as dictionary structure
+    """
+    Inspect Zoomdata installation and return info as dictionary structure.
 
     limits : False
         Detect system limits. Currently not implemented, so this parameter
@@ -382,7 +382,7 @@ def inspect(limits=False,
     .. code-block:: bash
 
         salt --out=yaml '*' zoomdata.inspect
-    '''
+    """
     baseurl = None
     gpgkey = None
     gpgcheck = False
