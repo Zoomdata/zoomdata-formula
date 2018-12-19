@@ -277,6 +277,8 @@ zoomdata:
       #properties:
         #zipkin.storage.type: 'elasticsearch'
         #zipkin.storage.elasticsearch.hosts: 'http://localhost:9200'
+        #storage.retention.removal.enabled: True
+        #storage.retention.days: 1
 
   # Zoomdata TLS: paste certificates chain and private key for your domain here.
   # Pay attention to indent exactly with 4 spaces for all lines under
