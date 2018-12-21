@@ -68,7 +68,7 @@ include:
   {%- endif %}
 {%- endfor %}
 
-{%- if 'zoomdata-consul' in zoomdata['packages']|default([], true) %}
+{%- if 'zoomdata-consul' in packages %}
 
 # The Consul data dir needs to be purged on upgrades
 
