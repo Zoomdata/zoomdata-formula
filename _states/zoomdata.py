@@ -76,12 +76,6 @@ import mimetypes
 import salt.utils.http as http
 
 
-HEADERS = {
-    'Accept': '*/*',
-    'Content-Type': 'application/vnd.zoomdata.v2+json',
-}
-
-
 def _file_data_encode(filename):
     """Encode file as multipart form data."""
     mimetypes.init()
@@ -102,6 +96,7 @@ def _file_data_encode(filename):
         '--{}--'.format(boundary),
         ''
     ]
+    # pylint: enable=undefined-variable
 
     body = '\r\n'.join(lines)
     headers = {
@@ -212,9 +207,10 @@ def branding(name,
             method='POST',
             username=username,
             password=password,
-            header_dict=HEADERS,
+            header_dict=__salt__['defaults.get']('zoomdata:zoomdata:setup:headers'),
             data=jf_
         )
+    # pylint: enable=undefined-variable
 
     if 'error' in res:
         ret['comment'] = res
@@ -253,6 +249,7 @@ def init_users(name,
         return ret
 
     init = __salt__['defaults.get']('zoomdata:zoomdata:setup:init')
+    headers = __salt__['defaults.get']('zoomdata:zoomdata:setup:headers')
     # pylint: enable=undefined-variable
 
     user_api = _urljoin(name, 'user')
@@ -276,7 +273,7 @@ def init_users(name,
     res = http.query(
         init_api,
         method='POST',
-        header_dict=HEADERS,
+        header_dict=headers,
         username=init['username'],
         password=init['password'],
         data=data,
@@ -357,12 +354,16 @@ def licensing(name,
         ret['result'] = None
         return ret
 
+    headers = __salt__['defaults.get']('zoomdata:zoomdata:setup:headers')
+    # pylint: enable=undefined-variable
+
     # Retrive Zoomdata instance ID and current license type
     zoomdata_api = _urljoin(name, 'license')
     res = http.query(
         zoomdata_api,
         username=username,
         password=password,
+        header_dict=headers,
         decode=True,
         decode_type='json'
     )
@@ -381,19 +382,17 @@ def licensing(name,
     if not expire:
         expire = (datetime.now() + timedelta(days=365)).strftime('%Y-%m-%d')
 
-    data = {
-        'instanceId': instance['instanceId'],
-        'expirationDate': expire,
-        'licenseType': license_type,
-        'userCount': users,
-        'concurrentSessionCount': sessions,
-        'enforcementLevel': concurrency,
-    }
-
     res = http.query(
         url,
         method='POST',
-        data=data,
+        data={
+            'instanceId': instance['instanceId'],
+            'expirationDate': expire,
+            'licenseType': license_type,
+            'userCount': users,
+            'concurrentSessionCount': sessions,
+            'enforcementLevel': concurrency,
+        },
         text=True
     )
 
@@ -402,14 +401,13 @@ def licensing(name,
         return ret
 
     # Install license key
-    data = json.dumps({'licenseKey': res['body']})
     res = http.query(
         zoomdata_api,
         method='POST',
         username=username,
         password=password,
-        header_dict=HEADERS,
-        data=data,
+        header_dict=headers,
+        data=json.dumps({'licenseKey': res['body']}),
         decode=True,
         decode_type='json'
     )
@@ -508,6 +506,7 @@ def libraries(name,
         if not res['result']:
             return res
         comments.append(res['comment'])
+    # pylint: enable=undefined-variable
 
     if res:
         ret = res

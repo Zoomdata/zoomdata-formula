@@ -137,8 +137,12 @@ zoomdata:
     - zoomdata
 
   setup:
-    # Zoomdata API v2 URI path
+    # Zoomdata API V2 URI path without context path
     api: api
+    # Zoomdata API V2 default headers
+    headers:
+      Accept: '*/*'
+      Content-Type: 'application/vnd.zoomdata.v2+json'
     timeout: 900
     init:
       username: admin

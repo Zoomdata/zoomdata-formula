@@ -85,7 +85,7 @@ zoomdata-connector-{{ key }}:
     - name: '{{ api }}/connection/types/{{ key }}'
     - status: 200
     - method: PATCH
-    - header_dict: {{ headers|yaml }}
+    - header_dict: {{ zoomdata.setup['headers']|yaml }}
     - username: supervisor
     - password: {{ users['supervisor'] }}
     - data: '{"enabled": {{ value|string|lower }}}'
