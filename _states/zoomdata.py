@@ -70,10 +70,16 @@ Example:
 
 
 from datetime import datetime, timedelta
-from urlparse import urljoin
 import json
 import mimetypes
-import salt.utils.http as http
+
+try:
+    from urlparse import urljoin
+except ImportError:
+    # Py3
+    from urllib.parse import urljoin
+
+from salt.utils import http  # pylint: disable=import-error
 
 
 def _file_data_encode(filename):
