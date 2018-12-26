@@ -2,13 +2,18 @@
 """
 Manage and inspect the Zoomdata installation.
 
-:depends:       urlparse (Python 2.7)
+:depends:       urlparse@Py2/urllib.parse@Py3
 :platform:      GNU/Linux
 
 """
 
 
-import urlparse
+try:
+    import urlparse
+except ImportError:
+    # Py3
+    import urllib.parse
+    urlparse = urllib.parse
 
 
 ENVIRONMENT = {
@@ -392,17 +397,18 @@ def inspect(limits=False,
     env = {}
     config = {}
 
-    for params in list_repos().itervalues():
-        url = urlparse.urlparse(params['baseurl'].strip())
+    repo_list = list_repos()
+    for i in repo_list:
+        url = urlparse.urlparse(repo_list[i]['baseurl'].strip())
         if baseurl is None:
             baseurl = urlparse.urlunparse((url.scheme, url.netloc, '', '', '', ''))
         try:
-            if int(params.get('gpgcheck', '0')):
+            if int(repo_list[i].get('gpgcheck', '0')):
                 gpgcheck = True
         except ValueError:
             pass
-        if gpgkey is None and 'gpgkey' in params:
-            gpgkey = params['gpgkey'].strip()
+        if gpgkey is None and 'gpgkey' in repo_list[i]:
+            gpgkey = repo_list[i]['gpgkey'].strip()
 
         repo_root = url.path.split('/')[1]
         try:
@@ -417,22 +423,22 @@ def inspect(limits=False,
         if component not in components:
             components.append(component)
 
-    for service, env_file in ENVIRONMENT.iteritems():
-        parsed_env = environment(env_file)
+    for service in ENVIRONMENT:
+        parsed_env = environment(ENVIRONMENT[service])
         if parsed_env is None:
             env[service] = None
         else:
             # file with environment is present
             env[service] = {
-                'path': env_file,
+                'path': ENVIRONMENT[service],
                 'variables': parsed_env,
             }
 
-    for service, config_file in PROPERTIES.iteritems():
+    for service in PROPERTIES:
         config[service] = {}
         configuration = {}
 
-        new_config = properties(config_file)
+        new_config = properties(PROPERTIES[service])
         if new_config:
             configuration.update(new_config)
         elif not configuration:
@@ -442,7 +448,7 @@ def inspect(limits=False,
         config[service].update({
             # Disable merging with defaults is mandatory here
             'merge': False,
-            'path': config_file,
+            'path': PROPERTIES[service],
             'properties': configuration,
         })
 
