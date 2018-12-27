@@ -18,6 +18,7 @@ include:
   - zoomdata.repo
 
 {%- for package in packages %}
+
   {%- set version = versions[package] %}
   {%- if version and version != 'latest' and '-' not in version and
          grains['saltversioninfo'] >= [2017, 7, 0, 0] and
@@ -51,21 +52,6 @@ include:
       - service: {{ package }}_start_enable
     {%- endif %}
 
-  {%- if jdbc['install']|default(false) %}
-
-{{ package }}_libs:
-  zoomdata.libraries:
-    - name: {{ package }}
-    {#- Check if EDC JDBC driver URLs have been configured #}
-    - urls: {{ jdbc.drivers[package|replace('zoomdata-edc-', '', 1)]|default([], true) }}
-    - require:
-      - pkg: {{ package }}_package
-    {%- if package in zoomdata['services'] %}
-    - watch_in:
-      - service: {{ package }}_start_enable
-    {%- endif %}
-
-  {%- endif %}
 {%- endfor %}
 
 {%- if 'zoomdata-consul' in packages %}
@@ -79,6 +65,26 @@ zoomdata-consul_data_dir:
     - clean: True
     - onchanges:
       - pkg: zoomdata-consul_package
+
+{%- endif %}
+
+{%- if jdbc['install']|default(false) %}
+
+  {%- for package in zoomdata.edc['packages']|default([], true) %}
+
+{{ package }}_libs:
+  zoomdata.libraries:
+    - name: {{ package }}
+    {#- Check if EDC JDBC driver URLs have been configured #}
+    - urls: {{ jdbc.drivers[package|replace('zoomdata-edc-', '', 1)]|default([], true) }}
+    - require:
+      - pkg: {{ package }}_package
+    {%- if package in zoomdata['services'] %}
+    - watch_in:
+      - service: {{ package }}_start_enable
+    {%- endif %}
+
+  {%- endfor %}
 
 {%- endif %}
 
