@@ -270,12 +270,9 @@ zoomdata-user-limits-conf:
   cmd.run:
     - name: {{ command }}
     - timeout: 300
-    - onchanges:
-      - pkg: {{ service }}
-    {%- if service in zoomdata['services'] %}
-    - watch_in:
-      - service: {{ service }}_start_enable
-    {%- endif %}
+    - require:
+      - pkg: {{ service }}_package
+    - onlyif: {{ zoomdata['bootstrap']|lower() }}
 
     {%- endfor %}
 
