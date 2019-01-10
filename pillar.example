@@ -320,23 +320,23 @@ zoomdata:
     # Make sure it will be started before all other Java services.
     #- zoomdata-tracing-server
 
-    # EDC (Enterprise Data Connector) services. Some of them are commented out
-    # due to licensed drivers not included into the distribution. Uncomment them
-    # after you have installed proper driver library file (see above).
+    # EDC (Enterprise Data Connector) services. Some of them require licensed
+    # drivers which are not included into the distribution. You may need to
+    # install proper JDBC driver library file (see above).
     - zoomdata-edc-apache-solr
     - zoomdata-edc-cloudera-search
     - zoomdata-edc-elasticsearch-5.0
     - zoomdata-edc-elasticsearch-6.0
     - zoomdata-edc-hive
     - zoomdata-edc-impala
-    #- zoomdata-edc-memsql
+    - zoomdata-edc-memsql
     - zoomdata-edc-mongo
-    #- zoomdata-edc-mssql
-    #- zoomdata-edc-mysql
-    #- zoomdata-edc-oracle
+    - zoomdata-edc-mssql
+    - zoomdata-edc-mysql
+    - zoomdata-edc-oracle
     - zoomdata-edc-phoenix-4.7-queryserver
     - zoomdata-edc-postgresql
-    #- zoomdata-edc-redshift
+    - zoomdata-edc-redshift
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
 
