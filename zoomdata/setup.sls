@@ -37,15 +37,19 @@ zoomdata-wait:
   http.wait_for_successful_query:
     - name: '{{ url }}/actuator/info'
     - wait_for: {{ zoomdata.setup['timeout'] }}
-    - request_interval: 30
     - status: 200
     - failhard: True
+    # Works only for Salt >= 2017.7
+    - request_interval: 30
 
-# Setup user passwords
+{%- if users %}
+
 zoomdata-setup-passwords:
   zoomdata.init_users:
     - name: '{{ api }}'
     - users: {{ users|yaml() }}
+
+{%- endif %}
 
 {%- if generated_passwords %}
 
