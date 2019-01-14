@@ -1,6 +1,22 @@
 zoomdata-formula
 ================
 
+4.0.0 (2019-01-14) **The Zoomdata 4.0 starts new Rapid Release cycle**
+
+- Fixed branding setup
+- Fixed creation of ``*.jvm`` files
+- Allowed to configure post-installation commands
+  (with an example for Screenshot Service)
+- Fixed web user passwords initialization states
+- Fixed obtaining Zoomdata Concurrent Session Count license V3
+- Cleaned up and updated the Pillar example
+- The Zoomdata Admin Server became "Core" service
+- The Consul service is now a part of "microservices" packages group
+- Fixed the Consul upgrade bug
+- Fixed the states to use only Zoomdata API version 2
+- Fixed documentation for custom modules and make them Python 3 compatible
+- Fixed installation of the Zoomdata EDC JDBC drivers
+
 3.7.0 (2018-11-20) **The Zoomdata 3.7 has become Long Term Supported release**
 
 - Updated defaults to match the Zoomdata 3.7.0 recommended installation options
