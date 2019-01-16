@@ -21,8 +21,8 @@ zoomdata-formula
 
 - Updated defaults to match the Zoomdata 3.7.0 recommended installation options
 - Fixed ``zoomdata-consul`` service upgrade
-- The ``zoomdata-edc-tez`` services has been deprecated and replaced with
-  ```zoomdata-edc-hive`` (generic Hive datasource connector)
+- The ``zoomdata-edc-tez`` service has been deprecated and replaced with
+  ``zoomdata-edc-hive`` (generic Hive datasource connector)
 - Fixed the example of ``zoomdata-admin-server`` service properties
 - Added the example of ElasticSearch backend configuration for
   ``zoomdata-tracing-server`` service
