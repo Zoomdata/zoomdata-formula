@@ -65,6 +65,8 @@ zoomdata:
     - zoomdata-scheduler
     # The Admin Server shares the exact same version as Zoomdata Core services.
     #- zoomdata-admin-server
+    # The Configuration Server was added in Zoomdata release 4.0.0
+    #- zoomdata-config-server
 
   # Zoomdata EDC (Enterprise Data Connectors) section
   edc:
@@ -316,8 +318,13 @@ zoomdata:
   services:
     - zoomdata-consul  # always start it first
 
+    # The Configuration Server was added in Zoomdata release 4.0.0.
+    # It is disabled by default. If enabled, it must be started before
+    # all other Java (micro)services.
+    #- zoomdata-config-server
+
     # The Tracing Service based on OpenZipkin is disabled by default.
-    # Make sure it will be started before all other Java services.
+    # This is the second Java service required to be started among the others.
     #- zoomdata-tracing-server
 
     # EDC (Enterprise Data Connector) services. Some of them require licensed
