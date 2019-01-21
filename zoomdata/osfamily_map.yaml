@@ -8,8 +8,17 @@
 default: {{ zoomdata|yaml }}
 
 Debian:
+  {% if grains['os'] == 'Ubuntu' %}
   os: {{ grains['oscodename'] }}
-  os_type: {{ grains['os']|lower }}
+  {% elif 'systemd' in salt['grains.ls']() %}
+  # Configure Unbuntu 16.04 LTS repo on other Debian derivatives
+  os: xenial
+  {%- else %}
+  # Use Ubuntu 14.04 LTS repo if systemd is not available
+  os: trusty
+  {%- endif %}
+  # The repo contains only Ubuntu directory
+  os_type: ubuntu
   repo_type: 'apt'
   repo_name: 'zoomdata-%(repo)s-repo'
   repo_file: '/etc/apt/sources.list.d/zoomdata-%(repo)s.list'
