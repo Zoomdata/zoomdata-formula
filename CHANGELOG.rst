@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+4.1.0 (2019-02-11)
+
+- Added the Zoomdata Configuration Server to the Pillar example
+- Added support for installation on Debian distributions via Ubuntu repository
+
 4.0.0 (2019-01-14) **The Zoomdata 4.0 starts new Rapid Release cycle**
 
 - Fixed branding setup
