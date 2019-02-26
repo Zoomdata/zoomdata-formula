@@ -127,9 +127,13 @@ def properties_scheduler(path=PROPERTIES['zoomdata-scheduler']):
     return _parse_ini(path)
 
 
-def list_repos():
+def list_repos(compact=False):
     """
     List the Zoomdata repositories which are locally configured.
+
+    compact : False
+        Set ``True`` to get compact dictionary containing the Zoomdata
+        repositories configuration
 
     CLI Example:
 
@@ -137,14 +141,53 @@ def list_repos():
 
         salt '*' zoomdata.list_repos
     """
-    # pylint: disable=undefined-variable
-    repos = __salt__['pkg.list_repos']()
-    zd_repos = {}
-    for repo in repos.keys():
-        if repo.startswith(ZOOMDATA):
-            zd_repos.update({repo: repos[repo]})
+    repo_config = {
+        'baseurl': None,
+        'gpgkey': None,
+        'release': None,
+        'repositories': [],
+        'components': [],
+    }
 
-    return zd_repos
+    repos = {k: v for (k, v) in
+             __salt__['pkg.list_repos']().items()  # pylint: disable=undefined-variable
+             if k.startswith(ZOOMDATA)}
+
+    if not compact:
+        return repos
+
+    for repo in repos:
+        # Skip repository discovery if disabled
+        if not int(repos[repo].get('enabled', 0)):
+            continue
+
+        url = urlparse.urlparse(repos[repo]['baseurl'].strip())
+        if not repo_config['baseurl']:
+            repo_config['baseurl'] = urlparse.urlunparse(
+                (url.scheme, url.netloc, '', '', '', ''))
+
+        try:
+            if not repo_config['gpgkey'] and 'gpgkey' in repos[repo] and \
+               int(repos[repo].get('gpgcheck', '0')):
+                repo_config['gpgkey'] = repos[repo]['gpgkey'].strip()
+        except ValueError:
+            pass
+
+        repo_root = url.path.split('/')[1]
+        try:
+            if not repo_config['release'] or float(repo_root) > float(repo_config['release']):
+                repo_config['release'] = repo_root
+        except ValueError:
+            if repo_root == 'latest':
+                repo_config['release'] = repo_root
+            else:
+                repo_config['repositories'].append(repo_root)
+
+        component = url.path.rstrip('/').rsplit('/')[-1]
+        if component not in repo_config['components']:
+            repo_config['components'].append(component)
+
+    return repo_config
 
 
 def list_pkgs(include_edc=True, include_microservices=True, include_tools=True):
@@ -364,12 +407,11 @@ def services(running=False):
     return zd_services
 
 
-# pylint: disable=too-many-locals,too-many-branches,too-many-statements
 def inspect(limits=False,
             versions=False,
             full=True):
     """
-    Inspect Zoomdata installation and return info as dictionary structure.
+    Inspect Zoomdata installation and return info as dictionary.
 
     limits : False
         Detect system limits. Currently not implemented, so this parameter
@@ -388,40 +430,11 @@ def inspect(limits=False,
 
         salt --out=yaml '*' zoomdata.inspect
     """
-    baseurl = None
-    gpgkey = None
-    gpgcheck = False
-    release = None
-    repositories = []
-    components = []
+    ret = {}
     env = {}
     config = {}
 
-    repo_list = list_repos()
-    for i in repo_list:
-        url = urlparse.urlparse(repo_list[i]['baseurl'].strip())
-        if baseurl is None:
-            baseurl = urlparse.urlunparse((url.scheme, url.netloc, '', '', '', ''))
-        try:
-            if int(repo_list[i].get('gpgcheck', '0')):
-                gpgcheck = True
-        except ValueError:
-            pass
-        if gpgkey is None and 'gpgkey' in repo_list[i]:
-            gpgkey = repo_list[i]['gpgkey'].strip()
-
-        repo_root = url.path.split('/')[1]
-        try:
-            release = float(repo_root) if not release or float(repo_root) > release else release
-        except ValueError:
-            if repo_root == 'latest':
-                release = repo_root
-            else:
-                repositories.append(repo_root)
-
-        component = url.path.rstrip('/').rsplit('/')[-1]
-        if component not in components:
-            components.append(component)
+    ret[ZOOMDATA] = list_repos(compact=True)
 
     for service in ENVIRONMENT:
         parsed_env = environment(ENVIRONMENT[service])
@@ -452,12 +465,8 @@ def inspect(limits=False,
             'properties': configuration,
         })
 
-    ret = {
-        ZOOMDATA: {
-            'base_url': baseurl,
-            'release': str(release),
-            'repositories': repositories,
-            'components': components,
+    ret[ZOOMDATA].update(
+        {
             'packages': list_pkgs(include_edc=False,
                                   include_microservices=False,
                                   include_tools=False),
@@ -473,14 +482,8 @@ def inspect(limits=False,
             'environment': env,
             'config': config,
             'services': services(True),
-        },
-    }
-
-    if not gpgcheck:
-        ret[ZOOMDATA]['gpgkey'] = None
-    elif gpgkey:
-        # Return the key only when it is really used
-        ret[ZOOMDATA]['gpgkey'] = gpgkey
+        }
+    )
 
     if limits:
         # TO DO: implement reading limits.
