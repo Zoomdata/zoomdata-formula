@@ -497,12 +497,12 @@ def inspect(limits=False,
             'version': version(full=full),
         })
         ret[ZOOMDATA]['edc'].update({
-            # Some EDC packages has different iteration (build number),
-            # so we strip it off
-            'version': version_edc(full=False),
+            'version': version_edc(full=full),
         })
         ret[ZOOMDATA]['microservices'].update({
-            'version': version_microservices(full=full),
+            # The auxiliary services usually do not share package iteration
+            # (build) number, so we strip it off
+            'version': version_microservices(full=False),
         })
         ret[ZOOMDATA]['tools'].update({
             'version': version_tools(full=full),
