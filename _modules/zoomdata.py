@@ -161,7 +161,7 @@ def list_repos(compact=False):
         if not int(repos[repo].get('enabled', 0)):
             continue
 
-        url = urlparse.urlparse(repos[repo]['base_url'].strip())
+        url = urlparse.urlparse(repos[repo]['baseurl'].strip())
         if not repo_config['base_url']:
             repo_config['base_url'] = urlparse.urlunparse(
                 (url.scheme, url.netloc, '', '', '', ''))
