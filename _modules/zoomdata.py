@@ -142,7 +142,7 @@ def list_repos(compact=False):
         salt '*' zoomdata.list_repos
     """
     repo_config = {
-        'baseurl': None,
+        'base_url': None,
         'gpgkey': None,
         'release': None,
         'repositories': [],
@@ -161,9 +161,9 @@ def list_repos(compact=False):
         if not int(repos[repo].get('enabled', 0)):
             continue
 
-        url = urlparse.urlparse(repos[repo]['baseurl'].strip())
-        if not repo_config['baseurl']:
-            repo_config['baseurl'] = urlparse.urlunparse(
+        url = urlparse.urlparse(repos[repo]['base_url'].strip())
+        if not repo_config['base_url']:
+            repo_config['base_url'] = urlparse.urlunparse(
                 (url.scheme, url.netloc, '', '', '', ''))
 
         try:
