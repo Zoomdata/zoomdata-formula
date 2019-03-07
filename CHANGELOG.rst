@@ -1,6 +1,14 @@
 zoomdata-formula
 ================
 
+4.2.0 (2019-03-07)
+
+- Fixed ``zoomdata.backup`` state to save correct Pillar settings for later
+  restoration
+- Fixed ``zoomdata.inspect`` function to correctly parse Zoomdata repositories
+  configuration
+- Fixed detection of common version number for microservice packages
+
 4.1.0 (2019-02-11)
 
 - Added the Zoomdata Configuration Server to the Pillar example
