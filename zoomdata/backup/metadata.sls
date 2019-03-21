@@ -11,10 +11,9 @@ zoomdata_backup_compressor:
       - file: zoomdata_backup_dir
 
   {%- for service in zoomdata.backup['services'] %}
-    {%- set config = {} %}
     {#- Read service config to retrieve DB connection details later #}
-    {%- set config = zoomdata.config.get(service, {}).properties|
-                     default(config, true) %}
+    {%- set config = zoomdata.local.config.get(service, {}).properties|
+                     default({}, true) %}
 
 {#-
 Detect if the service configured for backup would be upgraded
