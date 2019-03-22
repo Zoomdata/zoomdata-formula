@@ -62,7 +62,8 @@ zoomdata:
   packages:
     - zoomdata
     - zoomdata-query-engine
-    - zoomdata-scheduler
+    # The Scheduler will be removed in Zoomdata release 4.3.0
+    #- zoomdata-scheduler
     # The Admin Server shares the exact same version as Zoomdata Core services.
     #- zoomdata-admin-server
     # The Configuration Server was added in Zoomdata release 4.0.0
@@ -167,13 +168,6 @@ zoomdata:
     #  variables:
     #    DISCOVERY_REGISTRY_HOST: 'localhost'
     #    SPARK_MASTER: spark://localhost:7077
-    # Zoomdata Scheduler
-    #zoomdata-scheduler:
-    #  path: '/etc/zoomdata/scheduler.env'
-    #  variables:
-    #    DISCOVERY_REGISTRY_HOST: 'localhost'
-    #    LOGGING_UNIFIED_HOST: 'localhost'
-    #    LOGGING_UNIFIED_LEVEL: 'INFO'
 
   # Configuration property files and their corresponding variables:
   # https://www.zoomdata.com/docs/3/Topics/Config/config_props_vars.html
@@ -252,18 +246,8 @@ zoomdata:
         #- Dfile.encoding=UTF-8
         #- Duser.timezone=GMT
         #- Dquery.engine.application.mode=default
-    # Zoomdata Scheduler
-    zoomdata-scheduler:
-      path: '/etc/zoomdata/scheduler.properties'
-      properties:
-        # Metadata DB connection details.
-        # (REMEMBER TO CHANGE VALUES BELOW IN ``postgres`` SECTION ACCORDINGLY!)
-        spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
-        spring.datasource.username: 'zoomdata'
-        spring.datasource.password: 'PleaseChangeMe'
-      #merge: True
-      #update: False
-      #discard: True
+    # Zoomdata Scheduler will be removed in release 4.3.0
+    zoomdata-scheduler: null
     # Zoomdata Screenshot Service.
     # This is an example of setting default timeouts for dashboards to render.
     #zoomdata-screenshot-service:
@@ -356,13 +340,12 @@ zoomdata:
 
     # Zoomdata Core
     - zoomdata-query-engine
-    - zoomdata-scheduler
+    # The Scheduler will be removed in Zoomdata release 4.3.0
+    #- zoomdata-scheduler
+    - zoomdata
 
     # The Admin Service is based on Spring Boot Admin and disabled by default.
     #- zoomdata-admin-server
-
-    # Zoomdata Server starts last
-    - zoomdata
 
   # Perform additional post-installation setup
   #setup:
@@ -413,7 +396,6 @@ zoomdata:
       # These services are expected to have open database connections and
       # would be stopped prior to making a backup.
       - zoomdata
-      - zoomdata-scheduler
     # Use to define which databases need to be backed up from the services
     # above. It requires you to have those services defined.
     # Defaults to all.
@@ -421,7 +403,6 @@ zoomdata:
     #databases:
       #- zoomdata
       #- zoomdata-keyset
-      #- zoomdata-scheduler
       #- zoomdata-upload
     # Dump installation metadata in YAML (SLS) file that could be used as
     # a source for Salt Pillar configuration, just like this file.
@@ -498,8 +479,6 @@ postgres:
     zoomdata:
       owner: 'zoomdata'
     zoomdata-keyset:
-      owner: 'zoomdata'
-    zoomdata-scheduler:
       owner: 'zoomdata'
     zoomdata-upload:
       owner: 'zoomdata'

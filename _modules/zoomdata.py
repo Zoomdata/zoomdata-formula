@@ -18,12 +18,12 @@ except ImportError:
 
 ENVIRONMENT = {
     'zoomdata': '/etc/zoomdata/zoomdata.env',
-    'zoomdata-scheduler': '/etc/zoomdata/scheduler.env',
+    'zoomdata-query-engine': '/etc/zoomdata/query-engine.env',
 }
 
 PROPERTIES = {
     'zoomdata': '/etc/zoomdata/zoomdata.properties',
-    'zoomdata-scheduler': '/etc/zoomdata/scheduler.properties',
+    'zoomdata-query-engine': '/etc/zoomdata/query-engine.properties',
 }
 
 ZOOMDATA = 'zoomdata'
@@ -73,24 +73,6 @@ def environment(path=ENVIRONMENT['zoomdata']):
     return _parse_ini(path)
 
 
-def environment_scheduler(path=ENVIRONMENT['zoomdata-scheduler']):
-    """
-    Display Zoomdata Scheduler environment variables as dictionary.
-
-    Returns ``None`` if environment file cannot be read.
-
-    path
-        Full path to the environment file
-
-    CLI Example:
-
-    .. code-block:: bash
-
-        salt '*' zoomdata.environment_scheduler
-    """
-    return _parse_ini(path)
-
-
 def properties(path=PROPERTIES['zoomdata']):
     """
     Display Zoomdata properties as dictionary.
@@ -105,24 +87,6 @@ def properties(path=PROPERTIES['zoomdata']):
     .. code-block:: bash
 
         salt '*' zoomdata.properties
-    """
-    return _parse_ini(path)
-
-
-def properties_scheduler(path=PROPERTIES['zoomdata-scheduler']):
-    """
-    Display Zoomdata Scheduler properties as dictionary.
-
-    Returns ``None`` if property file cannot be read.
-
-    path
-        Full path to the property file
-
-    CLI Example:
-
-    .. code-block:: bash
-
-        salt '*' zoomdata.properties_scheduler
     """
     return _parse_ini(path)
 
