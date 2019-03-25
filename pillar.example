@@ -130,7 +130,8 @@ zoomdata:
       - zoomdata-consul
       - zoomdata-screenshot-service
       - zoomdata-stream-writer-postgresql
-      - zoomdata-upload-service
+      # The Upload Service will be removed in Zoomdata release 4.3.0
+      #- zoomdata-upload-service
       #- zoomdata-tracing-server
 
   tools:
@@ -186,7 +187,7 @@ zoomdata:
         keyset.destination.params.user_name: 'zoomdata'
         keyset.destination.params.password: 'PleaseChangeMe'
         keyset.destination.schema: 'public'
-        # Stream Writer credentials for saving Upload Service data
+        # Stream Writer credentials for saving flat file sources data
         upload.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-upload'
         upload.destination.params.user_name: 'zoomdata'
         upload.destination.params.password: 'PleaseChangeMe'
@@ -335,7 +336,8 @@ zoomdata:
     # to create CSV/JSON-based data sources. They require that the
     # ``zoomdata-edc-postgresql`` service must be up and running.
     - zoomdata-stream-writer-postgresql
-    - zoomdata-upload-service
+    # The Upload Service will be removed in Zoomdata release 4.3.0
+    #- zoomdata-upload-service
     - zoomdata-screenshot-service
 
     # Zoomdata Core
