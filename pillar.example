@@ -128,11 +128,13 @@ zoomdata:
       # The Consul service is mandatory for mutual discovery for all other
       # Zoomdata services. It is just packaged separately from the Core.
       - zoomdata-consul
+      # The Stream Writer service will be renamed to Data Writer in Zoomdata
+      # release 4.3.0
+      - zoomdata-data-writer-postgresql
       - zoomdata-screenshot-service
-      - zoomdata-stream-writer-postgresql
+      #- zoomdata-tracing-server
       # The Upload Service will be removed in Zoomdata release 4.3.0
       #- zoomdata-upload-service
-      #- zoomdata-tracing-server
 
   tools:
     # Exact version of Zoomdata tools package to install, use ``latest``
@@ -187,7 +189,7 @@ zoomdata:
         keyset.destination.params.user_name: 'zoomdata'
         keyset.destination.params.password: 'PleaseChangeMe'
         keyset.destination.schema: 'public'
-        # Stream Writer credentials for saving flat file sources data
+        # Data Writer credentials for saving flat file sources data
         upload.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-upload'
         upload.destination.params.user_name: 'zoomdata'
         upload.destination.params.password: 'PleaseChangeMe'
@@ -332,10 +334,9 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
 
-    # Former "microservices". These are flat file support services, i.e. used
-    # to create CSV/JSON-based data sources. They require that the
-    # ``zoomdata-edc-postgresql`` service must be up and running.
-    - zoomdata-stream-writer-postgresql
+    # The Stream Writer service will be renamed to Data Writer in Zoomdata
+    # release 4.3.0
+    - zoomdata-data-writer-postgresql
     # The Upload Service will be removed in Zoomdata release 4.3.0
     #- zoomdata-upload-service
     - zoomdata-screenshot-service
