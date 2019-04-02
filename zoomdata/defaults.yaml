@@ -59,7 +59,7 @@ zoomdata:
     packages:
       - zoomdata-consul
       - zoomdata-screenshot-service
-      - zoomdata-stream-writer
+      - zoomdata-stream-writer-postgresql
       - zoomdata-upload-service
 
   tools:
