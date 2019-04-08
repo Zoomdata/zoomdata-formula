@@ -28,7 +28,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
-  release: 4.2
+  release: 4.3
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
@@ -56,13 +56,13 @@ zoomdata:
   # Exact version of Zoomdata core packages to install, use ``latest``
   # keyword to always upgrade to the latest minor version in the release.
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
-  #version: '4.2.0'
+  #version: '4.3.0'
 
   # Zoomdata Core packages to install
   packages:
     - zoomdata
     - zoomdata-query-engine
-    # The Scheduler will be removed in Zoomdata release 4.3.0
+    # The Scheduler was removed in Zoomdata release 4.3.0
     #- zoomdata-scheduler
     # The Admin Server shares the exact same version as Zoomdata Core services.
     #- zoomdata-admin-server
@@ -74,7 +74,7 @@ zoomdata:
     # Exact version of Zoomdata EDC packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
-    #version: '4.2.0'
+    #version: '4.3.0'
 
     # Zoomdata EDC (datasource connector) packages to install
     packages:
@@ -121,19 +121,19 @@ zoomdata:
   microservices:
     # Exact version of Zoomdata microservice packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
-    #version: '4.2.0'
+    #version: '4.3.0'
 
     # Zoomdata microservice packages to install
     packages:
       # The Consul service is mandatory for mutual discovery for all other
       # Zoomdata services. It is just packaged separately from the Core.
       - zoomdata-consul
-      # The Stream Writer service will be renamed to Data Writer in Zoomdata
+      # The Stream Writer service was renamed to Data Writer in Zoomdata
       # release 4.3.0
       - zoomdata-data-writer-postgresql
       - zoomdata-screenshot-service
       #- zoomdata-tracing-server
-      # The Upload Service will be removed in Zoomdata release 4.3.0
+      # The Upload Service was removed in Zoomdata release 4.3.0
       #- zoomdata-upload-service
 
   tools:
@@ -249,7 +249,7 @@ zoomdata:
         #- Dfile.encoding=UTF-8
         #- Duser.timezone=GMT
         #- Dquery.engine.application.mode=default
-    # Zoomdata Scheduler will be removed in release 4.3.0
+    # Zoomdata Scheduler was removed in release 4.3.0
     zoomdata-scheduler: null
     # Zoomdata Screenshot Service.
     # This is an example of setting default timeouts for dashboards to render.
@@ -334,16 +334,16 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
 
-    # The Stream Writer service will be renamed to Data Writer in Zoomdata
+    # The Stream Writer service was renamed to Data Writer in Zoomdata
     # release 4.3.0
     - zoomdata-data-writer-postgresql
-    # The Upload Service will be removed in Zoomdata release 4.3.0
+    # The Upload Service was removed in Zoomdata release 4.3.0
     #- zoomdata-upload-service
     - zoomdata-screenshot-service
 
     # Zoomdata Core
     - zoomdata-query-engine
-    # The Scheduler will be removed in Zoomdata release 4.3.0
+    # The Scheduler was removed in Zoomdata release 4.3.0
     #- zoomdata-scheduler
     - zoomdata
 

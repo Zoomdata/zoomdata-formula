@@ -1,6 +1,13 @@
 zoomdata-formula
 ================
 
+4.3.0 (2019-04-08)
+
+- Removed HAproxy support and configuration example
+- Removed the Zoomdata Scheduler and Upload services
+- Renamed Stream Writer service to Data Writer for Zoomdata Rapid Release
+- Fixed Stream Writer package name for Zoomdata 3.7 LTS release
+
 4.2.0 (2019-03-07)
 
 - Fixed ``zoomdata.backup`` state to save correct Pillar settings for later
