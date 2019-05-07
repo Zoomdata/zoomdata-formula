@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+4.4.0 (2019-04-08)
+
+- Version bump in the examples to ensure compatibility with the Zoomdata 4.4.0
+
 4.3.0 (2019-04-08)
 
 - Removed HAproxy support and configuration example
