@@ -19,11 +19,13 @@ except ImportError:
 ENVIRONMENT = {
     'zoomdata': '/etc/zoomdata/zoomdata.env',
     'zoomdata-query-engine': '/etc/zoomdata/query-engine.env',
+    'zoomdata-scheduler': '/etc/zoomdata/scheduler.env',
 }
 
 PROPERTIES = {
     'zoomdata': '/etc/zoomdata/zoomdata.properties',
     'zoomdata-query-engine': '/etc/zoomdata/query-engine.properties',
+    'zoomdata-scheduler': '/etc/zoomdata/scheduler.properties',
 }
 
 ZOOMDATA = 'zoomdata'
@@ -402,32 +404,27 @@ def inspect(limits=False,
 
     for service in ENVIRONMENT:
         parsed_env = environment(ENVIRONMENT[service])
-        if parsed_env is None:
-            env[service] = None
-        else:
+        if parsed_env:
             # file with environment is present
             env[service] = {
                 'path': ENVIRONMENT[service],
                 'variables': parsed_env,
             }
+        else:
+            env[service] = None
 
     for service in PROPERTIES:
-        config[service] = {}
-        configuration = {}
-
         new_config = properties(PROPERTIES[service])
-        if new_config:
-            configuration.update(new_config)
-        elif not configuration:
-            config[service] = None
-            continue
 
-        config[service].update({
-            # Disable merging with defaults is mandatory here
-            'merge': False,
-            'path': PROPERTIES[service],
-            'properties': configuration,
-        })
+        if new_config:
+            config[service] = {
+                # Disable merging with defaults is mandatory here
+                'merge': False,
+                'path': PROPERTIES[service],
+                'properties': new_config,
+            }
+        else:
+            config[service] = None
 
     ret[ZOOMDATA].update(
         {
