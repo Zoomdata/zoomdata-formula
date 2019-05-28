@@ -1,20 +1,9 @@
 {%- from 'zoomdata/map.jinja' import init_available,
                                      zoomdata with context %}
 
-{%- set packages = zoomdata['packages'] +
-                   zoomdata.edc['packages'] +
-                   zoomdata.microservices['packages'] %}
-
-
 {%- if init_available %}
 
-  {%- set services = [] %}
-  {%- for service in packages + zoomdata.local['services'] %}
-    {%- if service and service not in services %}
-      {%- do services.append(service) %}
-    {%- endif %}
-  {%- endfor %}
-
+  {%- set services = zoomdata.local['services'] %}
   {%- if 'zoomdata-consul' in services %}
     {#- The ``zoomdata-consul`` is a special kind of service
         and should be stopped last. #}
@@ -32,6 +21,10 @@
   {%- endfor %}
 
 {%- else %}
+
+  {%- set packages = zoomdata['packages'] +
+                     zoomdata.edc['packages'] +
+                     zoomdata.microservices['packages'] %}
 
   {#- If there is no init system, just do nothing.
       The states here are rendered to satisfy upper level

@@ -38,7 +38,9 @@ include:
     - refresh: {{ loop.index == 1 }}
     {%- endif %}
     - skip_verify: {{ zoomdata.gpgkey|default(none, true) is none }}
-    {%- if not zoomdata['bootstrap'] and not zoomdata['upgrade'] %}
+    {%- if not zoomdata['bootstrap']
+       and not zoomdata['upgrade']
+       and package in zoomdata.local['services'] %}
     - prereq_in:
       - service: {{ package }}_stop_disable
       {%- if zoomdata.backup['destination'] and (
