@@ -1,6 +1,12 @@
 zoomdata-formula
 ================
 
+4.5.0 (2019-05-03)
+
+- Fixed detecting the Scheduler service configuration files in the Zoomdata LTS
+  release 3.7
+- Fixed enabling of Systemd units for new services on upgrades due to caching
+
 4.4.0 (2019-04-08)
 
 - Version bump in the examples to ensure compatibility with the Zoomdata 4.4.0
