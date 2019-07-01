@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+4.6.0 (2019-07-01)
+
+- Version bump in the examples to ensure compatibility with the Zoomdata 4.6.0
+
 4.5.0 (2019-05-03)
 
 - Fixed detecting the Scheduler service configuration files in the Zoomdata LTS
