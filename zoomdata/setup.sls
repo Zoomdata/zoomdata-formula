@@ -1,8 +1,10 @@
 {%- from 'zoomdata/map.jinja' import zoomdata %}
 
-{%- set url = 'http://localhost:8080' ~
+{%- set url = 'http://localhost:' ~
+               zoomdata.config.zoomdata.properties['server.port'] |
+                default('8080', true) ~
                zoomdata.config.zoomdata.properties['server.servlet.context-path'] |
-               default('/zoomdata', true) -%}
+                default('/zoomdata', true) -%}
 {%- set api = (url, zoomdata.setup['api'])|join('/') %}
 
 {%- set headers = {
