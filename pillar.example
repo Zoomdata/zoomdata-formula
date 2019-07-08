@@ -204,6 +204,8 @@ zoomdata:
         #screenshots.datasource-charts.enabled: False
         # Define custom HTTP(S) port
         #server.port: 8080
+        # Change default URL path
+        #server.servlet.context-path: /zoomdata
         ## Configure HTTPS for Zoomdata (see ``tls`` item below):
         # https://www.zoomdata.com/docs/3/Topics/Security/adding-ssl-certificate-to-the-zoomdata-server.html
         #server.ssl.enabled: True
