@@ -232,6 +232,16 @@ zoomdata:
       # all. Set ``False`` if you would like to keep local modifications, but
       # add some options from above.
       discard: True
+    # Configuration for Hashicorp's Consul distrubuted with Zoomdata
+    #zoomdata-consul:
+    #  path: '/etc/zoomdata/consul.json'
+    #  json:
+    #    data_dir: '/opt/zoomdata/data/consul'
+    #    client_addr: '0.0.0.0'
+    #    bind_addr: '127.0.0.1'
+    #    bootstrap: True
+    #    server: True
+    #    ui: True
     # Zoomdata Query Engine
     #zoomdata-query-engine:
       ## JVM options to start the service with
