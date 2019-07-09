@@ -98,6 +98,9 @@ zoomdata:
       merge: True
       update: False
       discard: True
+    zoomdata-consul:
+      path: '/etc/zoomdata/consul.json'
+      json: {}
     zoomdata-scheduler:
       path: /etc/zoomdata/scheduler.properties
       properties:

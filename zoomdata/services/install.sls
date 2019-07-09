@@ -226,6 +226,28 @@ zoomdata-user-limits-conf:
 
   {%- endif %}
 
+  {%- if config.json|default({}, true) and service in packages %}
+
+{{ service }}_json:
+  file.serialize:
+    - name: {{ config.path }}
+    - dataset: {{ config.json|yaml() }}
+    - formatter: json
+    - user: root
+    - group: {{ zoomdata.group }}
+    - mode: 0640
+    - makedirs: True
+    - require:
+      - pkg: {{ service }}_package
+    {%- if service in zoomdata['services'] %}
+    - watch_in:
+      - service: {{ service }}_start_enable
+    {%- endif %}
+    # Prevent ``test=True`` failures on a fresh system
+    - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
+
+  {%- endif %}
+
   {%- if config.options|default({}, true) and service in packages %}
 
     {%- if service.startswith('zoomdata-') %}
