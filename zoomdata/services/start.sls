@@ -15,10 +15,14 @@ systemctl_reload:
 
   {%- endif %}
 
-  {%- for service in zoomdata['services'] if service in packages %}
+  {%- for service in zoomdata['services'] %}
 
 {{ service }}_start_enable:
+  {%- if service == 'zoomdata-edc-all' %}
+  zoomdata.edc_running:
+  {%- else %}
   service.running:
+  {%- endif %}
     - name: {{ service }}
     - enable: True
 

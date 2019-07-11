@@ -29,7 +29,11 @@ include:
   {%- endif %}
 
 {{ package }}_package:
+  {%- if package == 'zoomdata-edc-all' %}
+  zoomdata.edc_installed:
+  {%- else %}
   pkg.installed:
+  {%- endif %}
     - name: {{ package }}
     {%- if version %}
     - version: {{ version }}
@@ -51,7 +55,7 @@ include:
     {%- endif %}
     {%- if package in zoomdata['services'] %}
     - watch_in:
-      - service: {{ package }}_start_enable
+      - {{ package }}_start_enable
     {%- endif %}
 
 {%- endfor %}
@@ -80,10 +84,10 @@ zoomdata-consul_data_dir:
     {#- Check if EDC JDBC driver URLs have been configured #}
     - urls: {{ jdbc.drivers[package|replace('zoomdata-edc-', '', 1)]|default([], true) }}
     - require:
-      - pkg: {{ package }}_package
+      - {{ package }}_package
     {%- if package in zoomdata['services'] %}
     - watch_in:
-      - service: {{ package }}_start_enable
+      - {{ package }}_start_enable
     {%- endif %}
 
   {%- endfor %}
@@ -122,7 +126,7 @@ zoomdata-consul_data_dir:
     - watch_in:
       - module: systemctl_reload
       {%- if service in zoomdata['services'] %}
-      - service: {{ service }}_start_enable
+      - {{ service }}_start_enable
       {%- endif %}
 
     {%- endfor %}
@@ -148,7 +152,7 @@ zoomdata-user-limits-conf:
     {%- if zoomdata['services'] %}
     - watch_in:
       {%- for service in zoomdata['services'] %}
-      - service: {{ service }}_start_enable
+      - {{ service }}_start_enable
       {%- endfor %}
     {%- endif %}
 
@@ -184,7 +188,7 @@ zoomdata-user-limits-conf:
     {%- endif %}
     {%- if service in zoomdata['services'] %}
     - watch_in:
-      - service: {{ service }}_start_enable
+      - {{ service }}_start_enable
     {%- endif %}
     # Prevent `test=True` failures on a fresh system
     - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
@@ -219,7 +223,7 @@ zoomdata-user-limits-conf:
       - pkg: {{ service }}_package
     {%- if service in zoomdata['services'] %}
     - watch_in:
-      - service: {{ service }}_start_enable
+      - {{ service }}_start_enable
     {%- endif %}
     # Prevent ``test=True`` failures on a fresh system
     - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
@@ -241,7 +245,7 @@ zoomdata-user-limits-conf:
       - pkg: {{ service }}_package
     {%- if service in zoomdata['services'] %}
     - watch_in:
-      - service: {{ service }}_start_enable
+      - {{ service }}_start_enable
     {%- endif %}
     # Prevent ``test=True`` failures on a fresh system
     - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'
@@ -273,7 +277,7 @@ zoomdata-user-limits-conf:
       - pkg: {{ service }}_package
     {%- if service in zoomdata['services'] %}
     - watch_in:
-      - service: {{ service }}_start_enable
+      - {{ service }}_start_enable
     {%- endif %}
     # Prevent ``test=True`` failures on a fresh system
     - onlyif: getent group | grep -q '\<{{ zoomdata.group }}\>'

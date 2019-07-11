@@ -94,6 +94,9 @@ zoomdata:
       - zoomdata-edc-redshift
       - zoomdata-edc-rts
       - zoomdata-edc-sparksql
+    # It is possible to install all available connectors without a need to
+    # specify each one explicitly with just the following keyword:
+    #packages: 'all'
 
     # Install JDBC jar drivers which are not packaged with Zoomdata connectors.
     # More here: https://www.zoomdata.com/docs/3/Topics/Installation/adding-a-jdbc-driver.html
@@ -363,6 +366,9 @@ zoomdata:
 
     # The Admin Service is based on Spring Boot Admin and disabled by default.
     #- zoomdata-admin-server
+  # Use the keyword ``all`` instead of a explicit list to start all services
+  # which are specified to be installed above in ``packages`` sections:
+  #services: 'all'
 
   # Perform additional post-installation setup
   #setup:
