@@ -79,7 +79,7 @@ except ImportError:
     # Py3
     from urllib.parse import urljoin
 
-from salt.utils import http  # pylint: disable=import-error
+from salt.utils import http  # pylint: disable=import-error,no-name-in-module
 
 
 def _file_data_encode(filename):
@@ -427,6 +427,84 @@ def licensing(name,
     return ret
 
 
+def edc_installed(name, **kwargs):
+    """
+    Install all connector packages available from repository.
+
+    name
+        The name of the state
+
+    All other keyword arguments will be passed to ``pkg.installed`` state.
+    """
+    ret = {
+        'name': name,
+        'changes': {},
+        'result': False,
+        'comment': ('Getting available package versions is not supported on ',
+                    'your operating system and/or Salt version'),
+        'pchanges': {},
+    }
+
+    # pylint: disable=undefined-variable
+    supported_by_salt = 'pkg.list_repo_pkgs' in __salt__
+
+    if __opts__['test']:
+        if supported_by_salt:
+            ret['comment'] = 'The state will install all connector packages'
+            ret['result'] = None
+        return ret
+
+    # This will not work on Salt earlier than 2017.7 for APT-based distros
+    if supported_by_salt:
+        pkgs = list(__salt__['pkg.list_repo_pkgs']('zoomdata-edc-*'))
+        ret = __states__['pkg.installed'](name, pkgs=pkgs, **kwargs)
+    # pylint: enable=undefined-variable
+
+    return ret
+
+
+def edc_runnning(name, **kwargs):
+    """
+    Run all installed connector services.
+
+    name
+        The name of the state
+
+    All other keyword arguments will be passed to ``service.running`` state.
+    """
+    ret = {
+        'name': name,
+        'changes': {},
+        'result': False,
+        'comment': 'No installed connector services found.',
+        'pchanges': {},
+    }
+
+    res = {}
+    comments = []
+
+    # pylint: disable=undefined-variable
+    if __opts__['test']:
+        ret['comment'] = 'The state will start all connector services'
+        ret['result'] = None
+        return ret
+
+    services = [i for i in __salt__['zoomdata.services']() if i.startswith('zoomdata-edc-')]
+    for service in services:
+        res = __states__['service.running'](service, **kwargs)
+        if not res['result']:
+            return res
+        comments.append(res['comment'])
+    # pylint: enable=undefined-variable
+
+    if res:
+        ret = res
+        ret['name'] = name
+        ret['comment'] = '\n'.join(comments)
+
+    return ret
+
+
 def libraries(name,
               urls=None,
               metadata_path='docs',
@@ -452,7 +530,7 @@ def libraries(name,
     ret = {
         'name': name,
         'changes': {},
-        'result': False,
+        'result': True,
         'comment': 'No library URLs found in the metadata file and no URLs given.',
         'pchanges': {},
     }
@@ -463,61 +541,56 @@ def libraries(name,
         ret['result'] = None
         return ret
 
-    prefix = __salt__['pillar.get'](
-        'zoomdata:prefix',
+    prefix = __salt__['pillar.get']('zoomdata:prefix') or \
         __salt__['defaults.get']('zoomdata:zoomdata:prefix')
-    )
 
-    if not prefix:
-        ret['comment'] = ('Unable to read Zoomdata installation directory neither from '
-                          '``zoomdata:prefix`` Pillar nor defaults.')
-        return ret
+    services = [name]
 
-    libs = {}
-    service = name.replace('zoomdata-', '', 1)
+    if 'zoomdata-edc-all' in services:
+        services = __salt__['zoomdata.list_pkgs_edc']()
 
-    if urls:
-        for i, url in enumerate(urls):
-            libs.update({'url{0}'.format(i + 1): url})
-    else:
-        meta_file = __salt__['file.join'](prefix, metadata_path, service, 'PACKAGE-METADATA')
-        if __salt__['file.file_exists'](meta_file):
-            libs = __salt__['ini.get_section'](meta_file, 'libs')
-        else:
-            ret['comment'] = 'The metadata file not found.'
-
-    if not libs:
-        ret['result'] = True
-        return ret
+    services = [i.replace('zoomdata-', '', 1) for i in services]
 
     comments = []
     res = {}
-    for key in libs:
-        if not key.startswith('url'):
-            continue
-        target = __salt__['file.join'](
-            __salt__['file.join'](prefix, install_path, service),
-            __salt__['file.basename'](libs[key]))
-        res = __states__['file.managed'](
-            target,
-            source=libs[key],
-            skip_verify=True,
-            user='root',
-            group='root',
-            mode=644,
-            makedirs=True,
-            dir_mode=755,
-            show_changes=False
-        )
-        if not res['result']:
-            return res
-        comments.append(res['comment'])
+
+    for service in services:
+        libs = {}
+        if urls:
+            for i, url in enumerate(urls):
+                libs.update({'url{0}'.format(i + 1): url})
+        else:
+            meta_file = __salt__['file.join'](prefix, metadata_path, service, 'PACKAGE-METADATA')
+            if __salt__['file.file_exists'](meta_file):
+                libs.update(__salt__['ini.get_section'](meta_file, 'libs'))
+            else:
+                ret['comment'] = 'The metadata file not found.'
+
+        for key in libs:
+            if not key.startswith('url'):
+                continue
+            res = __states__['file.managed'](
+                __salt__['file.join'](
+                    __salt__['file.join'](prefix, install_path, service),
+                    __salt__['file.basename'](libs[key])
+                ),
+                source=libs[key],
+                skip_verify=True,
+                user='root',
+                group='root',
+                mode=644,
+                makedirs=True,
+                dir_mode=755,
+                show_changes=False
+            )
+            if not res['result']:
+                return res
+            comments.append(res['comment'])
     # pylint: enable=undefined-variable
 
     if res:
         ret = res
+        ret['name'] = name
         ret['comment'] = '\n'.join(comments)
-        return ret
 
-    ret['result'] = True
     return ret
