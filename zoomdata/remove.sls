@@ -1,5 +1,11 @@
 {%- from 'zoomdata/map.jinja' import zoomdata -%}
 
+{%- if zoomdata.edc['packages'] == 'all' %}
+  {%- do zoomdata.edc.update({
+    'packages': salt['zoomdata.list_pkgs_edc'](from_repo=true)
+  }) %}
+{%- endif %}
+
 {%- set packages = zoomdata['packages'] +
                    zoomdata.edc['packages'] +
                    zoomdata.microservices['packages'] +
@@ -19,5 +25,5 @@
 {%- endif %}
 
 zoomdata-remove:
-  pkg.removed:
+  pkg.purged:
     - pkgs: {{ uninstall|yaml() }}
