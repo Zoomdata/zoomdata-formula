@@ -456,14 +456,14 @@ def edc_installed(name, **kwargs):
 
     # This will not work on Salt earlier than 2017.7 for APT-based distros
     if supported_by_salt:
-        pkgs = list(__salt__['pkg.list_repo_pkgs']('zoomdata-edc-*'))
+        pkgs = __salt__['zoomdata.list_pkgs_edc'](from_repo=True)
         ret = __states__['pkg.installed'](name, pkgs=pkgs, **kwargs)
     # pylint: enable=undefined-variable
 
     return ret
 
 
-def edc_runnning(name, **kwargs):
+def edc_running(name, **kwargs):
     """
     Run all installed connector services.
 

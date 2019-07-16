@@ -82,6 +82,7 @@
     merge=zoomdata,
 ) %}
 
+{# Read EDC environment variables #}
 {% do zoomdata.edc.update({
     'packages': salt['environ.get']('ZOOMDATA_EDC_PACKAGES', zoomdata.edc.get('packages')),
     'version':  salt['environ.get']('ZOOMDATA_EDC_VERSION', zoomdata.edc.get('version')),

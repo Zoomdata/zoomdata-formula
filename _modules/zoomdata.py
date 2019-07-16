@@ -190,9 +190,13 @@ def list_pkgs(include_edc=True, include_microservices=True, include_tools=True):
     return sorted(zd_pkgs)
 
 
-def list_pkgs_edc():
+def list_pkgs_edc(from_repo=False):
     """
-    List only currently installed Zoomdata EDC (data connector) packages.
+    List available Zoomdata EDC (data connector) packages.
+
+    from_repo : False
+        By default, return only locally installed packages. If set ``True``,
+        return all connector packages available from configured repositories.
 
     CLI Example:
 
@@ -201,7 +205,10 @@ def list_pkgs_edc():
         salt '*' zoomdata.list_pkgs_edc
     """
     # pylint: disable=undefined-variable
-    edc_pkgs = [i for i in __salt__['pkg.list_pkgs']() if i.startswith(EDC)]
+    if from_repo:
+        edc_pkgs = list(__salt__['pkg.list_repo_pkgs'](EDC + '-*'))
+    else:
+        edc_pkgs = [i for i in __salt__['pkg.list_pkgs']() if i.startswith(EDC)]
 
     return sorted(edc_pkgs)
 
