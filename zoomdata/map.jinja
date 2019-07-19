@@ -164,6 +164,36 @@
     {% endif %}
 {% endfor %}
 
+{# Configure connection to Consul via environment variable #}
+{% set consul_addr = salt['environ.get']('ZOOMDATA_CONSUL_ADDRESS') %}
+{% if consul_addr %}
+    {% if ':' not in consul_addr %}
+        {% set consul_addr = consul_addr ~ ':' %}
+    {% endif %}
+    {% set consul_host, consul_port = consul_addr.split(':') %}
+    {% set props = {'discovery.registry.host': consul_host} %}
+    {% if consul_port %}
+        {% do props.update({'discovery.registry.port': consul_port}) %}
+    {% endif %}
+    {% set configs = {} %}
+    {% for service in zoomdata['services'] %}
+        {% if service == 'zoomdata' %}
+            {% set file = service ~ '.properties' %}
+        {% else %}
+            {% set file = service|replace('zoomdata-', '', 1) ~ '.properties' %}
+        {% endif %}
+        {% if service != 'zoomdata-consul' %}
+            {% do configs.update({
+                service: {
+                    'path': salt['file.join'](zoomdata.config_dir, file),
+                    'properties': props,
+                }
+            }) %}
+        {% endif %}
+    {% endfor %}
+    {% do zoomdata.config.update(salt['defaults.merge'](zoomdata.config, configs)) %}
+{% endif %}
+
 {# Hard-code of some PostgreSQL authentication property names
    and expose administrative credentials for running raw ``psql`` command. #}
 {% set postgres = {
