@@ -1,6 +1,9 @@
 {%- from 'zoomdata/map.jinja' import zoomdata, postgres with context %}
 
-{%- if zoomdata.restore['dir'] %}
+{%- if zoomdata.restore['dir']
+   and (not postgres['connection_uri']
+        or (postgres['connection_uri'] and postgres['password'])
+       ) %}
 
 include:
   - zoomdata.services.stop
@@ -49,6 +52,7 @@ zoomdata_restore_{{ salt['file.basename'](zoomdata.restore['dir']) }}_{{ dump }}
         {{ zoomdata.restore['bin'] }} {{ postgres.connection_uri }}
     - cwd: "{{ zoomdata.restore['dir'] }}"
     - runas: {{ zoomdata.restore['user'] }}
+      {#- The password is required for remote connections #}
       {%- if postgres.password %}
     - env:
       - PGUSER: {{ postgres.user|yaml() }}

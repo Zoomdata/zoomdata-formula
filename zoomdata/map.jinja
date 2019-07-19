@@ -194,9 +194,18 @@
     {% do zoomdata.config.update(salt['defaults.merge'](zoomdata.config, configs)) %}
 {% endif %}
 
+{# Read global PostgreSQL configuration for Salt #}
+{% set pg_host = salt['config.option']('postgres.host') %}
+{% set pg_port = salt['config.option']('postgres.port', 5432) %}
+{# These are administrative credentials #}
+{% set pg_user = salt['config.option']('postgres.user', 'postgres') %}
+{% set pg_pass =  salt['config.option']('postgres.pass') %}
+{% set pg_db = salt['config.option']('postgres.maintenance_db', 'postgres') %}
+
 {# Hard-code of some PostgreSQL authentication property names
    and expose administrative credentials for running raw ``psql`` command. #}
 {% set postgres = {
+    'connection_uri': '',
     'properties': (
         (
             'spring.datasource.url',
@@ -214,20 +223,42 @@
             'upload.destination.params.password'
         ),
     ),
-    'connection_uri': '',
-    'user': salt['config.option']('postgres.user', 'postgres'),
-    'password': salt['config.option']('postgres.pass'),
+    'user': pg_user,
+    'password': pg_pass,
 } %}
 
-{% set pg_host = salt['config.option']('postgres.host') %}
-{% set pg_port = salt['config.option']('postgres.port', 5432) %}
-{% set pg_db = salt['config.option']('postgres.maintenance_db', 'postgres') %}
+{# Read PostgreSQL connection details for the Zoomdata services
+   from the environment variables. #}
+{% set pg_host = salt['environ.get']('ZOOMDATA_POSTGRES_HOST', pg_host) %}
+{% set pg_port = salt['environ.get']('ZOOMDATA_POSTGRES_PORT', pg_port) %}
+{% set zd_user = salt['environ.get']('ZOOMDATA_POSTGRES_USER') %}
+{% set zd_pass = salt['environ.get']('ZOOMDATA_POSTGRES_PASS') %}
 
+{# This is used to manage databases during metadata restoration.
+   Automated restoration to remote PostgreSQL host is supported only when
+   the ``postgres.pass`` configuration option or Pillar value exists. #}
 {% if pg_host %}
     {% do postgres.update({
-        'connection_uri': 'postgresql://' ~ pg_host ~ ':' ~ pg_port ~ '/' ~ pg_db,
+        'connection_uri': 'postgresql://%s:%s/%s'|format(pg_host, pg_port, pg_db),
     }) %}
 {% endif %}
+
+{% for i in postgres.properties %}
+    {% if pg_host %}
+        {% set db = zoomdata.config.zoomdata.properties[i[0]].rsplit('/', 1)[1] %}
+        {% do zoomdata.config.zoomdata.properties.update({
+            i[0]: 'jdbc:postgresql://%s:%s/%s'|format(pg_host, pg_port, db),
+        }) %}
+    {% endif %}
+
+    {% if zd_user %}
+        {% do zoomdata.config.zoomdata.properties.update({i[1]: zd_user}) %}
+    {% endif %}
+
+    {% if zd_pass %}
+        {% do zoomdata.config.zoomdata.properties.update({i[2]: zd_pass}) %}
+    {% endif %}
+{% endfor %}
 
 {# Detect if we are using real init or building some image #}
 {% set init_available = grains['init'] != 'unknown' %}

@@ -490,21 +490,26 @@ zoomdata:
 # Comment out the whole section to disable PostgreSQL installation and
 # configuration (depends on targeting set in the states ``top.sls`` file).
 # In that case, consider to configure the options above.
+
 postgres:
   # Create Zoomdata user and set password for the first time.
+  # The ``ZOOMDATA_POSTGRES_USER`` and ``ZOOMDATA_POSTGRES_PASS`` environment
+  # variables may override the defaults.
+  {%- set user = salt['environ.get']('ZOOMDATA_POSTGRES_USER', 'zoomdata') %}
+  {%- set pass = salt['environ.get']('ZOOMDATA_POSTGRES_PASS', 'PleaseChangeMe') %}
   users:
-    zoomdata:
+    {{ user }}:
       ensure: present
-      default_password: 'PleaseChangeMe'
+      default_password: {{ pass }}
 
   # Create databases for Zoomdata services
   databases:
     zoomdata:
-      owner: 'zoomdata'
+      owner: {{ user }}
     zoomdata-keyset:
-      owner: 'zoomdata'
+      owner: {{ user }}
     zoomdata-upload:
-      owner: 'zoomdata'
+      owner: {{ user }}
 
   # Backup extension for configuration files, defaults to ``.bak``.
   # Set ``False`` to stop creation of backups when config files change.
