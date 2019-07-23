@@ -371,9 +371,14 @@ zoomdata:
   #services: 'all'
 
   # Perform additional post-installation setup
-  #setup:
+  setup:
+    # Zoomdata Web server URI path to probe for readiness. The path is relative
+    # to the context path configured in the ``server.servlet.context-path``
+    # property for the ``zoomdata`` service. It is expected that HTTP GET
+    # request on given URL will return HTTP status code 200.
+    probe: 'api/version'
   #  # How much time to wait in seconds until Zoomdata server would start to
-  #  # respond on API calls.
+  #  # respond on HTTP probe and API calls.
   #  timeout: 900
   #  # Configure users for accessing Zoomdata web interface. Setting passwords
   #  # for admin/supervisor is allowed only once after initial installation.

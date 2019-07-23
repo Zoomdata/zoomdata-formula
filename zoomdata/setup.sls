@@ -6,7 +6,8 @@
                   zoomdata.config.zoomdata.properties|default({}, true)
                 ) %}
 {#- We assume no TLS configuration and standard binding on 127.0.0.1, ::1 #}
-{%- set url = 'http://localhost:' ~ props['server.port'] ~  props['server.servlet.context-path'] %}
+{%- set url = 'http://localhost:%s%s'|format(props['server.port'],
+                                             props['server.servlet.context-path']) %}
 {%- set api = (url, zoomdata.setup['api'])|join('/') %}
 
 {%- set users = {} %}
@@ -34,7 +35,7 @@
 # Wait until Zoomdata server will be available
 zoomdata-wait:
   http.wait_for_successful_query:
-    - name: '{{ url }}/actuator/info'
+    - name: "{{ (url, zoomdata.setup['probe'])|join('/') }}"
     - wait_for: {{ zoomdata.setup['timeout'] }}
     - status: 200
     - failhard: True
