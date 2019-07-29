@@ -1,6 +1,17 @@
 zoomdata-formula
 ================
 
+4.7.0 (2019-07-29)
+
+- Fixed recognition of configured custom Zoomdata Web server's port
+- Made the Zoomdata Web server probe URI path configurable
+- Added the Zoomdata Consul service configuration to the Pillar
+- Allowed to connect to external Consul agent by providing
+  ``ZOOMDATA_CONSUL_ADDRESS`` environment variable
+- Allowed to install and run all available connectors
+- Allowed to start all installed services
+- Added environment variables to configure connection to PostgreSQL metadata
+
 4.6.0 (2019-07-01)
 
 - Version bump in the examples to ensure compatibility with the Zoomdata 4.6.0
