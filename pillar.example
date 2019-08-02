@@ -246,7 +246,7 @@ zoomdata:
     #    server: True
     #    ui: True
     # Zoomdata Query Engine
-    #zoomdata-query-engine:
+    zoomdata-query-engine:
       ## JVM options to start the service with
       #options:
         ## This is a mandatory JVM option
@@ -266,6 +266,24 @@ zoomdata:
         #- Dfile.encoding=UTF-8
         #- Duser.timezone=GMT
         #- Dquery.engine.application.mode=default
+      path: '/etc/zoomdata/query-engine.properties'
+      properties:
+        # Persistent database cache settings
+        spring.qe.datasource.jdbcUrl: 'jdbc:postgresql://localhost:5432/zoomdata-qe'
+        spring.qe.datasource.username: 'zoomdata'
+        spring.qe.datasource.password: 'PleaseChangeMe'
+        # Maximum size of serialized data to be saved in Kb, defaults to 32 MiB
+        #topology.cache.db.max-cached-data-size-kb: 32768
+        # Interval to delete cached entries expired by TTL in milliseconds,
+        # defaults to 1 minute.
+        #topology.cache.db.cleanup-interval-ms: 60000
+        # TTL in minutes, defaults to 1 hour
+        #topology.cache.timeout: 60
+        # Maximum possible TTL in minutes, defaults to 1 week
+        #topology.cache.timeout.max: 10080
+        # Timeout to memorize DB cache metrics obtained as a result of SQL queries
+        # (size, storedSizeKb, rawSizeKb) in milliseconds, defaults to 1 minute.
+        #topology.cache.db.db-query-metric-memorize-timeout-ms: 60000
     # Zoomdata Scheduler was removed in release 4.3.0
     zoomdata-scheduler: null
     # Zoomdata Screenshot Service.
