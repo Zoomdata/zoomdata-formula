@@ -101,6 +101,9 @@ zoomdata:
     zoomdata-consul:
       path: '/etc/zoomdata/consul.json'
       json: {}
+    zoomdata-query-engine:
+      path: '/etc/zoomdata/query-engine.properties'
+      properties: {}
     zoomdata-scheduler:
       path: /etc/zoomdata/scheduler.properties
       properties:
