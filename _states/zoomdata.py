@@ -456,6 +456,7 @@ def edc_installed(name, **kwargs):
 
     # This will not work on Salt earlier than 2017.7 for APT-based distros
     if supported_by_salt:
+        __salt__['pkg.refresh_db']()
         pkgs = __salt__['zoomdata.list_pkgs_edc'](from_repo=True)
         ret = __states__['pkg.installed'](name, pkgs=pkgs, **kwargs)
     # pylint: enable=undefined-variable
