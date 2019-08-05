@@ -531,6 +531,8 @@ postgres:
       owner: {{ user }}
     zoomdata-keyset:
       owner: {{ user }}
+    zoomdata-qe:
+      owner: {{ user }}
     zoomdata-upload:
       owner: {{ user }}
 
