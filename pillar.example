@@ -80,7 +80,9 @@ zoomdata:
     packages:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-cloudera-search
-      - zoomdata-edc-elasticsearch-5.0
+      # The ElasticSearch 5.0 connector is going to be deprecated in Zoomdata
+      # release 4.8.0
+      #- zoomdata-edc-elasticsearch-5.0
       - zoomdata-edc-elasticsearch-6.0
       - zoomdata-edc-hive
       - zoomdata-edc-impala
@@ -354,7 +356,9 @@ zoomdata:
     # install proper JDBC driver library file (see above).
     - zoomdata-edc-apache-solr
     - zoomdata-edc-cloudera-search
-    - zoomdata-edc-elasticsearch-5.0
+    # The ElasticSearch 5.0 connector is going to be deprecated in Zoomdata
+    # release 4.8.0
+    #- zoomdata-edc-elasticsearch-5.0
     - zoomdata-edc-elasticsearch-6.0
     - zoomdata-edc-hive
     - zoomdata-edc-impala
