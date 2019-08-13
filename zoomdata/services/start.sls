@@ -1,9 +1,6 @@
 {%- from 'zoomdata/map.jinja' import init_available,
+                                     packages,
                                      zoomdata with context %}
-
-{%- set packages = zoomdata['packages'] +
-                   zoomdata.edc['packages'] +
-                   zoomdata.microservices['packages'] %}
 
 {%- if init_available %}
 
@@ -15,7 +12,9 @@ systemctl_reload:
 
   {%- endif %}
 
-  {%- for service in zoomdata['services'] %}
+  {%- for service in packages %}
+
+    {%- if service in zoomdata['services'] %}
 
 {{ service }}_start_enable:
   {%- if service == 'zoomdata-edc-all' %}
@@ -25,6 +24,8 @@ systemctl_reload:
   {%- endif %}
     - name: {{ service }}
     - enable: True
+
+    {%- endif %}
 
   {%- endfor %}
 

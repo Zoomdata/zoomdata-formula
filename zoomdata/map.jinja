@@ -27,12 +27,12 @@
 
 {# Make sure we have finished bootstrapping when some packages were
    already installed. #}
-{% set packages = zoomdata.local['packages'] +
-                  zoomdata.local.edc['packages'] +
-                  zoomdata.local.microservices['packages'] %}
+{% set local_packages = zoomdata.local['packages']
+                        + zoomdata.local.edc['packages']
+                        + zoomdata.local.microservices['packages'] %}
 
 {% do zoomdata.update({
-    'bootstrap': packages == [] or
+    'bootstrap': local_packages == [] or
                  salt['grains.get']('zoomdata:bootstrap', false),
 }) %}
 
@@ -123,14 +123,15 @@
     {% endfor %}
 {% endfor %}
 
+{# Create an ordered list of all packages to iterate in start/stop states #}
+{% set packages = zoomdata.microservices['packages']
+                  + zoomdata.edc['packages']
+                  + zoomdata['packages'] %}
+
 {# Start all configured service packages.
    The keyword ``zoomdata-all`` will be created from ``all`` by the loop above. #}
 {% if 'zoomdata-all' in zoomdata['services'] %}
-    {% do zoomdata.update({
-        'services': zoomdata.microservices['packages']
-                    + zoomdata.edc['packages']
-                    + zoomdata['packages']
-    }) %}
+    {% do zoomdata.update({'services': packages}) %}
 {% endif %}
 
 {% for params in ('backup', 'restore') %}
