@@ -1,4 +1,5 @@
 {%- from 'zoomdata/map.jinja' import init_available,
+                                     packages,
                                      zoomdata with context %}
 
 {%- if init_available %}
@@ -21,10 +22,6 @@
   {%- endfor %}
 
 {%- else %}
-
-  {%- set packages = zoomdata['packages'] +
-                     zoomdata.edc['packages'] +
-                     zoomdata.microservices['packages'] %}
 
   {#- If there is no init system, just do nothing.
       The states here are rendered to satisfy upper level

@@ -84,6 +84,9 @@ zoomdata:
       # release 4.8.0
       #- zoomdata-edc-elasticsearch-5.0
       - zoomdata-edc-elasticsearch-6.0
+      # The ElasticSearch 7.0 connector is going to be added in upcoming
+      # Zoomdata release 4.8.0
+      - zoomdata-edc-elasticsearch-7.0
       - zoomdata-edc-hive
       - zoomdata-edc-impala
       - zoomdata-edc-memsql
@@ -360,6 +363,9 @@ zoomdata:
     # release 4.8.0
     #- zoomdata-edc-elasticsearch-5.0
     - zoomdata-edc-elasticsearch-6.0
+    # The ElasticSearch 7.0 connector is going to be added in upcoming
+    # Zoomdata release 4.8.0
+    - zoomdata-edc-elasticsearch-7.0
     - zoomdata-edc-hive
     - zoomdata-edc-impala
     - zoomdata-edc-memsql
