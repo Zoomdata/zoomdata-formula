@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+4.8.0 (2019-08-24)
+
+- Version bump in the examples to ensure compatibility with the Zoomdata 4.8.0
+
 4.7.0 (2019-07-29)
 
 - Fixed recognition of configured custom Zoomdata Web server's port
