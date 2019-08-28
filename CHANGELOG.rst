@@ -1,9 +1,13 @@
 zoomdata-formula
 ================
 
-4.8.0 (2019-08-24)
+4.8.0 (2019-08-27)
 
-- Version bump in the examples to ensure compatibility with the Zoomdata 4.8.0
+- Added Zoomdata Query Engine cache settings
+- Fixed repository cache update for installing all connector packages
+- ElasticSearch 5.0 connector was deprecated
+- Added ElasticSearch 7.0 connector
+- Fixed the upgrade when new connectors would be installed
 
 4.7.0 (2019-07-29)
 

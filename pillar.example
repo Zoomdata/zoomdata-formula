@@ -28,7 +28,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
-  release: 4.7
+  release: 4.8
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
@@ -80,12 +80,10 @@ zoomdata:
     packages:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-cloudera-search
-      # The ElasticSearch 5.0 connector is going to be deprecated in Zoomdata
-      # release 4.8.0
+      # The ElasticSearch 5.0 connector was removed in Zoomdata release 4.8.0
       #- zoomdata-edc-elasticsearch-5.0
       - zoomdata-edc-elasticsearch-6.0
-      # The ElasticSearch 7.0 connector is going to be added in upcoming
-      # Zoomdata release 4.8.0
+      # The ElasticSearch 7.0 connector was added in Zoomdata release 4.8.0
       - zoomdata-edc-elasticsearch-7.0
       - zoomdata-edc-hive
       - zoomdata-edc-impala
@@ -359,12 +357,10 @@ zoomdata:
     # install proper JDBC driver library file (see above).
     - zoomdata-edc-apache-solr
     - zoomdata-edc-cloudera-search
-    # The ElasticSearch 5.0 connector is going to be deprecated in Zoomdata
-    # release 4.8.0
+    # The ElasticSearch 5.0 connector was deprecated in Zoomdata release 4.8.0
     #- zoomdata-edc-elasticsearch-5.0
     - zoomdata-edc-elasticsearch-6.0
-    # The ElasticSearch 7.0 connector is going to be added in upcoming
-    # Zoomdata release 4.8.0
+    # The ElasticSearch 7.0 connector was added in Zoomdata release 4.8.0
     - zoomdata-edc-elasticsearch-7.0
     - zoomdata-edc-hive
     - zoomdata-edc-impala
