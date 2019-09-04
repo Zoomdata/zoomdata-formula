@@ -464,12 +464,73 @@ def edc_installed(name, **kwargs):
     return ret
 
 
-def edc_running(name, **kwargs):
+def service_probe(name, url_path, timeout=None):
+    """
+    Probe if service has been started successfully.
+
+    name
+        The name of the Zoomdata service package
+
+    url_path
+        The URL path to service health HTTP endpoint. Used to check if the
+        service is available.
+
+    timeout
+        Wait for specified amount of time (in seconds) for service to come up
+        and respond to requests. Works only if ``url_path`` has been provided.
+    """
+    ret = {
+        'name': name,
+        'changes': {},
+        'result': False,
+        'comment': 'The service {} not found.'.format(name),
+        'pchanges': {},
+    }
+
+    # pylint: disable=undefined-variable
+    if __opts__['test']:
+        ret['comment'] = 'The state will probe service of readiness'
+        ret['result'] = None
+        return ret
+
+    service = name.replace('zoomdata-', '', 1)
+    prefix = __salt__['defaults.get']('zoomdata:zoomdata:prefix')
+    port = __salt__['zoomdata.properties'](
+        __salt__['file.join'](prefix, 'conf', '{}.properties'.format(service))
+    )['server.port']
+
+    url = urljoin('http://localhost:{}/'.format(port), url_path)
+    if timeout:
+        res = __salt__['http.wait_for_successful_query'](
+            url,
+            wait_for=timeout,
+            status=200)
+    # pylint: enable=undefined-variable
+    else:
+        res = http.query(url)
+
+    if res and not res.get('error'):
+        ret['result'] = True
+
+    ret['comment'] = res['body']
+
+    return ret
+
+
+def edc_running(name, url_path=None, timeout=None, **kwargs):
     """
     Run all installed connector services.
 
     name
         The name of the state
+
+    url_path
+        The URL path to service health HTTP endpoint. Used to check if the
+        service is available.
+
+    timeout
+        Wait for specified amount of time (in seconds) for service to come up
+        and respond to requests. Works only if ``url_path`` has been provided.
 
     All other keyword arguments will be passed to ``service.running`` state.
     """
@@ -493,10 +554,16 @@ def edc_running(name, **kwargs):
     services = [i for i in __salt__['zoomdata.services']() if i.startswith('zoomdata-edc-')]
     for service in services:
         res = __states__['service.running'](service, **kwargs)
+        # pylint: enable=undefined-variable
         if not res['result']:
             return res
+        if url_path:
+            probe = service_probe(service, url_path, timeout)
+            if not probe['result']:
+                res['comment'] = probe['comment']
+                res['result'] = probe['result']
+                return res
         comments.append(res['comment'])
-    # pylint: enable=undefined-variable
 
     if res:
         ret = res
@@ -542,8 +609,7 @@ def libraries(name,
         ret['result'] = None
         return ret
 
-    prefix = __salt__['pillar.get']('zoomdata:prefix') or \
-        __salt__['defaults.get']('zoomdata:zoomdata:prefix')
+    prefix = __salt__['defaults.get']('zoomdata:zoomdata:prefix')
 
     services = [name]
 

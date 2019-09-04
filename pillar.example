@@ -123,6 +123,14 @@ zoomdata:
     # To actually make it work, set ``install`` to ``True``:
       #install: True
 
+    # Liveness probe for connector after its start up
+    probe:
+      # How much time to wait in seconds. Set it up for the probing to work.
+      timeout: 120
+      # An URL path to query with HTTP request, which should response with
+      # status code 200.
+      path: 'actuator/health'
+
   # Zoomdata microservices section
   microservices:
     # Exact version of Zoomdata microservice packages to install, use ``latest``

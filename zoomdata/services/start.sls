@@ -24,6 +24,14 @@ systemctl_reload:
   {%- endif %}
     - name: {{ service }}
     - enable: True
+  {%- if service.startswith('zoomdata-edc-') and zoomdata.edc.probe['timeout'] %}
+    {%- if service != 'zoomdata-edc-all' %}
+  zoomdata.service_probe:
+    - name: {{ service }}
+    {%- endif %}
+    - url_path: {{ zoomdata.edc.probe['path'] }}
+    - timeout: {{ zoomdata.edc.probe['timeout'] }}
+  {%- endif %}
 
     {%- endif %}
 
