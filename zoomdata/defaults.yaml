@@ -54,6 +54,10 @@ zoomdata:
       drivers: {}
       install: False
 
+    probe:
+      timeout: Null
+      path: 'actuator/health'
+
   microservices:
     #version: 'latest'
     packages:
