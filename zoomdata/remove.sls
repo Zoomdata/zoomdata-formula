@@ -1,6 +1,6 @@
 {%- from 'zoomdata/map.jinja' import zoomdata -%}
 
-{%- if zoomdata.edc['packages'] == 'zoomdata-edc-all' %}
+{%- if 'zoomdata-edc-all' in zoomdata.edc['packages'] %}
   {%- do zoomdata.edc.update({
     'packages': salt['zoomdata.list_pkgs_edc'](from_repo=true)
   }) %}
