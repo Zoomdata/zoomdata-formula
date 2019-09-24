@@ -12,7 +12,7 @@ include:
     {%- set config = zoomdata.config.get(service, {}).properties|
                      default({}, true) %}
 
-    {%- for properties in postgres.properties %}
+    {%- for properties in postgres.zoomdata_properties %}
       {#- The full set of properties: url, user and pw need to be configured #}
       {%- set has_properties = [true] %}
       {%- for property in properties %}
