@@ -200,14 +200,16 @@
 {% set pg_port = salt['config.option']('postgres.port', 5432) %}
 {# These are administrative credentials #}
 {% set pg_user = salt['config.option']('postgres.user', 'postgres') %}
-{% set pg_pass =  salt['config.option']('postgres.pass') %}
+{% set pg_pass = salt['config.option']('postgres.pass') %}
 {% set pg_db = salt['config.option']('postgres.maintenance_db', 'postgres') %}
 
 {# Hard-code of some PostgreSQL authentication property names
-   and expose administrative credentials for running raw ``psql`` command. #}
+   and expose administrative credentials for running raw ``psql`` command.
+   Order of properties should be preserved (URL/username/password).
+#}
 {% set postgres = {
     'connection_uri': '',
-    'properties': (
+    'zoomdata_properties': (
         (
             'spring.datasource.url',
             'spring.datasource.username',
@@ -222,6 +224,13 @@
             'upload.destination.params.jdbc_url',
             'upload.destination.params.user_name',
             'upload.destination.params.password'
+        ),
+    ),
+    'zoomdata-query-engine_properties': (
+        (
+            'spring.qe.datasource.jdbcUrl',
+            'spring.qe.datasource.username',
+            'spring.qe.datasource.password'
         ),
     ),
     'user': pg_user,
@@ -244,20 +253,26 @@
     }) %}
 {% endif %}
 
-{% for i in postgres.properties %}
-    {% if pg_host %}
-        {% set db = zoomdata.config.zoomdata.properties[i[0]].rsplit('/', 1)[1] %}
-        {% do zoomdata.config.zoomdata.properties.update({
-            i[0]: 'jdbc:postgresql://%s:%s/%s'|format(pg_host, pg_port, db),
-        }) %}
-    {% endif %}
+{# Iterating over services postgres related properties #}
+{% for service in postgres %}
+    {% if service.endswith('_properties') %}
+        {% set srv_name = service|replace('_properties', '') %}
+        {% for i in postgres[service] %}
+            {% if pg_host %}
+                {% set db = zoomdata.config[srv_name].properties[i[0]].rsplit('/', 1)[1] %}
+                {% do zoomdata.config[srv_name].properties.update({
+                    i[0]: 'jdbc:postgresql://%s:%s/%s'|format(pg_host, pg_port, db),
+                }) %}
+            {% endif %}
 
-    {% if zd_user %}
-        {% do zoomdata.config.zoomdata.properties.update({i[1]: zd_user}) %}
-    {% endif %}
+            {% if zd_user %}
+                {% do zoomdata.config[srv_name].properties.update({i[1]: zd_user}) %}
+            {% endif %}
 
-    {% if zd_pass %}
-        {% do zoomdata.config.zoomdata.properties.update({i[2]: zd_pass}) %}
+            {% if zd_pass %}
+                {% do zoomdata.config[srv_name].properties.update({i[2]: zd_pass}) %}
+            {% endif %}
+        {% endfor %}
     {% endif %}
 {% endfor %}
 
