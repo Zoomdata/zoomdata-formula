@@ -7,6 +7,8 @@ zoomdata-formula
 - Fixed removing of deprecated connector service packages
 - Fixed setting the Query Engine service properties for connecting to external
   PostgreSQL metadata via environment variable
+- Increase the timeout for running service post installation scripts, this
+  fixes downloading from slow Ubuntu Archive repository
 - Dropped default values for Zoomdata 3.7 due to its transition to *Passive
   Support* mode
 

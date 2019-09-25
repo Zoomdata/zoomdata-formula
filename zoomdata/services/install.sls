@@ -297,7 +297,7 @@ zoomdata-user-limits-conf:
 {{ service }}-post-install-{{ loop.index }}:
   cmd.run:
     - name: {{ command }}
-    - timeout: 300
+    - timeout: 600
     - require:
       - pkg: {{ service }}_package
     - onlyif: {{ zoomdata['bootstrap']|lower() }}
