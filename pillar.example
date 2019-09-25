@@ -28,7 +28,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
-  release: 4.8
+  release: 4.9
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
@@ -56,17 +56,15 @@ zoomdata:
   # Exact version of Zoomdata core packages to install, use ``latest``
   # keyword to always upgrade to the latest minor version in the release.
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
-  #version: '4.8.0'
+  #version: '4.9.0'
 
   # Zoomdata Core packages to install
   packages:
     - zoomdata
     - zoomdata-query-engine
-    # The Scheduler was removed in Zoomdata release 4.3.0
-    #- zoomdata-scheduler
-    # The Admin Server shares the exact same version as Zoomdata Core services.
+    # The Admin and Configuration Servers share the exact same version as
+    # Zoomdata Core services.
     #- zoomdata-admin-server
-    # The Configuration Server was added in Zoomdata release 4.0.0
     #- zoomdata-config-server
 
   # Zoomdata EDC (Enterprise Data Connectors) section
@@ -74,16 +72,13 @@ zoomdata:
     # Exact version of Zoomdata EDC packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
-    #version: '4.8.0'
+    #version: '4.9.0'
 
     # Zoomdata EDC (datasource connector) packages to install
     packages:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-cloudera-search
-      # The ElasticSearch 5.0 connector was removed in Zoomdata release 4.8.0
-      #- zoomdata-edc-elasticsearch-5.0
       - zoomdata-edc-elasticsearch-6.0
-      # The ElasticSearch 7.0 connector was added in Zoomdata release 4.8.0
       - zoomdata-edc-elasticsearch-7.0
       - zoomdata-edc-hive
       - zoomdata-edc-impala
@@ -106,10 +101,6 @@ zoomdata:
     # This is an example for publicly available ElasticSearch X-PACK and MySQL drivers:
     #jdbc:
       #drivers:
-        #elasticsearch-5.0:
-          #- 'https://artifacts.elastic.co/maven/org/elasticsearch/client/x-pack-transport/5.0.2/x-pack-transport-5.0.2.jar'
-          #- 'https://artifacts.elastic.co/maven/org/elasticsearch/plugin/x-pack-api/5.0.2/x-pack-api-5.0.2.jar'
-          #- 'https://repo1.maven.org/maven2/com/unboundid/unboundid-ldapsdk/3.1.1/unboundid-ldapsdk-3.1.1.jar'
         #elasticsearch-6.0:
           #- 'https://artifacts.elastic.co/maven/org/elasticsearch/client/x-pack-transport/6.0.0/x-pack-transport-6.0.0.jar'
           #- 'https://artifacts.elastic.co/maven/org/elasticsearch/plugin/x-pack-api/6.0.0/x-pack-api-6.0.0.jar'
@@ -135,20 +126,16 @@ zoomdata:
   microservices:
     # Exact version of Zoomdata microservice packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
-    #version: '4.8.0'
+    #version: '4.9.0'
 
     # Zoomdata microservice packages to install
     packages:
       # The Consul service is mandatory for mutual discovery for all other
       # Zoomdata services. It is just packaged separately from the Core.
       - zoomdata-consul
-      # The Stream Writer service was renamed to Data Writer in Zoomdata
-      # release 4.3.0
       - zoomdata-data-writer-postgresql
       - zoomdata-screenshot-service
       #- zoomdata-tracing-server
-      # The Upload Service was removed in Zoomdata release 4.3.0
-      #- zoomdata-upload-service
 
   tools:
     # Exact version of Zoomdata tools package to install, use ``latest``
@@ -295,13 +282,11 @@ zoomdata:
         # Timeout to memorize DB cache metrics obtained as a result of SQL queries
         # (size, storedSizeKb, rawSizeKb) in milliseconds, defaults to 1 minute.
         #topology.cache.db.db-query-metric-memorize-timeout-ms: 60000
-    # Zoomdata Scheduler was removed in release 4.3.0
-    zoomdata-scheduler: null
     # Zoomdata Screenshot Service.
-    # This is an example of setting default timeouts for dashboards to render.
     #zoomdata-screenshot-service:
       #path: '/etc/zoomdata/screenshot-service.properties'
       #properties:
+        ## This is an example of setting default timeouts for dashboards to render.
         #screenshot.webdriver.timeout: 30
         #export.dashboard.screenshot.timeout.seconds: 60
         ## Google ChromeDriver options:
@@ -365,10 +350,7 @@ zoomdata:
     # install proper JDBC driver library file (see above).
     - zoomdata-edc-apache-solr
     - zoomdata-edc-cloudera-search
-    # The ElasticSearch 5.0 connector was deprecated in Zoomdata release 4.8.0
-    #- zoomdata-edc-elasticsearch-5.0
     - zoomdata-edc-elasticsearch-6.0
-    # The ElasticSearch 7.0 connector was added in Zoomdata release 4.8.0
     - zoomdata-edc-elasticsearch-7.0
     - zoomdata-edc-hive
     - zoomdata-edc-impala
@@ -383,21 +365,16 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
 
-    # The Stream Writer service was renamed to Data Writer in Zoomdata
-    # release 4.3.0
     - zoomdata-data-writer-postgresql
-    # The Upload Service was removed in Zoomdata release 4.3.0
-    #- zoomdata-upload-service
     - zoomdata-screenshot-service
 
     # Zoomdata Core
     - zoomdata-query-engine
-    # The Scheduler was removed in Zoomdata release 4.3.0
-    #- zoomdata-scheduler
     - zoomdata
 
     # The Admin Service is based on Spring Boot Admin and disabled by default.
     #- zoomdata-admin-server
+
   # Use the keyword ``all`` instead of a explicit list to start all services
   # which are specified to be installed above in ``packages`` sections:
   #services: 'all'

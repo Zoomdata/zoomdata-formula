@@ -1,6 +1,15 @@
 zoomdata-formula
 ================
 
+4.9.0 (2019-09-25) **The Zoomdata 4.9 has become Long Term Supported release**
+
+- Added configurable probing of readiness for connector services after start
+- Fixed removing of deprecated connector service packages
+- Fixed setting the Query Engine service properties for connecting to external
+  PostgreSQL metadata via environment variable
+- Dropped default values for Zoomdata 3.7 due to its transition to *Passive
+  Support* mode
+
 4.8.0 (2019-08-27)
 
 - Added Zoomdata Query Engine cache settings
