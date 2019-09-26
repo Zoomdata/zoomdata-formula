@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Default variables for the Zoomdata LTS 3.7 release deployment
+# Default variables for the Zoomdata LTS 4.9 release deployment
 
 zoomdata:
   # Constants
@@ -12,7 +12,7 @@ zoomdata:
   # Defaults which could be overridden in Pillar
   base_url: 'http://repo.zoomdata.com'
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
-  release: '3.7'
+  release: '4.9'
   repositories:
     - tools
   components:
@@ -27,16 +27,16 @@ zoomdata:
   packages:
     - zoomdata
     - zoomdata-query-engine
-    - zoomdata-scheduler
     #- zoomdata-admin-server
+    #- zoomdata-config-server
 
   edc:
     #version: 'latest'
     packages:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-cloudera-search
-      - zoomdata-edc-elasticsearch-5.0
       - zoomdata-edc-elasticsearch-6.0
+      - zoomdata-edc-elasticsearch-7.0
       - zoomdata-edc-hive
       - zoomdata-edc-impala
       - zoomdata-edc-memsql
@@ -62,9 +62,9 @@ zoomdata:
     #version: 'latest'
     packages:
       - zoomdata-consul
+      - zoomdata-data-writer-postgresql
       - zoomdata-screenshot-service
-      - zoomdata-stream-writer-postgresql
-      - zoomdata-upload-service
+      #- zoomdata-tracing-server
 
   tools:
     packages:
@@ -107,13 +107,10 @@ zoomdata:
       json: {}
     zoomdata-query-engine:
       path: '/etc/zoomdata/query-engine.properties'
-      properties: {}
-    zoomdata-scheduler:
-      path: /etc/zoomdata/scheduler.properties
       properties:
-        spring.datasource.url: 'jdbc:postgresql://localhost:5432/zoomdata-scheduler'
-        spring.datasource.username: zoomdata
-        spring.datasource.password: 'PleaseChangeMe'
+        spring.qe.datasource.jdbcUrl: 'jdbc:postgresql://localhost:5432/zoomdata-qe'
+        spring.qe.datasource.username: 'zoomdata'
+        spring.qe.datasource.password: 'PleaseChangeMe'
       merge: True
       update: False
       discard: True
@@ -127,8 +124,8 @@ zoomdata:
     - zoomdata-consul
     - zoomdata-edc-apache-solr
     - zoomdata-edc-cloudera-search
-    - zoomdata-edc-elasticsearch-5.0
     - zoomdata-edc-elasticsearch-6.0
+    - zoomdata-edc-elasticsearch-7.0
     - zoomdata-edc-hive
     - zoomdata-edc-impala
     #- zoomdata-edc-memsql
@@ -141,16 +138,14 @@ zoomdata:
     #- zoomdata-edc-redshift
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
+    - zoomdata-data-writer-postgresql
     #- zoomdata-screenshot-service
-    - zoomdata-stream-writer-postgresql
-    - zoomdata-upload-service
     - zoomdata-query-engine
-    - zoomdata-scheduler
     - zoomdata
 
   setup:
-    # This is supported in both Zoomdata LTS 3.7 and latest 4.X
-    probe: 'actuator/info'
+    # This is supported starting from Zoomdata 4.0 release
+    probe: 'api/version'
     timeout: 900
     # Zoomdata API V2 URI path without context path
     api: api
