@@ -141,12 +141,16 @@ def list_repos(compact=False):
 
         repo_root = url.path.split('/')[1]
         try:
-            if not repo_config['release'] or float(repo_root) > float(repo_config['release']):
-                repo_config['release'] = repo_root
-        except ValueError:
             if repo_root == 'latest':
                 repo_config['release'] = repo_root
-            else:
+            # Float release number is more than None and
+            # less than ``latest`` string
+            elif float(repo_root) > repo_config['release']:
+                repo_config['release'] = float(repo_root)
+        except ValueError:
+            # Collect all other unique repos which are not release numbers,
+            # such as ``tools`` for example.
+            if repo_root not in repo_config['repositories']:
                 repo_config['repositories'].append(repo_root)
 
         component = url.path.rstrip('/').rsplit('/')[-1]
