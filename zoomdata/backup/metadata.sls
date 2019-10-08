@@ -22,7 +22,7 @@ Nothing would happen if nothing to upgrade.
 If called directly as ``state.apply zoomdata.backup``, always do the backup.
 #}
 
-    {%- for properties in postgres.zoomdata_properties %}
+    {%- for properties in postgres['zoomdata_properties'] %}
       {#- The full set of properties: url, user and pw need to be configured #}
       {%- set has_properties = [true] %}
       {%- for property in properties %}
