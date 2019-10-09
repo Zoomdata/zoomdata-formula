@@ -2,12 +2,14 @@
 
 {#- Always fall back to defaults to construct connection URL #}
 {%- set props = salt['defaults.merge'](
-                  salt['defaults.get']('zoomdata:zoomdata:config:zoomdata:properties'),
-                  zoomdata.config.zoomdata.properties|default({}, true)
-                ) %}
-{#- We assume no TLS configuration and standard binding on 127.0.0.1, ::1 #}
-{%- set url = 'http://localhost:%s%s'|format(props['server.port'],
-                                             props['server.servlet.context-path']) %}
+  salt['defaults.get']('zoomdata:zoomdata:config:zoomdata:properties'),
+  zoomdata.config.zoomdata.properties|default({}, true)
+) %}
+{#- We assume Zoomdata Web server is binded on local loopback interaface #}
+{%- set url = 'http://localhost:%s%s'|format(
+  props['server.port'],
+  props['server.servlet.context-path']
+) %}
 {%- set api = (url, zoomdata.setup['api'])|join('/') %}
 
 {%- set users = {} %}

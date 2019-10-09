@@ -4,7 +4,6 @@ include:
   - zoomdata.restore.metadata
   - zoomdata.remove
   - zoomdata.services.install
-  - zoomdata.tls
   - zoomdata.services.start
 
 zoomdata-completed:
