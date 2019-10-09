@@ -96,11 +96,6 @@ Stop the Zoomdata services.
 
 Setup initial runtime parameters for the Zoomdata server.
 
-``zoomdata.tls``
-----------------
-
-Install a TLS (SSL) certificate with a private key into a Java keystore file.
-
 ``zoomdata.tools``
 ------------------
 

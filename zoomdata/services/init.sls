@@ -15,5 +15,4 @@ include:
   - zoomdata.backup.retension
 {%- endif %}
   - zoomdata.services.install
-  - zoomdata.tls
   - zoomdata.services.start

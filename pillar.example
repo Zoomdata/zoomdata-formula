@@ -197,22 +197,16 @@ zoomdata:
         upload.destination.schema: 'public'
         upload.batch-size: 1000
         ## Screenshot Feature is enabled by default.
-        # Look at these pages for instructions how to set it up on your platform:
-        # https://www.zoomdata.com/docs/3/Topics/Installation/screenshot-for-rpm.html
+        ## Look at these pages for instructions how to set it up on your platform:
+        ## https://www.zoomdata.com/docs/3/Topics/Installation/screenshot-for-rpm.html
         #screenshot.daemon.enabled: False
         #screenshot.daemon.schedule.rate: '24h'  # 1 day
         #screenshots.dashboards.enabled: False
         #screenshots.datasource-charts.enabled: False
-        # Define custom HTTP(S) port
+        ## Define custom HTTP(S) port
         #server.port: 8080
-        # Change default URL path
+        ## Change default URL path
         #server.servlet.context-path: /zoomdata
-        ## Configure HTTPS for Zoomdata (see ``tls`` item below):
-        # https://www.zoomdata.com/docs/3/Topics/Security/adding-ssl-certificate-to-the-zoomdata-server.html
-        #server.ssl.enabled: True
-        #server.ssl.enabled-protocols: 'TLSv1.2'
-        #server.ssl.key-store: '/etc/zoomdata/zoomdata.jks'
-        #server.ssl.key-store-password: 'your_keystore_password'
         ## Web Server Content Security Policy (CSP):
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
         http.response.header.content-security-policy.frame-ancestors: 'self'
@@ -309,20 +303,6 @@ zoomdata:
         #zipkin.storage.elasticsearch.hosts: 'http://localhost:9200'
         #storage.retention.removal.enabled: True
         #storage.retention.days: 1
-
-  # Zoomdata TLS: paste certificates chain and private key for your domain here.
-  # Pay attention to indent exactly with 4 spaces for all lines under
-  # ``certificate`` and ``key`` items.
-  #tls:
-  #  name: 'www.example.com'
-  #  certificate: |
-  #      -----BEGIN CERTIFICATE-----
-  #      MIIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-  #      -----END CERTIFICATE-----
-  #  key: |
-  #      -----BEGIN PRIVATE KEY-----
-  #      MIIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-  #      -----END PRIVATE KEY-----
 
   # Run post installation commands for each defined service before actually
   # starting it
