@@ -28,7 +28,7 @@ zoomdata:
   gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
-  release: 4.9
+  release: 5.0
 
   # Additional repositories under the ``base_url`` to get packages from
   repositories:
@@ -56,7 +56,7 @@ zoomdata:
   # Exact version of Zoomdata core packages to install, use ``latest``
   # keyword to always upgrade to the latest minor version in the release.
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
-  #version: '4.9.0'
+  #version: '5.0.0'
 
   # Zoomdata Core packages to install
   packages:
@@ -72,7 +72,7 @@ zoomdata:
     # Exact version of Zoomdata EDC packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
-    #version: '4.9.0'
+    #version: '5.0.0'
 
     # Zoomdata EDC (datasource connector) packages to install
     packages:
@@ -126,7 +126,7 @@ zoomdata:
   microservices:
     # Exact version of Zoomdata microservice packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
-    #version: '4.9.0'
+    #version: '5.0.0'
 
     # Zoomdata microservice packages to install
     packages:

@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+5.0.0 (2019-10-21) 
+
+- New RR release with QE v2 as defaut engine
+
 4.9.0 (2019-09-25) **The Zoomdata 4.9 has become Long Term Supported release**
 
 - Added configurable probing of readiness for connector services after start
