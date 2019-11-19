@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+5.1.0 (2019-11-18)
+
+- Version bump in the examples to ensure compatibility with the Zoomdata 5.1.0
+
 5.0.0 (2019-10-21) 
 
 - New RR release with QE v2 as defaut engine
