@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+5.2.0 (2019-12-17)
+
+- Next Rapid Release version bump.
+
 5.1.0 (2019-11-18)
 
 - Version bump in the examples to ensure compatibility with the Zoomdata 5.1.0
