@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+5.4.0 (2020-Feb-10)
+
+- Next RR version bump. 
+- Significant product performance optimizations. 
+
 5.3.0 (2020-Jan-14)
 
 - Next RR version bump.
