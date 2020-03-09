@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+5.5.0 (2020-Mar-09)
+
+- New Repid Release version bump.
+
 5.3.0 (2020-Jan-14)
 
 - Next RR version bump.
