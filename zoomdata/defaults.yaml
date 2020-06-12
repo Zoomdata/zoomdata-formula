@@ -98,7 +98,7 @@ zoomdata:
         upload.destination.schema: 'public'
         upload.batch-size: 1000
         server.port: 8080
-        server.servlet.context-path: /zoomdata
+        server.servlet.context-path: /composer
       merge: True
       update: False
       discard: True

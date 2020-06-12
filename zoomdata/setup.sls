@@ -150,7 +150,7 @@ zoomdata-supervisor-toggle-{{ key }}:
 zoomdata-setup:
   test.show_notification:
     - text: |-
-        The Zoomdata installation has been comleted. Nothing to setup.
+        The Zoomdata installation has been completed. Nothing to setup.
         Configure the ``zoomdata:setup:passwords`` Pillar values to
         automatically set passswords for users.
 
