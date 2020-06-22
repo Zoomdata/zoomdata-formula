@@ -486,6 +486,11 @@ zoomdata:
 # In that case, consider to configure the options above.
 
 postgres:
+  # Make sure we're installing PostgreSQL 12
+  version: 12
+  # Set linux alternatives priority higher than possibly previously installed PG9.5
+  linux:
+    altpriority: 60
   # Create Zoomdata user and set password for the first time.
   # The ``ZOOMDATA_POSTGRES_USER`` and ``ZOOMDATA_POSTGRES_PASS`` environment
   # variables may override the defaults.

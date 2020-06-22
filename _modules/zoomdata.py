@@ -143,10 +143,13 @@ def list_repos(compact=False):
         try:
             if repo_root == 'latest':
                 repo_config['release'] = repo_root
-            # Float release number is more than None and
-            # less than ``latest`` string
-            elif float(repo_root) > repo_config['release']:
-                repo_config['release'] = float(repo_root)
+            else:
+                # repo_root is a string like '5.8'
+                if isinstance(repo_config['release'], type(None)):
+                    repo_config['release'] = float(repo_root)
+                elif isinstance(repo_config['release'], float) and \
+                        float(repo_root) > repo_config['release']:
+                    repo_config['release'] = float(repo_root)
         except ValueError:
             # Collect all other unique repos which are not release numbers,
             # such as ``tools`` for example.
