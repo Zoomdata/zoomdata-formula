@@ -7,14 +7,16 @@ Manage and inspect the Zoomdata installation.
 
 """
 
-
+import logging
 try:
     import urlparse
 except ImportError:
     # Py3
     import urllib.parse
     urlparse = urllib.parse
+from distutils.version import LooseVersion, StrictVersion
 
+log = logging.getLogger(__name__)
 
 ENVIRONMENT = {
     'zoomdata': '/etc/zoomdata/zoomdata.env',
@@ -140,16 +142,19 @@ def list_repos(compact=False):
             pass
 
         repo_root = url.path.split('/')[1]
+        log.debug("zoomdata.list_repos: Processing repo_root: %s" % repo_root)
         try:
             if repo_root == 'latest':
                 repo_config['release'] = repo_root
             else:
-                # repo_root is a string like '5.8'
+                if not StrictVersion(repo_root):
+                    raise ValueError
+                # repo_root is a string like '5.8' or '5.10'
                 if isinstance(repo_config['release'], type(None)):
-                    repo_config['release'] = float(repo_root)
-                elif isinstance(repo_config['release'], float) and \
-                        float(repo_root) > repo_config['release']:
-                    repo_config['release'] = float(repo_root)
+                    repo_config['release'] = repo_root
+                elif isinstance(repo_config['release'], str) and \
+                        LooseVersion(repo_root) > LooseVersion(repo_config['release']):
+                    repo_config['release'] = repo_root
         except ValueError:
             # Collect all other unique repos which are not release numbers,
             # such as ``tools`` for example.
