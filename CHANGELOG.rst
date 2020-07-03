@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+5.9.0 (2020-Jul-03)
+
+- Implemented PostgreSQL 12 support
+- Introduced support for Python3 based SaltStack versions
+
 5.5.0 (2020-Mar-09)
 
 - New Repid Release version bump.
