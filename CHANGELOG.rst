@@ -1,9 +1,13 @@
 zoomdata-formula
 ================
 
+6.0.0 (2020-Sep-09)
+
+- New Rapid Release version bump.
+
 5.5.0 (2020-Mar-09)
 
-- New Repid Release version bump.
+- New Rapid Release version bump.
 
 5.3.0 (2020-Jan-14)
 
