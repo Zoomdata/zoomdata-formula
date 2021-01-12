@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+6.4.0 (2021-Jan-12)
+
+- New Rapid Release version bump.
+
 6.3.0 (2020-Dec-15)
 
 - Support for CentOS 6 was completelly dropped.
