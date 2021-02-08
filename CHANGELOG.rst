@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+6.5.0 (2021-Feb-08)
+
+- Next Rapid release version bump.
+- Bootstrap is now uses internal SaltStack repo.
+
 6.4.0 (2021-Jan-12)
 
 - New Rapid Release version bump.
