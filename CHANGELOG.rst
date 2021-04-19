@@ -1,6 +1,12 @@
 zoomdata-formula
 ================
 
+6.7.0 (2021-Apr-19)
+
+- New Repid release version bump.
+- Zoomdata-Formula will be soone renamed to Composerr-Formula to
+  reflect latest Product rebranding.
+
 6.6.0 (2021-Mar-22)
 
 - New Rapid release version bump.
