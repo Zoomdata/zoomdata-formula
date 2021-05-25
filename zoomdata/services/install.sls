@@ -1,5 +1,8 @@
 {%- from 'zoomdata/map.jinja' import zoomdata with context %}
 
+include:
+  - zoomdata.repo
+
 {%- set packages = [] %}
 {%- set versions = {} %}
 
@@ -14,18 +17,34 @@
 
 {%- set jdbc = zoomdata.edc.jdbc|default({}, true) %}
 
-include:
-  - zoomdata.repo
-
 {%- for package in packages %}
 
   {%- set version = versions[package] %}
+
   {%- if version and version != 'latest' and '-' not in version and
-         grains['saltversioninfo'] >= [2017, 7, 0, 0] and
          grains['os_family'] == 'Debian' %}
     {#- pkg state on Ubuntu allows wildcards instead of
         specifying the full version #}
     {%- set version = version ~ '-*' %}
+  {%- endif %}
+
+  {%- if version and version != 'latest' and '-' not in version and
+         grains['os_family'] == 'RedHat' %}
+    {#- pkg state on CentOS/RHEL requires full version to be set.
+        There is a trick to set global var from a loop by using global array.#}
+    {%- set full_ver_arr = [] %}
+    {%- for versions_item in salt['pkg.list_repo_pkgs'](package)[package] %}
+      {%- if versions_item.startswith(version) %}
+        {%- do salt.log.info('Resolved version is: ' ~ versions_item) -%}
+        {%- do full_ver_arr.append(versions_item) %}
+      {%- endif %}
+    {%- endfor %}
+    {%- if full_ver_arr %}
+      {%- set version = full_ver_arr[0] %}
+    {%- else %}
+      {#- setting version to 'latest' if exact one wasn't found #}
+      {%- set version = 'latest' %}
+    {%- endif %}
   {%- endif %}
 
 {{ package }}_package:
@@ -57,6 +76,8 @@ include:
     - watch_in:
       - {{ package }}_start_enable
     {%- endif %}
+    - require:
+      - sls: zoomdata.repo
 
 {%- endfor %}
 
