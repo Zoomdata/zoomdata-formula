@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+6.9.0 (2021-Jun-22) **The Zoomdata 6.9 has become Long Term Supported release**
+
+- New LTS release 6.9
+- Fixed bug with exact patch version required installations on CentOS/RHEL 7
+
 6.8.0 (2021-May-19)
 
 - New rapid release version bump
