@@ -29,7 +29,11 @@ Debian:
 
 RedHat:
   os_type: {{ grains['os_family']|lower }}
+  {%- if grains.get('os', '') == 'Amazon' and grains.get('osmajorrelease', 0) == 2 %}
+  os_release: 7
+  {%- else %}
   os_release: {{ grains['osmajorrelease'] }}
+  {%- endif %}
   os_arch: {{  grains['osarch'] }}
   repo_type: 'yum'
   repo_name: 'zoomdata-%(repo)s-%(component)s'
