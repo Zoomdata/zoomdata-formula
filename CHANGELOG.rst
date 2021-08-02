@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+7.0.0 (2021-Aug-02)
+
+- New rapid release version bump
+
 6.9.0 (2021-Jun-22) **The Zoomdata 6.9 has become Long Term Supported release**
 
 - New LTS release 6.9
