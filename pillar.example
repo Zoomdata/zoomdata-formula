@@ -22,10 +22,10 @@ zoomdata:
   # This would be overridden if ``ZOOMDATA_REPOSITORY`` environment variable
   # has been set for ``salt-minion`` process or ``salt-call`` command (in
   # masterless mode).
-  base_url: 'http://repo.zoomdata.com'
+  base_url: 'http://composer-repo.logianalytics.com'
   # URL to the GnuPG public key for the repo/pkgs verification.
   # Put ``None`` or empty string to skip GnuPG check (for internal repos).
-  gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
+  gpgkey: 'https://composer-repo.logianalytics.com/ZOOMDATA-GPG-KEY.pub'
   # Repository branch from which the packages would be installed.
   # This would be overridden by ``ZOOMDATA_RELEASE`` environment variable.
   release: '7.0'
