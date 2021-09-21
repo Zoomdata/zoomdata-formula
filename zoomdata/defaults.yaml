@@ -10,9 +10,9 @@ zoomdata:
   group: zoomdata
 
   # Defaults which could be overridden in Pillar
-  base_url: 'http://repo.zoomdata.com'
-  gpgkey: 'https://repo.zoomdata.com/ZOOMDATA-GPG-KEY.pub'
-  release: '4.9'
+  base_url: 'http://composer-repo.logianalytics.com'
+  gpgkey: 'https://composer-repo.logianalytics.com/ZOOMDATA-GPG-KEY.pub'
+  release: '6.9'
   repositories:
     - tools
   components:
