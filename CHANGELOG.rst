@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+7.2.0 (2021-Sep-27)
+
+- New repid release version bump
+- Default OS package repository links were changes to composer-repo.logianalytics.com
+
 7.1.0 (2021-Aug-30)
 
 - New rapid release version bump
