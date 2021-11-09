@@ -216,6 +216,17 @@ zoomdata:
         #actuator.user.name: 'admin'
         #actuator.user.password: 'password'
         #actuator.logging.external-file: '/opt/zoomdata/logs/zoomdata-actuator.log'
+        ## User auditing default parameters
+        #user-auditing.enabled: False
+        #user-auditing.destination.name: 'PostgreSQL'
+        #user-auditing.destination.type: 'postgresql'
+        #user-auditing.destination.schema: 'public'
+        #user-auditing.destination.collection: 'audit_records'
+        #user-auditing.destination.collection-per-account: False
+        #user-auditing.destination.params.user_name: 'zoomdata'
+        #user-auditing.destination.params.password: 'PleaseChangeMe'
+        #user-auditing.destination.params.jdbc_url: 'jdbc:postgresql://localhost:5432/zoomdata-user-auditing'
+        #user-auditing.tenant.attribute: ''
       # Merge properties with hard-coded defaults. This is useful to skip
       # common configuration values. Set ``False`` to disable such behavior.
       merge: True
