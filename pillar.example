@@ -511,6 +511,8 @@ postgres:
       owner: {{ user }}
     zoomdata-upload:
       owner: {{ user }}
+    zoomdata-user-auditing:
+      owner: {{ user }}
 
   # Backup extension for configuration files, defaults to ``.bak``.
   # Set ``False`` to stop creation of backups when config files change.
