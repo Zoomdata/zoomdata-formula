@@ -29,7 +29,7 @@ Debian:
 
 RedHat:
   os_type: {{ grains['os_family']|lower }}
-  os_release: {{ grains['osmajorrelease'] }}
+  os_release: {{ '7' if grains['osfinger'] == 'Amazon Linux-2' else grains['osmajorrelease'] }}
   os_arch: {{  grains['osarch'] }}
   repo_type: 'yum'
   repo_name: 'zoomdata-%(repo)s-%(component)s'
