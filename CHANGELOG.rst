@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+7.4.0 (2021-Dec-06)
+
+- New repid release version bump
+
 7.3.0 (2021-Nov-08)
 
 - New repid release version bump
