@@ -1,37 +1,41 @@
 zoomdata-formula
 ================
 
+7.10.0 (2022-Jun-06) **The Composer (former Zoomdata) 7.10 has become Long Term Supported release**
+
+- New rapid release. No significant changes.
+
 7.9.0 (2022-May-14)
 
-- New repid release. No significant changes.
+- New rapid release. No significant changes.
 
 7.8.0 (2022-Apr-11)
 
-- New repid release. No significant changes.
+- New rapid release. No significant changes.
 
 7.7.0 (2022-Feb-28)
 
-- New repid release version bump
+- New rapid release version bump
 
 7.6.0 (2022-Jan-31)
 
-- New repid release version bump
+- New rapid release version bump
 
 7.5.0 (2022-Jan-04)
 
-- New repid release version bump
+- New rapid release version bump
 
 7.4.0 (2021-Dec-06)
 
-- New repid release version bump
+- New rapid release version bump
 
 7.3.0 (2021-Nov-08)
 
-- New repid release version bump
+- New rapid release version bump
 
 7.2.0 (2021-Sep-27)
 
-- New repid release version bump
+- New rapid release version bump
 - Default OS package repository links were changes to composer-repo.logianalytics.com
 
 7.1.0 (2021-Aug-30)
