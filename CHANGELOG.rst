@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+8.0.0 (2022-Jul-18)
+
+- New rapid release. No significant changes.
+
 7.10.0 (2022-Jun-06) **The Composer (former Zoomdata) 7.10 has become Long Term Supported release**
 
 - New rapid release. No significant changes.
