@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+8.2.0 (2022-Sep-12)
+
+- New rapid release. No significant changes.
+
 8.1.0 (2022-Aug-15)
 
 - New rapid release. No significant changes.
