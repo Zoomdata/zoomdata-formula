@@ -78,7 +78,6 @@ zoomdata:
     packages:
       - zoomdata-edc-apache-solr
       - zoomdata-edc-cloudera-search
-      - zoomdata-edc-elasticsearch-6.0
       - zoomdata-edc-elasticsearch-7.0
       - zoomdata-edc-hive
       - zoomdata-edc-impala
