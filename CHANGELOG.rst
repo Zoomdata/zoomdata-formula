@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+8.3.0 (2022-Oct-23)
+
+- New rapid release.
+- Elasticsearch 6.0 was deprecated and removed from formula's defaults
+
 8.2.0 (2022-Sep-12)
 
 - New rapid release. No significant changes.
