@@ -1,6 +1,11 @@
 zoomdata-formula
 ================
 
+8.4.0 (2022-Nov-20)
+
+- New rapid release.
+- Last one in 8.X family - all upcoming Zoomdata/Composer formulas will be using quarterly release model with YY.Q version style.
+
 8.3.0 (2022-Oct-23)
 
 - New rapid release.
