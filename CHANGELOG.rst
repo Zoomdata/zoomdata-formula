@@ -1,6 +1,10 @@
 zoomdata-formula
 ================
 
+22.4.0 (2022-Dec-26)
+
+- New versioning schema - quarterly releases.
+
 8.4.0 (2022-Nov-20)
 
 - New rapid release.
