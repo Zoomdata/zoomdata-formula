@@ -22,7 +22,7 @@ zoomdata:
   # This would be overridden if ``ZOOMDATA_REPOSITORY`` environment variable
   # has been set for ``salt-minion`` process or ``salt-call`` command (in
   # masterless mode).
-  base_url: 'http://composer-repo.logianalytics.com'
+  base_url: 'https://composer-repo.logianalytics.com'
   # URL to the GnuPG public key for the repo/pkgs verification.
   # Put ``None`` or empty string to skip GnuPG check (for internal repos).
   gpgkey: 'https://composer-repo.logianalytics.com/ZOOMDATA-GPG-KEY.pub'
@@ -56,7 +56,7 @@ zoomdata:
   # Exact version of Zoomdata core packages to install, use ``latest``
   # keyword to always upgrade to the latest minor version in the release.
   # This would be overridden by ``ZOOMDATA_VERSION`` environment variable.
-  #version: '23.2.0'
+  #version: '23.3.0'
 
   # Zoomdata Core packages to install
   packages:
@@ -72,7 +72,7 @@ zoomdata:
     # Exact version of Zoomdata EDC packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
     # This would be overridden by ``ZOOMDATA_EDC_VERSION`` environment variable.
-    #version: '23.2.0'
+    #version: '23.3.0'
 
     # Zoomdata EDC (datasource connector) packages to install
     packages:
@@ -125,7 +125,7 @@ zoomdata:
   microservices:
     # Exact version of Zoomdata microservice packages to install, use ``latest``
     # keyword to always upgrade to the latest minor version in the release.
-    #version: '23.2.0'
+    #version: '23.3.0'
 
     # Zoomdata microservice packages to install
     packages:
