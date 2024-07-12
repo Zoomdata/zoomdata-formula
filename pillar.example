@@ -134,6 +134,7 @@ zoomdata:
       - zoomdata-consul
       - zoomdata-data-writer-postgresql
       - zoomdata-screenshot-service
+      - zoomdata-sdk-service
       #- zoomdata-tracing-server
 
   tools:
@@ -356,6 +357,7 @@ zoomdata:
 
     - zoomdata-data-writer-postgresql
     - zoomdata-screenshot-service
+    - zoomdata-sdk-service
 
     # Zoomdata Core
     - zoomdata-query-engine
