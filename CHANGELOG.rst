@@ -1,5 +1,8 @@
 zoomdata-formula
 ================
+24.3.0 (2024-september-27)
+
+- New quarter release (2024.3) no significant changes
 
 24.2.0 (2024-june-28)
 
