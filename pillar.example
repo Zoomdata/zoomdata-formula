@@ -374,7 +374,7 @@ zoomdata:
     zoomdata-sdk-service:
       path: '/etc/zoomdata/sdk-service.env'
       variables:
-        DISCOVERY_REGISTRY_HOST: 'localhost'  
+        DISCOVERY_REGISTRY_HOST: '127.0.0.1'  
 
   # Perform additional post-installation setup
   setup:
