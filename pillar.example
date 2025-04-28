@@ -62,6 +62,7 @@ zoomdata:
   packages:
     - zoomdata
     - zoomdata-query-engine
+    - zoomdata-sdk-service
     # The Admin and Configuration Servers share the exact same version as
     # Zoomdata Core services.
     #- zoomdata-admin-server
@@ -359,6 +360,7 @@ zoomdata:
 
     # Zoomdata Core
     - zoomdata-query-engine
+    - zoomdata-sdk-service
     - zoomdata
 
     # The Admin Service is based on Spring Boot Admin and disabled by default.
