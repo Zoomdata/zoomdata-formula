@@ -6,7 +6,11 @@
     {%- if value is none %}
         {%- set value = '' %}
     {%- endif %}
+    {%- if key == 'DISCOVERY_REGISTRY_HOST' %}
+{{ key }}={{ value }}
+    {%- else %}
 {{ key }}="{{ value }}"
+    {%- endif %}
 {%- endfor %}
 
 {#- vim: ft=jinja sw=4 sts=4 et
