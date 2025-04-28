@@ -370,6 +370,12 @@ zoomdata:
   # which are specified to be installed above in ``packages`` sections:
   #services: 'all'
 
+  environment:
+    zoomdata-sdk-service:
+      path: '/etc/zoomdata/sdk-service.env'
+      variables:
+        DISCOVERY_REGISTRY_HOST: 'localhost'  
+
   # Perform additional post-installation setup
   setup:
     # Zoomdata Web server URI path to probe for readiness. The path is relative
