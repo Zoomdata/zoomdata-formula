@@ -1,5 +1,9 @@
 zoomdata-formula
 ================
+25.2.0 (2025-June-20)
+
+- New quarter release (2025.2) added new service sdk changes
+
 25.1.0 (2025-March-28)
 
 - New quarter release (2025.1) no significant changes
