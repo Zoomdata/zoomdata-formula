@@ -116,7 +116,7 @@ zoomdata:
     # Liveness probe for connector after its start up
     probe:
       # How much time to wait in seconds. Set it up for the probing to work.
-      timeout: 120
+      timeout: 500
       # An URL path to query with HTTP request, which should response with
       # status code 200.
       path: 'actuator/health'
