@@ -41,7 +41,7 @@ zoomdata-gpg-key-download:
 
 zoomdata-gpg-key:
   cmd.run:
-    - name: mkdir -p /usr/share/keyrings && gpg --dearmor -o {{ zoomdata.repo_keyfile }} /tmp/zoomdata-gpg-key.asc
+    - name: mkdir -p /usr/share/keyrings && gpg --batch --yes --dearmor -o {{ zoomdata.repo_keyfile }} /tmp/zoomdata-gpg-key.asc
     - onchanges:
       - file: zoomdata-gpg-key-download
     - require:
