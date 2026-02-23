@@ -73,6 +73,7 @@ zoomdata:
       - zoomdata-zdmanage
     components:
       - stable
+    trusted: true
 
   # Comment added to each file modified by the formula
   header: |

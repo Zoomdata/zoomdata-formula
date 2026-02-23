@@ -74,13 +74,16 @@ zoomdata-repo-is-mission:
 {%- endif %}
 
 {%- for repo in repositories %}
+  {#- Look up per-repo configuration dict (e.g. zoomdata.tools) for this repo.
+      The release repo itself is not a dict key so falls back to an empty dict. #}
+  {%- set repo_cfg = zoomdata.get(repo, {}) %}
+
   {#- Populate configured components only for release repo.
       For non-release repos (e.g. tools), use their own components
       if configured, otherwise fall back to the global default. #}
   {%- if repo == zoomdata.release %}
     {%- set components = zoomdata.components %}
   {%- else %}
-    {%- set repo_cfg = zoomdata.get(repo) %}
     {%- if repo_cfg is mapping and repo_cfg.get('components') %}
       {%- set components = repo_cfg['components'] %}
     {%- else %}
@@ -96,10 +99,15 @@ zoomdata-repo-is-mission:
       'components': components|join(' '),
     }) %}
 
-    {#- Apply signed-by only for the release repo whose GPG key is in the keyring.
-        Non-release repos (e.g. tools) may be signed with a different key. #}
+    {#- Build the apt options string for this repo entry:
+        - Release repo on Ubuntu 24.04+: use [signed-by=...] with downloaded keyring.
+        - Non-release repo on Ubuntu 24.04+ with trusted:true: use [trusted=yes] to
+          allow repos signed with a different key not in the keyring (e.g. tools).
+        - Otherwise: no options (Ubuntu 22.04 uses key_url instead). #}
     {%- if zoomdata.gpgkey and use_modern_keyring and repo == zoomdata.release %}
     {%- set _signed_by = '[signed-by=' ~ zoomdata.repo_keyfile ~ '] ' %}
+    {%- elif use_modern_keyring and repo_cfg is mapping and repo_cfg.get('trusted') %}
+    {%- set _signed_by = '[trusted=yes] ' %}
     {%- else %}
     {%- set _signed_by = '' %}
     {%- endif %}
