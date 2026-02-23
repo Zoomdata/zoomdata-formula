@@ -74,11 +74,18 @@ zoomdata-repo-is-mission:
 {%- endif %}
 
 {%- for repo in repositories %}
-  {#- Populate configured components only for release repo #}
+  {#- Populate configured components only for release repo.
+      For non-release repos (e.g. tools), use their own components
+      if configured, otherwise fall back to the global default. #}
   {%- if repo == zoomdata.release %}
     {%- set components = zoomdata.components %}
   {%- else %}
-    {%- set components = default_components %}
+    {%- set repo_cfg = zoomdata.get(repo) %}
+    {%- if repo_cfg is mapping and repo_cfg.get('components') %}
+      {%- set components = repo_cfg['components'] %}
+    {%- else %}
+      {%- set components = default_components %}
+    {%- endif %}
   {%- endif %}
 
   {%- if grains['os_family'] == 'Debian' %}
@@ -89,7 +96,9 @@ zoomdata-repo-is-mission:
       'components': components|join(' '),
     }) %}
 
-    {%- if zoomdata.gpgkey and use_modern_keyring %}
+    {#- Apply signed-by only for the release repo whose GPG key is in the keyring.
+        Non-release repos (e.g. tools) may be signed with a different key. #}
+    {%- if zoomdata.gpgkey and use_modern_keyring and repo == zoomdata.release %}
     {%- set _signed_by = '[signed-by=' ~ zoomdata.repo_keyfile ~ '] ' %}
     {%- else %}
     {%- set _signed_by = '' %}
@@ -101,10 +110,10 @@ zoomdata-repo-is-mission:
     - file: {{ zoomdata.repo_file|format(**zoomdata) }}
     - clean_file: True
     {%- if zoomdata.gpgkey %}
-    {%- if use_modern_keyring %}
+    {%- if use_modern_keyring and repo == zoomdata.release %}
     - require:
       - cmd: zoomdata-gpg-key
-    {%- else %}
+    {%- elif not use_modern_keyring %}
     - key_url: file://{{ zoomdata.repo_keyfile }}
     - require:
       - file: zoomdata-gpg-key

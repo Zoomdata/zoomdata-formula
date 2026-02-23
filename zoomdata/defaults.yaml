@@ -71,6 +71,8 @@ zoomdata:
   tools:
     packages:
       - zoomdata-zdmanage
+    components:
+      - stable
 
   # Comment added to each file modified by the formula
   header: |
