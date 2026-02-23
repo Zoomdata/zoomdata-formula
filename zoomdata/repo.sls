@@ -41,7 +41,7 @@ zoomdata-gpg-key-download:
 
 zoomdata-gpg-key:
   cmd.run:
-    - name: mkdir -p /usr/share/keyrings && gpg --dearmor -o {{ zoomdata.repo_keyfile }} /tmp/zoomdata-gpg-key.asc
+    - name: mkdir -p /usr/share/keyrings && gpg --batch --yes --dearmor -o {{ zoomdata.repo_keyfile }} /tmp/zoomdata-gpg-key.asc
     - onchanges:
       - file: zoomdata-gpg-key-download
     - require:
@@ -74,11 +74,21 @@ zoomdata-repo-is-mission:
 {%- endif %}
 
 {%- for repo in repositories %}
-  {#- Populate configured components only for release repo #}
+  {#- Look up per-repo configuration dict (e.g. zoomdata.tools) for this repo.
+      The release repo itself is not a dict key so falls back to an empty dict. #}
+  {%- set repo_cfg = zoomdata.get(repo, {}) %}
+
+  {#- Populate configured components only for release repo.
+      For non-release repos (e.g. tools), use their own components
+      if configured, otherwise fall back to the global default. #}
   {%- if repo == zoomdata.release %}
     {%- set components = zoomdata.components %}
   {%- else %}
-    {%- set components = default_components %}
+    {%- if repo_cfg is mapping and repo_cfg.get('components') %}
+      {%- set components = repo_cfg['components'] %}
+    {%- else %}
+      {%- set components = default_components %}
+    {%- endif %}
   {%- endif %}
 
   {%- if grains['os_family'] == 'Debian' %}
@@ -89,8 +99,15 @@ zoomdata-repo-is-mission:
       'components': components|join(' '),
     }) %}
 
-    {%- if zoomdata.gpgkey and use_modern_keyring %}
+    {#- Build the apt options string for this repo entry:
+        - Release repo on Ubuntu 24.04+: use [signed-by=...] with downloaded keyring.
+        - Non-release repo on Ubuntu 24.04+ with trusted:true: use [trusted=yes] to
+          allow repos signed with a different key not in the keyring (e.g. tools).
+        - Otherwise: no options (Ubuntu 22.04 uses key_url instead). #}
+    {%- if zoomdata.gpgkey and use_modern_keyring and repo == zoomdata.release %}
     {%- set _signed_by = '[signed-by=' ~ zoomdata.repo_keyfile ~ '] ' %}
+    {%- elif use_modern_keyring and repo_cfg is mapping and repo_cfg.get('trusted') %}
+    {%- set _signed_by = '[trusted=yes] ' %}
     {%- else %}
     {%- set _signed_by = '' %}
     {%- endif %}
@@ -101,10 +118,10 @@ zoomdata-repo-is-mission:
     - file: {{ zoomdata.repo_file|format(**zoomdata) }}
     - clean_file: True
     {%- if zoomdata.gpgkey %}
-    {%- if use_modern_keyring %}
+    {%- if use_modern_keyring and repo == zoomdata.release %}
     - require:
       - cmd: zoomdata-gpg-key
-    {%- else %}
+    {%- elif not use_modern_keyring %}
     - key_url: file://{{ zoomdata.repo_keyfile }}
     - require:
       - file: zoomdata-gpg-key
