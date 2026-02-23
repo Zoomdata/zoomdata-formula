@@ -495,9 +495,16 @@ def service_probe(name, url_path, timeout=None):
 
     service = name.replace('zoomdata-', '', 1)
     prefix = __salt__['defaults.get']('zoomdata:zoomdata:prefix')
-    port = __salt__['zoomdata.properties'](
+    props = __salt__['zoomdata.properties'](
         __salt__['file.join'](prefix, 'conf', '{}.properties'.format(service))
-    )['server.port']
+    )
+    if props is None:
+        ret['result'] = False
+        ret['comment'] = (
+            'Properties file for service {} is missing or unreadable.'.format(service)
+        )
+        return ret
+    port = props['server.port']
 
     url = urljoin('http://localhost:{}/'.format(port), url_path)
     if timeout:
