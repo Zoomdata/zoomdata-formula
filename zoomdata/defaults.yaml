@@ -12,6 +12,15 @@ zoomdata:
   # Defaults which could be overridden in Pillar
   base_url: 'http://composer-repo.logianalytics.com'
   gpgkey: 'https://composer-repo.logianalytics.com/ZOOMDATA-GPG-KEY.pub'
+  # Per-repository GPG key URL overrides used on Ubuntu 24.04+ (noble and later)
+  # where each repository is verified against its own dedicated keyring file.
+  # Map repository names to their GPG key URLs here when a repository is signed
+  # with a different key than the global ``gpgkey`` above.  Falls back to
+  # ``gpgkey`` for any repository not listed.
+  # Example:
+  #   gpgkeys:
+  #     tools: 'https://example-repo.com/tools-GPG-KEY.pub'
+  #     '26.1': 'https://example-repo.com/26.1-GPG-KEY.pub'
   gpgkeys: {}
   release: '6.9'
   repositories:
