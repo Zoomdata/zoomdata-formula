@@ -25,7 +25,7 @@ Debian:
   repo_entry: 'deb %(base_url)s/%(repo)s/%(repo_type)s/%(os_type)s %(os)s
                %(components)s'
   {% if grains['os'] == 'Ubuntu' and grains['osmajorrelease']|int >= 24 %}
-  repo_keyfile: '/usr/share/keyrings/zoomdata-archive-keyring.gpg'
+  repo_keyfile: '/usr/share/keyrings/zoomdata-%(repo)s-keyring.gpg'
   {% else %}
   repo_keyfile: {{ salt['file.join'](zoomdata.config_dir,
                                      salt['file.basename'](zoomdata.gpgkey)) }}
