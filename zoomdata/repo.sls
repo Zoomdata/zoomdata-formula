@@ -24,31 +24,11 @@
 # FIXME: provision and check sum for repo GnuPG pub key
 
   {%- if grains['os_family'] == 'Debian'
-     and zoomdata.gpgkey %}
+     and zoomdata.gpgkey
+     and not use_modern_keyring %}
 
 # FIXME: due to a bug in Salt 2017.7.2,
 # some file downloads and remote hash verifications are broken
-  {%- if use_modern_keyring %}
-
-zoomdata-gpg-key-download:
-  file.managed:
-    - name: /tmp/zoomdata-gpg-key.asc
-    - user: root
-    - group: root
-    - mode: 0644
-    - contents: |
-        {{ salt['http.query'](zoomdata.gpgkey)['body']|indent(8) }}
-
-zoomdata-gpg-key:
-  cmd.run:
-    - name: mkdir -p /usr/share/keyrings && gpg --dearmor -o {{ zoomdata.repo_keyfile }} /tmp/zoomdata-gpg-key.asc
-    - onchanges:
-      - file: zoomdata-gpg-key-download
-    - require:
-      - file: zoomdata-gpg-key-download
-
-  {%- else %}
-
 zoomdata-gpg-key:
   file.managed:
     - name: {{ zoomdata.repo_keyfile }}
@@ -58,8 +38,6 @@ zoomdata-gpg-key:
     - mode: 0444
     - contents: |
         {{ salt['http.query'](zoomdata.gpgkey)['body']|indent(8) }}
-
-  {%- endif %}
 
   {%- endif %}
 
@@ -90,7 +68,30 @@ zoomdata-repo-is-mission:
     }) %}
 
     {%- if zoomdata.gpgkey and use_modern_keyring %}
-    {%- set _signed_by = '[signed-by=' ~ zoomdata.repo_keyfile ~ '] ' %}
+    {#- Per-repo key URL: use gpgkeys dict if a specific key is configured for
+        this repo, otherwise fall back to the global gpgkey. #}
+    {%- set _repo_keyurl = (zoomdata.gpgkeys|default({}, true)).get(repo, zoomdata.gpgkey) %}
+    {%- set _repo_keyfile = zoomdata.repo_keyfile|format(**zoomdata) %}
+    {%- set _signed_by = '[signed-by=' ~ _repo_keyfile ~ '] ' %}
+
+zoomdata-gpg-key-download-{{ repo }}:
+  file.managed:
+    - name: /tmp/zoomdata-{{ repo }}-gpg-key.asc
+    - user: root
+    - group: root
+    - mode: 0644
+    - contents: |
+        {{ salt['http.query'](_repo_keyurl)['body']|indent(8) }}
+
+zoomdata-gpg-key-{{ repo }}:
+  cmd.run:
+    - name: mkdir -p /usr/share/keyrings && gpg --dearmor -o {{ _repo_keyfile }} /tmp/zoomdata-{{ repo }}-gpg-key.asc
+    - creates: {{ _repo_keyfile }}
+    - onchanges:
+      - file: zoomdata-gpg-key-download-{{ repo }}
+    - require:
+      - file: zoomdata-gpg-key-download-{{ repo }}
+
     {%- else %}
     {%- set _signed_by = '' %}
     {%- endif %}
@@ -103,7 +104,7 @@ zoomdata-repo-is-mission:
     {%- if zoomdata.gpgkey %}
     {%- if use_modern_keyring %}
     - require:
-      - cmd: zoomdata-gpg-key
+      - cmd: zoomdata-gpg-key-{{ repo }}
     {%- else %}
     - key_url: file://{{ zoomdata.repo_keyfile }}
     - require:

@@ -1,5 +1,10 @@
 zoomdata-formula
 ================
+26.1.0 (2026-March-26)
+
+- Ubuntu 24.04 (Noble) support: use modern APT keyring (signed-by + gpg --dearmor),
+  scoped to Ubuntu 24.04 and later; older Ubuntu/Debian systems retain existing behavior
+
 25.4.0 (2025-December-15)
 
 - New quarter release (2025.3) no significant changes
