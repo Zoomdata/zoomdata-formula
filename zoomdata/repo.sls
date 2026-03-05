@@ -22,22 +22,15 @@
 
 # FIXME: due to a bug in Salt 2017.7.2,
 # some file downloads and remote hash verifications are broken
-zoomdata-gpg-key-download:
+zoomdata-gpg-key:
   file.managed:
-    - name: /tmp/zoomdata-gpg-key.asc
+    - name: {{ zoomdata.repo_keyfile }}
+    - makedirs: True
     - user: root
     - group: root
-    - mode: 0644
+    - mode: 0444
     - contents: |
         {{ salt['http.query'](zoomdata.gpgkey)['body']|indent(8) }}
-
-zoomdata-gpg-key:
-  cmd.run:
-    - name: mkdir -p /usr/share/keyrings && gpg --dearmor -o {{ zoomdata.repo_keyfile }} /tmp/zoomdata-gpg-key.asc
-    - onchanges:
-      - file: zoomdata-gpg-key-download
-    - require:
-      - file: zoomdata-gpg-key-download
 
   {%- endif %}
 
@@ -67,20 +60,15 @@ zoomdata-repo-is-mission:
       'components': components|join(' '),
     }) %}
 
-    {%- if zoomdata.gpgkey %}
-    {%- set _signed_by = '[signed-by=' ~ zoomdata.repo_keyfile ~ '] ' %}
-    {%- else %}
-    {%- set _signed_by = '' %}
-    {%- endif %}
-
 {{ zoomdata.repo_name|format(**zoomdata) }}:
   pkgrepo.managed:
-    - name: deb {{ _signed_by }}{{ (zoomdata.repo_entry|format(**zoomdata))[4:] }}
+    - name: {{ zoomdata.repo_entry|format(**zoomdata) }}
     - file: {{ zoomdata.repo_file|format(**zoomdata) }}
     - clean_file: True
     {%- if zoomdata.gpgkey %}
+    - key_url: file://{{ zoomdata.repo_keyfile }}
     - require:
-      - cmd: zoomdata-gpg-key
+      - file: zoomdata-gpg-key
     {%- endif %}
 
   {%- elif grains['os_family'] == 'RedHat' %}
