@@ -139,7 +139,7 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
     - zoomdata-data-writer-postgresql
-    #- zoomdata-report-service
+    - zoomdata-report-service
     #- zoomdata-screenshot-service
     - zoomdata-query-engine
     - zoomdata-sdk-service
