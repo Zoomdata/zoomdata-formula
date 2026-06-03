@@ -134,6 +134,7 @@ zoomdata:
       # Zoomdata services. It is just packaged separately from the Core.
       - zoomdata-consul
       - zoomdata-data-writer-postgresql
+      - zoomdata-report-service
       - zoomdata-screenshot-service
       #- zoomdata-tracing-server
 
@@ -287,6 +288,10 @@ zoomdata:
         # Timeout to memorize DB cache metrics obtained as a result of SQL queries
         # (size, storedSizeKb, rawSizeKb) in milliseconds, defaults to 1 minute.
         #topology.cache.db.db-query-metric-memorize-timeout-ms: 60000
+    # Zoomdata Report Service.
+    #zoomdata-report-service:
+      #path: '/etc/zoomdata/report-service.properties'
+      #properties:
     # Zoomdata Screenshot Service.
     #zoomdata-screenshot-service:
       #path: '/etc/zoomdata/screenshot-service.properties'
@@ -356,6 +361,7 @@ zoomdata:
     - zoomdata-edc-sparksql
 
     - zoomdata-data-writer-postgresql
+    - zoomdata-report-service
     - zoomdata-screenshot-service
 
     # Zoomdata Core

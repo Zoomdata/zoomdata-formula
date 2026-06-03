@@ -64,6 +64,7 @@ zoomdata:
     packages:
       - zoomdata-consul
       - zoomdata-data-writer-postgresql
+      - zoomdata-report-service
       - zoomdata-screenshot-service
       - zoomdata-sdk-service
       #- zoomdata-tracing-server
@@ -138,6 +139,7 @@ zoomdata:
     - zoomdata-edc-rts
     - zoomdata-edc-sparksql
     - zoomdata-data-writer-postgresql
+    #- zoomdata-report-service
     #- zoomdata-screenshot-service
     - zoomdata-query-engine
     - zoomdata-sdk-service
