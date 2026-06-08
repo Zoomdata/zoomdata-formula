@@ -361,7 +361,7 @@ zoomdata:
     - zoomdata-edc-sparksql
 
     - zoomdata-data-writer-postgresql
-    - zoomdata-report-service
+    #- zoomdata-report-service
     - zoomdata-screenshot-service
 
     # Zoomdata Core
