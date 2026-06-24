@@ -134,7 +134,7 @@ zoomdata:
       # Zoomdata services. It is just packaged separately from the Core.
       - zoomdata-consul
       - zoomdata-data-writer-postgresql
-      - zoomdata-report-service
+      #- zoomdata-report-service
       - zoomdata-screenshot-service
       #- zoomdata-tracing-server
 
