@@ -64,7 +64,7 @@ zoomdata:
     packages:
       - zoomdata-consul
       - zoomdata-data-writer-postgresql
-      - zoomdata-report-service
+      #- zoomdata-report-service
       - zoomdata-screenshot-service
       - zoomdata-sdk-service
       #- zoomdata-tracing-server
