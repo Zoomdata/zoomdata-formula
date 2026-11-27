@@ -328,3 +328,30 @@ zoomdata-user-limits-conf:
   {%- endif %}
 
 {%- endfor %}
+
+{%- if 'zoomdata-report-service' in packages %}
+
+  {%- set capture_script = salt['file.join'](zoomdata.prefix,
+          'scripts/report-service/install-capture-dependencies.sh') %}
+  {%- set capture_browsers = salt['file.join'](zoomdata.prefix, 'playwright/browsers') %}
+
+# Install the operating system libraries and fonts the Chromium bundled with
+# Report Service needs for dashboard PDF capture. Unlike ``post_install``
+# commands this runs on upgrades too, and is skipped when the script's own
+# check finds nothing missing. Packages older than 26.4 ship no Chromium and
+# are skipped.
+
+zoomdata-report-service_capture_dependencies:
+  cmd.run:
+    - name: sh {{ capture_script }}
+    - onlyif: test -f {{ capture_script }} && test -d {{ capture_browsers }}
+    - unless: sh {{ capture_script }} --check
+    - timeout: 900
+    - require:
+      - pkg: zoomdata-report-service_package
+  {%- if 'zoomdata-report-service' in zoomdata['services'] %}
+    - require_in:
+      - zoomdata-report-service_start_enable
+  {%- endif %}
+
+{%- endif %}

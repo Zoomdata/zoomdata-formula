@@ -27,6 +27,7 @@ ENVIRONMENT = {
 PROPERTIES = {
     'zoomdata': '/etc/zoomdata/zoomdata.properties',
     'zoomdata-query-engine': '/etc/zoomdata/query-engine.properties',
+    'zoomdata-report-service': '/etc/zoomdata/report-service.properties',
     'zoomdata-scheduler': '/etc/zoomdata/scheduler.properties',
 }
 

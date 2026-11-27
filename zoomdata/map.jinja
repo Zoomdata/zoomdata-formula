@@ -134,6 +134,17 @@
     {% do zoomdata.update({'services': packages}) %}
 {% endif %}
 
+{# Dashboard PDF export enabled at install time needs Report Service running.
+   Without this, a run that keeps only the already running services (relaxed
+   ``enforce: False`` mode) would install Report Service and leave it stopped. #}
+{% if salt['environ.get']('ZOOMDATA_DASHBOARD_REPORT_ENABLED', '')|lower == 'true'
+      and 'zoomdata-report-service' in packages
+      and 'zoomdata-report-service' not in zoomdata['services'] %}
+    {% do zoomdata.update({
+        'services': zoomdata['services'] + ['zoomdata-report-service'],
+    }) %}
+{% endif %}
+
 {% for params in ('backup', 'restore') %}
     {% if zoomdata[params] is not mapping %}
         {# Reload defaults if nested dictionary with parameters is messy #}
