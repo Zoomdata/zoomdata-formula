@@ -134,7 +134,10 @@ zoomdata:
       # Zoomdata services. It is just packaged separately from the Core.
       - zoomdata-consul
       - zoomdata-data-writer-postgresql
-      #- zoomdata-report-service
+      # Report Service exports dashboards to PDF. From release 26.4 its
+      # package carries the Playwright driver and Chromium; the system
+      # libraries Chromium needs are installed by the formula.
+      - zoomdata-report-service
       - zoomdata-screenshot-service
       #- zoomdata-tracing-server
 
@@ -289,9 +292,32 @@ zoomdata:
         # (size, storedSizeKb, rawSizeKb) in milliseconds, defaults to 1 minute.
         #topology.cache.db.db-query-metric-memorize-timeout-ms: 60000
     # Zoomdata Report Service.
+    # Dashboard PDF export is off in the packaged defaults. Set the
+    # ``ZOOMDATA_DASHBOARD_REPORT_ENABLED`` environment variable to ``true``
+    # or ``false`` to set ``dashboard-report.enabled``, and optionally
+    # ``ZOOMDATA_DASHBOARD_REPORT_COMPOSER_URL`` to set the Composer URL the
+    # capture opens (found through Consul when unset). Only these keys are
+    # changed: other properties already in the file are kept.
+    {%- set dashboard_report = salt['environ.get']('ZOOMDATA_DASHBOARD_REPORT_ENABLED', '')|lower %}
+    {%- set dashboard_report_url = salt['environ.get']('ZOOMDATA_DASHBOARD_REPORT_COMPOSER_URL', '') %}
+    {%- if dashboard_report in ('true', 'false') %}
+    zoomdata-report-service:
+      path: '/etc/zoomdata/report-service.properties'
+      properties:
+        dashboard-report.enabled: {{ dashboard_report }}
+      {%- if dashboard_report_url %}
+        dashboard-report.capture.composer-base-url: {{ dashboard_report_url|yaml_dquote }}
+      {%- endif %}
+      update: True
+      discard: True
+    {%- else %}
     #zoomdata-report-service:
       #path: '/etc/zoomdata/report-service.properties'
       #properties:
+        #dashboard-report.enabled: True
+      #update: True
+      #discard: True
+    {%- endif %}
     # Zoomdata Screenshot Service.
     #zoomdata-screenshot-service:
       #path: '/etc/zoomdata/screenshot-service.properties'
